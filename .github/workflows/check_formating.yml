@@ -1,0 +1,65 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main, dev]
+
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  formatting-check:
+    name: Formatting Check
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Check C/C++ formatting
+        uses: jidicula/clang-format-action@v4.18.0
+        with:
+          clang-format-version: "13"
+          check-path: "Source"
+          fallback-style: "LLVM"
+
+  coding-convention-check:
+    name: Coding Convention Check
+
+    # clang-tidy-review only works on pull requests.
+    if: github.event_name == 'pull_request'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run clang-tidy
+        id: review
+        uses: ZedThree/clang-tidy-review@v0.23.1
+        with:
+          clang_tidy_version: "18"
+          config_file: ".clang-tidy"
+          build_dir: "build"
+          cmake_command: >-
+            cmake
+            -S .
+            -B build
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            -DBUILD_UNIT_TEST=ON
+
+      - name: Upload clang-tidy results
+        if: always()
+        uses: ZedThree/clang-tidy-review/upload@v0.23.1
+
+      - name: Fail if clang-tidy found violations
+        if: steps.review.outputs.total_comments > 0
+        run: exit 1

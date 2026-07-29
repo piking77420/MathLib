@@ -1,0 +1,74 @@
+name: Build and Test C/C++ Code
+
+on:
+  push:
+    branches: [main, dev]
+
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x64 GCC
+            os: ubuntu-24.04
+            compiler: g++
+            build_type: Release
+
+          - name: Linux ARM64 GCC
+            os: ubuntu-24.04-arm
+            compiler: g++
+            build_type: Release
+
+          - name: Linux x64 Clang
+            os: ubuntu-24.04
+            compiler: clang++
+            build_type: Release
+
+          - name: Linux ARM64 Clang
+            os: ubuntu-24.04-arm
+            compiler: clang++
+            build_type: Release
+
+          - name: Windows x64 MSVC
+            os: windows-2025
+            build_type: Release
+            configure_args: >-
+              -G "Visual Studio 18 2026"
+              -A x64
+
+          - name: Windows x64 ClangCL
+            os: windows-2025
+            build_type: Release
+            configure_args: >-
+              -G "Visual Studio 18 2026"
+              -A x64
+              -T ClangCL
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Configure
+        run: >
+          cmake
+          -S .
+          -B build
+          -DBUILD_UNIT_TEST=ON
+          ${{ matrix.configure_args }}
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Run tests
+        run: ctest
+          --test-dir build
+          -C ${{ matrix.build_type }}
+          --output-on-failure
+          --no-tests=error
