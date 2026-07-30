@@ -20,6 +20,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+enable_testing()
 if (BUILD_UNIT_TEST)
     add_subdirectory(UnitTest)
 endif()
