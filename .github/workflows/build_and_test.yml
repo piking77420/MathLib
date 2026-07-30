@@ -14,30 +14,41 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Linux GCC
-            os: ubuntu-latest
-            configure-arguments: >
-              -DCMAKE_CXX_COMPILER=g++
-              -DCMAKE_BUILD_TYPE=Release
+          - name: Linux x64 GCC
+            os: ubuntu-24.04
+            compiler: g++
+            build_type: Release
 
-          - name: Linux Clang
-            os: ubuntu-latest
-            configure-arguments: >
-              -DCMAKE_CXX_COMPILER=clang++
-              -DCMAKE_BUILD_TYPE=Release
+          - name: Linux ARM64 GCC
+            os: ubuntu-24.04-arm
+            compiler: g++
+            build_type: Release
 
-          - name: Windows MSVC
-            os: windows-2026
-            configure-arguments: >
-              -G "Visual Studio 17 2026"
+          - name: Linux x64 Clang
+            os: ubuntu-24.04
+            compiler: clang++
+            build_type: Release
+
+          - name: Linux ARM64 Clang
+            os: ubuntu-24.04-arm
+            compiler: clang++
+            build_type: Release
+
+          - name: Windows x64 MSVC
+            os: windows-2025
+            build_type: Release
+            configure_args: >-
+              -G "Visual Studio 18 2026"
               -A x64
 
-          - name: Windows ClangCL
-            os: windows-2026
-            configure-arguments: >
-              -G "Visual Studio 17 2026"
+          - name: Windows x64 ClangCL
+            os: windows-2025
+            build_type: Release
+            configure_args: >-
+              -G "Visual Studio 18 2026"
               -A x64
               -T ClangCL
+
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -50,10 +61,14 @@ jobs:
           -S .
           -B build
           -DBUILD_UNIT_TEST=ON
-          -DCMAKE_BUILD_TYPE=Release
+          ${{ matrix.configure_args }}
 
       - name: Build
         run: cmake --build build --config Release
 
       - name: Run tests
-        run: ctest --test-dir build -C Release --output-on-failure
+        run: ctest
+          --test-dir build
+          -C ${{ matrix.build_type }}
+          --output-on-failure
+          --no-tests=error
