@@ -2,7 +2,7 @@
 
 namespace MathLib
 {
-    Vector4<double>::Vector4<double>(double _x, double _y, double _z, double _w)
+    Vector4<double>::Vector4(double _x, double _y, double _z, double _w)
         : m_x(_x)
         , m_y(_y)
         , m_z(_z)
@@ -11,7 +11,7 @@ namespace MathLib
 
     }
 
-    Vector4<double>::~Vector4<double>() = default;
+    Vector4<double>::~Vector4() = default;
 
     double Vector4<double>::getX() const noexcept
     {
