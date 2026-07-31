@@ -1,0 +1,29 @@
+name: Formatting Check
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - "2-add-github-action-ci-for-compiling-test"
+
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  formatting-check:
+    name: Formatting Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Check C/C++ formatting
+        uses: jidicula/clang-format-action@v5.18.0
+        with:
+          clang-format-version: "13"
+          check-path: "Source"
+          fallback-style: "Mozilla"
