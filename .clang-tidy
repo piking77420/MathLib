@@ -1,0 +1,69 @@
+WarningsAsErrors: >
+  readability-identifier-naming
+CheckOptions:
+    # Parameters: _value
+  readability-identifier-naming.ParameterCase: camelBack
+  readability-identifier-naming.ParameterPrefix: _
+
+  # Private members: m_value
+  readability-identifier-naming.PrivateMemberCase: camelBack
+  readability-identifier-naming.PrivateMemberPrefix: m_
+
+  # Public members: value
+  readability-identifier-naming.PublicMemberCase: camelBack
+
+  cppcoreguidelines-pro-type-member-init.IgnoreArrays: true
+  cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
+  misc-const-correctness.WarnPointersAsValues: true
+  cppcoreguidelines-non-private-member-variables-in-classes.IgnorePublicMemberVariables: true
+  misc-non-private-member-variables-in-classes.IgnorePublicMemberVariables: true
+Checks: >
+    *,
+    -abseil-*,
+    -altera-*,
+    -android-*,
+    -boost-*,
+    -bugprone-easily-swappable-parameters,
+    -bugprone-empty-catch,
+    -cert-err58-cpp,
+    -clang-analyzer-alpha.*,
+    -clang-analyzer-debug.*,
+    -clang-analyzer-fuchsia.*,
+    -clang-analyzer-webkit.*,
+    -cppcoreguidelines-pro-type-vararg,
+    -darwin-*,
+    -fuchsia-*,
+    -google-*,
+    -hicpp-avoid-c-arrays,
+    -hicpp-braces-around-statements,
+    -hicpp-member-init,
+    -hicpp-no-array-decay,
+    -hicpp-signed-bitwise,
+    -hicpp-special-member-functions,
+    -hicpp-use-auto,
+    -hicpp-vararg,
+    -linuxkernel-*,
+    -llvm-*,
+    -llvmlibc-*,
+    -misc-definitions-in-headers,
+    -modernize-avoid-bind,
+    -modernize-avoid-c-arrays,
+    -modernize-use-auto,
+    -modernize-use-constraints,
+    -modernize-use-designated-initializers,
+    -modernize-use-ranges,
+    -modernize-use-std-numbers,
+    -modernize-use-trailing-return-type,
+    -mpi-*,
+    -objc-*,
+    -openmp-*,
+    -performance-enum-size,
+    -readability-avoid-nested-conditional-operator,
+    -readability-braces-around-statements,
+    -readability-function-cognitive-complexity,
+    -readability-identifier-length,
+    -readability-magic-numbers,
+    -readability-use-concise-preprocessor-directives,
+    -zircon-*,
+HeaderFileExtensions: [h, hpp, cppm]
+HeaderFilterRegex: .*

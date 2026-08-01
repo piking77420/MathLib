@@ -1,0 +1,42 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+ContinuationIndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+BreakBeforeBraces: Allman
+
+NamespaceIndentation: All
+
+AccessModifierOffset: -4
+IndentAccessModifiers: false
+
+SpaceAfterTemplateKeyword: false
+SpaceBeforeParens: ControlStatements
+
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+
+MaxEmptyLinesToKeep: 1
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: LogicalBlock
+
+ColumnLimit: 120
+
+SortIncludes: false
+IncludeBlocks: Preserve
+
+FixNamespaceComments: false
+
+Standard: c++20
+...
