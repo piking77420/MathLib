@@ -1,5 +1,6 @@
 ---
 Language: Cpp
+Standard: c++20
 BasedOnStyle: LLVM
 
 IndentWidth: 4
@@ -40,8 +41,4 @@ FixNamespaceComments: false
 
 ## Constructor
 BreakConstructorInitializers: BeforeComma
-PackConstructorInitializers: Never
 ConstructorInitializerIndentWidth: 4
-
-Standard: c++20
-...
