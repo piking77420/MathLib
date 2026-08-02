@@ -38,5 +38,10 @@ IncludeBlocks: Preserve
 
 FixNamespaceComments: false
 
+## Constructor
+BreakConstructorInitializers: BeforeComma
+PackConstructorInitializers: Never
+ConstructorInitializerIndentWidth: 4
+
 Standard: c++20
 ...

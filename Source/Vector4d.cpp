@@ -8,7 +8,6 @@ namespace MathLib
         , m_z(_z)
         , m_w(_w)
     {
-
     }
 
     Vector4<double>::~Vector4() = default;
