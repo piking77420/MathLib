@@ -1,7 +1,6 @@
 #include <array>
 
 #include <CpuInstructionSet.hpp>
-#include <CompilerDetection.hpp>
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex?view=msvc-140
 // https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/x86-Built-in-Functions.html
@@ -12,6 +11,7 @@
 
 namespace MathLib
 {
+#if CPU_X86_64
     struct CpuidRegisters
     {
         std::uint32_t eax{};
@@ -90,11 +90,11 @@ namespace MathLib
     {
         return (_value & (std::uint32_t{1} << _bit)) != 0;
     }
+#endif // CPU_X86_64
 
     CpuInstructionSet::CpuInstructionSet()
     {
-
-#if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
+#if CPU_X86_64
 
         const std::uint32_t maximumLeaf = maximumCpuidLeaf();
 
@@ -167,7 +167,7 @@ namespace MathLib
         x86InstructionSet.avx512bw = x86InstructionSet.avx512f && hasBit(leaf7.ebx, 30);
 
         x86InstructionSet.avx512vl = x86InstructionSet.avx512f && hasBit(leaf7.ebx, 31);
-#endif
+#endif // CPU_X86_64
     }
 
 } // namespace MathLib

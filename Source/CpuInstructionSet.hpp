@@ -4,10 +4,18 @@
 #include <cstdint>
 #include <variant>
 
+#include <CompilerDetection.hpp>
+
 #if defined(_MSC_VER)
+
 #include <intrin.h>
+
 #elif defined(__GNUC__) || defined(__clang__)
+
+#if CPU_X86_64
 #include <cpuid.h>
+#endif // CPU_X86_64
+
 #endif
 
 namespace MathLib
