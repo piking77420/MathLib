@@ -10,7 +10,7 @@ namespace MathLib
     {
     public:
     private:
-        double m_x;
+        double x;
         double m_y;
         double m_z;
         double m_w;
