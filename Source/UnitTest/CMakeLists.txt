@@ -22,6 +22,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 set(TEST_SOURCES
+    SimdExtension_test.cpp
     Vector4d_Test.cpp)
 
 function(add_buildTest_variant level)

@@ -6,6 +6,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 
 set(MATHLIB_SOURCES 
+    CpuInstructionSet.cpp
+    CpuInstructionSet.hpp
     CompilerDetection.hpp
     Vector4.cpp
     Vector4.hpp
