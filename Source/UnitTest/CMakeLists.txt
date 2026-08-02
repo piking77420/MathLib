@@ -25,28 +25,21 @@ set(TEST_SOURCES
     SimdExtension_test.cpp
     Vector4d_Test.cpp)
 
-function(add_buildTest_variant level)
-    set(MATH_LIB_TARGET "MathLib_${level}")
-    set(EXECUTABLE_TARGET "${PROJECT_NAME}_${level}")
-
-    add_executable(
-        ${EXECUTABLE_TARGET}
+add_executable(
+        ${PROJECT_NAME}
         ${TEST_SOURCES}
     )
 
-    target_link_libraries(
-        ${EXECUTABLE_TARGET}
-        PRIVATE
-            ${MATH_LIB_TARGET}
-            GTest::gtest_main
-    )
-    include(GoogleTest)
-    gtest_discover_tests(${EXECUTABLE_TARGET})
-endfunction()
+target_link_libraries(
+    ${PROJECT_NAME}
+    PRIVATE
+    MathLib
+    GTest::gtest_main
+)
 
-foreach(SIMD_EXT IN LISTS MATHLIB_SIMD_EXT)
-    add_buildTest_variant(${SIMD_EXT})
-endforeach()
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})
+
 
 
 

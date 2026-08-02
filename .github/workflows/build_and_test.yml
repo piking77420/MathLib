@@ -10,44 +10,123 @@ on:
 jobs:
   build:
     name: ${{ matrix.name }}
+
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: Linux x64 GCC
+          # ============================================================
+          # Linux x64 GCC
+          # ============================================================
+
+          - name: Linux x64 GCC Default
             os: ubuntu-24.04
-            compiler: g++
             build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=g++
 
-          - name: Linux ARM64 GCC
-            os: ubuntu-24.04-arm
-            compiler: g++
-            build_type: Release
-
-          - name: Linux x64 Clang
+          - name: Linux x64 GCC AVX2
             os: ubuntu-24.04
-            compiler: clang++
             build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=g++
+              DMATHLIB_SIMD_EXT=AVX2
 
-          - name: Linux ARM64 Clang
+
+          # ============================================================
+          # Linux x64 Clang
+          # ============================================================
+
+          - name: Linux x64 Clang Default
+            os: ubuntu-24.04
+            build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=clang++
+
+          - name: Linux x64 Clang AVX2
+            os: ubuntu-24.04
+            build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=clang++
+              DMATHLIB_SIMD_EXT=AVX2
+
+
+          # ============================================================
+          # Linux ARM64 GCC
+          # ============================================================
+
+          - name: Linux ARM64 GCC Default
             os: ubuntu-24.04-arm
-            compiler: clang++
             build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=g++
 
-          - name: Windows x64 MSVC
+          - name: Linux ARM64 GCC NEON
+            os: ubuntu-24.04-arm
+            build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=g++
+              -DMATHLIB_SIMD_EXT=NEON
+
+
+          # ============================================================
+          # Linux ARM64 Clang
+          # ============================================================
+
+          - name: Linux ARM64 Clang Default
+            os: ubuntu-24.04-arm
+            build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=clang++
+
+          - name: Linux ARM64 Clang NEON
+            os: ubuntu-24.04-arm
+            build_type: Release
+            configure_args: >-
+              -DCMAKE_CXX_COMPILER=clang++
+              -DMATHLIB_SIMD_EXT=NEON
+
+
+          # ============================================================
+          # Windows x64 MSVC
+          # ============================================================
+
+          - name: Windows x64 MSVC Default
             os: windows-2025
             build_type: Release
             configure_args: >-
               -G "Visual Studio 18 2026"
               -A x64
 
-          - name: Windows x64 ClangCL
+          - name: Windows x64 MSVC AVX2
+            os: windows-2025
+            build_type: Release
+            configure_args: >-
+              -G "Visual Studio 18 2026"
+              -A x64
+              -DCMAKE_CXX_FLAGS=/arch:AVX2
+
+
+          # ============================================================
+          # Windows x64 ClangCL
+          # ============================================================
+
+          - name: Windows x64 ClangCL Default
             os: windows-2025
             build_type: Release
             configure_args: >-
               -G "Visual Studio 18 2026"
               -A x64
               -T ClangCL
+
+          - name: Windows x64 ClangCL AVX2
+            os: windows-2025
+            build_type: Release
+            configure_args: >-
+              -G "Visual Studio 18 2026"
+              -A x64
+              -T ClangCL
+              -DCMAKE_CXX_FLAGS=/arch:AVX2
 
     runs-on: ${{ matrix.os }}
 
@@ -64,7 +143,9 @@ jobs:
           ${{ matrix.configure_args }}
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake
+          --build build
+          --config ${{ matrix.build_type }}
 
       - name: Run tests
         run: ctest
