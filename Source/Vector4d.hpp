@@ -5,9 +5,11 @@
 
 namespace MathLib
 {
-    template<typename T> class Vector4;
+    template<typename T>
+    class Vector4;
 
-    template<> class Vector4<double>
+    template<>
+    class Vector4<double>
     {
     public:
         Vector4(double _x, double _y, double _z, double _w);

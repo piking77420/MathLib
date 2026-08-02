@@ -5,11 +5,10 @@
 
 namespace MathLib
 {
-    template <typename T>
+    template<typename T>
     class Vector4
     {
     public:
-        
     private:
         double m_x;
         double m_y;

@@ -15,7 +15,6 @@ NamespaceIndentation: All
 AccessModifierOffset: -4
 IndentAccessModifiers: false
 
-SpaceAfterTemplateKeyword: false
 SpaceBeforeParens: ControlStatements
 
 DerivePointerAlignment: false
@@ -42,3 +41,7 @@ FixNamespaceComments: false
 ## Constructor
 BreakConstructorInitializers: BeforeComma
 ConstructorInitializerIndentWidth: 4
+
+## Templates
+SpaceAfterTemplateKeyword: false
+AlwaysBreakTemplateDeclarations: Yes
