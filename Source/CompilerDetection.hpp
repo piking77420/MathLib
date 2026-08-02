@@ -47,19 +47,35 @@
 #if CPU_ARM_64
 
 // ARM SIMD
-#if defined(__ARM_FEATURE_SVE)
+#if defined(MATHLIB_SIMD_LEVEL_AVX_SVE)
 #define SIMD_ARM_SVE 1
 #endif
 
-#if defined(__ARM_FEATURE_SVE2)
+#if defined(MATHLIB_SIMD_LEVEL_AVX_SVE2)
 #define SIMD_ARM_SVE2 1
 #endif
 
-#if defined(__ARM_NEON) || defined(__ARM_NEON__) || defined(_M_ARM64)
+#if defined(MATHLIB_SIMD_LEVEL_AVX)
 #define SIMD_ARM_NEON 1
 #endif
 
 #endif // CPU_ARM_64
+
+#if CPU_X86_64
+#include <immintrin.h>
+#endif // CPU_X86_64
+
+#if SIMD_ARM_SVE
+#include <arm_sve.h>
+#endif
+
+#if SIMD_ARM_SVE2
+#include <arm_sve.h>
+#endif
+
+#if SIMD_ARM_NEON
+#include <arm_neon.h>
+#endif
 
 // NOLINTEND(cppcoreguidelines-macro-usage)
 

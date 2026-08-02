@@ -60,7 +60,7 @@ namespace MathLib
 
         ~CpuInstructionSet() = default;
 
-        bool isValid() const;
+        [[nodiscard]] bool isValid() const;
 
     private:
     };
