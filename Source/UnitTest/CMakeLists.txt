@@ -21,18 +21,31 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_executable(${PROJECT_NAME})
+set(TEST_SOURCES
+    Vector4d_Test.cpp)
 
-target_sources(${PROJECT_NAME}
-    PRIVATE
-        Vector4d_Test.cpp
-)
+function(add_buildTest_variant level)
+    set(MATH_LIB_TARGET "MathLib_${level}")
+    set(EXECUTABLE_TARGET "${PROJECT_NAME}_${level}")
 
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-        MathLib
-        GTest::gtest_main
-)
+    add_executable(
+        ${EXECUTABLE_TARGET}
+        ${TEST_SOURCES}
+    )
 
-include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME})
+    target_link_libraries(
+        ${EXECUTABLE_TARGET}
+        PRIVATE
+            ${MATH_LIB_TARGET}
+            GTest::gtest_main
+    )
+    include(GoogleTest)
+    gtest_discover_tests(${EXECUTABLE_TARGET})
+endfunction()
+
+foreach(SIMD_EXT IN LISTS MATHLIB_SIMD_EXT)
+    add_buildTest_variant(${SIMD_EXT})
+endforeach()
+
+
+

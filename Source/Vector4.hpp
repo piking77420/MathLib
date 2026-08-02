@@ -1,7 +1,7 @@
 #ifndef MATH_LIB_VECTOR4_H
 #define MATH_LIB_VECTOR4_H
 
-#include <CompilerDetection.hpp>
+#include <MathLibHeader.hpp>
 
 namespace MathLib
 {
