@@ -10,10 +10,10 @@ namespace MathLib
     {
     public:
     private:
-        double x;
-        double m_y;
-        double m_z;
-        double m_w;
+        T m_x;
+        T m_y;
+        T m_z;
+        T m_w;
     };
 
 } // MathLib

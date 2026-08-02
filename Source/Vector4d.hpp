@@ -12,9 +12,11 @@ namespace MathLib
     class Vector4<double>
     {
     public:
-        Vector4(double _x, double _y, double _z, double _w);
+        Vector4() = default;
 
-        ~Vector4();
+        ~Vector4() = default;
+
+        Vector4(double _x, double _y, double _z, double _w);
 
         [[nodiscard]] double getX() const noexcept;
 
@@ -23,6 +25,14 @@ namespace MathLib
         [[nodiscard]] double getZ() const noexcept;
 
         [[nodiscard]] double getW() const noexcept;
+
+        void setX(double _x) noexcept;
+
+        void setY(double _y) noexcept;
+
+        void setZ(double _z) noexcept;
+
+        void setW(double _w) noexcept;
 
     private:
         double m_x;

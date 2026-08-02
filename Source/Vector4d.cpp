@@ -10,8 +10,6 @@ namespace MathLib
     {
     }
 
-    Vector4<double>::~Vector4() = default;
-
     double Vector4<double>::getX() const noexcept
     {
         return m_x;
@@ -30,6 +28,26 @@ namespace MathLib
     double Vector4<double>::getW() const noexcept
     {
         return m_w;
+    }
+
+    void Vector4<double>::setX(double _x) noexcept
+    {
+        m_x = _x;
+    }
+
+    void Vector4<double>::setY(double _y) noexcept
+    {
+        m_y = _y;
+    }
+
+    void Vector4<double>::setZ(double _z) noexcept
+    {
+        m_z = _z;
+    }
+
+    void Vector4<double>::setW(double _w) noexcept
+    {
+        m_w = _w;
     }
 
 } // MathLib
