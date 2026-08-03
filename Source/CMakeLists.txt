@@ -14,29 +14,20 @@ set(MATHLIB_SOURCES
     Vector4d.cpp
     Vector4d.hpp)
 
-function(add_mathlib_variant level)
-    string(TOLOWER "${level}" level_lower)
+add_library(
+    ${PROJECT_NAME}
+    STATIC
+    ${MATHLIB_SOURCES}
+)
 
-    set(library_target "MathLib_${level}")
-    set(executable_target "MathTest_${level}")
-
-    add_library(
-        ${library_target}
-        STATIC
-        ${MATHLIB_SOURCES}
-    )
-
-    target_include_directories(
-        ${library_target}
-        PUBLIC
-            "${CMAKE_CURRENT_SOURCE_DIR}"
-    )
-
-    mathlib_enable_simd(${library_target} ${level})
-endfunction()
+target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+)
 
 foreach(SIMD_EXT IN LISTS MATHLIB_SIMD_EXT)
-    add_mathlib_variant(${SIMD_EXT})
+        mathlib_enable_simd(${PROJECT_NAME} ${SIMD_EXT})
 endforeach()
 
 enable_testing()

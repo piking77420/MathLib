@@ -1,13 +1,12 @@
-#include <array>
-
+#include <variant>
 #include <CpuInstructionSet.hpp>
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex?view=msvc-140
 // https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/x86-Built-in-Functions.html
 
+// NOLINTBEGIN(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTBEGIN(misc-include-cleaner)
-// NOLINTBEGIN(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
 
 namespace MathLib
 {
@@ -48,8 +47,8 @@ namespace MathLib
     {
 #if defined(_MSC_VER)
 
-        std::array<int, 4> registers{};
-        __cpuid(registers.data(), 0);
+        int registers[4];
+        __cpuid(registers, 0);
 
         return static_cast<std::uint32_t>(registers[0]);
 

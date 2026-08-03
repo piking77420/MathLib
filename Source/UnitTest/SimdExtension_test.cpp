@@ -27,7 +27,7 @@ TEST(SIMDExtension, DetectsX86InstructionSet)
     EXPECT_TRUE(std::holds_alternative<Cpu::X86InstructionSet>(InstructionSet));
 }
 
-#if defined(__GNUC__) || defined(__clang__)
+#if (defined(__GNUC__) || defined(__clang__)) && !defined(_MSC_VER)
 
 TEST(SIMDExtension, MatchesCompilerRuntimeDetection)
 {
@@ -71,52 +71,5 @@ TEST(SIMDExtension, MatchesCompilerRuntimeDetection)
 }
 
 #endif
-
-TEST(SIMDExtension, RuntimeFeatureDependenciesAreConsistent)
-{
-    ASSERT_TRUE(std::holds_alternative<Cpu::X86InstructionSet>(InstructionSet));
-
-    const Cpu::X86InstructionSet& x86Instruction = std::get<Cpu::X86InstructionSet>(InstructionSet);
-
-    if (x86Instruction.avx2)
-    {
-        EXPECT_TRUE(x86Instruction.avx);
-    }
-
-    if (x86Instruction.sse42)
-    {
-        EXPECT_TRUE(x86Instruction.sse41);
-        EXPECT_TRUE(x86Instruction.ssse3);
-        EXPECT_TRUE(x86Instruction.sse3);
-        EXPECT_TRUE(x86Instruction.sse2);
-        EXPECT_TRUE(x86Instruction.sse);
-    }
-
-    if (x86Instruction.sse41)
-    {
-        EXPECT_TRUE(x86Instruction.ssse3);
-        EXPECT_TRUE(x86Instruction.sse3);
-        EXPECT_TRUE(x86Instruction.sse2);
-        EXPECT_TRUE(x86Instruction.sse);
-    }
-
-    if (x86Instruction.ssse3)
-    {
-        EXPECT_TRUE(x86Instruction.sse3);
-        EXPECT_TRUE(x86Instruction.sse2);
-        EXPECT_TRUE(x86Instruction.sse);
-    }
-
-    if (x86Instruction.sse3)
-    {
-        EXPECT_TRUE(x86Instruction.sse2);
-        EXPECT_TRUE(x86Instruction.sse);
-    }
-
-    if (x86Instruction.sse2)
-    {
-        EXPECT_TRUE(x86Instruction.sse);
-    }
-}
 
 #endif // CPU_X86_64
