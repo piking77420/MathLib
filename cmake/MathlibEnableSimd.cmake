@@ -13,10 +13,6 @@ function(mathlib_enable_simd target level)
 
         elseif(level_upper STREQUAL "AVX2")
             set(simd_option /arch:AVX2)
-
-        elseif(level_upper STREQUAL "AVX512F")
-            set(simd_option /arch:AVX512)
-
         else()
             message(FATAL_ERROR
                 "Unsupported SIMD level '${level}' for MSVC"
@@ -48,10 +44,6 @@ function(mathlib_enable_simd target level)
 
             elseif(level_upper STREQUAL "AVX2")
                 set(simd_option -mavx2)
-
-            elseif(level_upper STREQUAL "AVX512F")
-                set(simd_option -mavx512f)
-
             else()
                 message(FATAL_ERROR
                     "Unsupported SIMD level '${level}' for "
@@ -75,7 +67,7 @@ function(mathlib_enable_simd target level)
         target_compile_options(
             ${target}
             PRIVATE
-                ${simd_option}
+            ${simd_option}
         )
     endif()
 endfunction()

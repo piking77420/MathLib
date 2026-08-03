@@ -18,14 +18,7 @@
 
 #if CPU_X86_64
 
-#if defined(MATHLIB_SIMD_LEVEL_AVX512F)
-
-#define SIMD_AVX512F 1
-#define SIMD_AVX2 1
-#define SIMD_AVX 1
-#define SIMD_SSE2 1
-
-#elif defined(MATHLIB_SIMD_LEVEL_AVX2)
+#if defined(MATHLIB_SIMD_LEVEL_AVX2)
 
 #define SIMD_AVX2 1
 #define SIMD_AVX 1

@@ -9,9 +9,7 @@ static inline const CpuInstructionSet InstructionSet{};
 
 TEST(SIMDExtension, CompileTimeConfiguration)
 {
-#if SIMD_AVX512F
-    SUCCEED() << "Compiled with AVX-512F enabled.";
-#elif SIMD_AVX2
+#if SIMD_AVX2
     SUCCEED() << "Compiled with AVX2 enabled.";
 #elif SIMD_AVX
     SUCCEED() << "Compiled with AVX enabled.";
