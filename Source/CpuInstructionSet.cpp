@@ -1,4 +1,3 @@
-#include <variant>
 #include <CpuInstructionSet.hpp>
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex?view=msvc-140
@@ -7,6 +6,11 @@
 // NOLINTBEGIN(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTBEGIN(misc-include-cleaner)
+
+#if CPU_ARM_64
+#include <sys/auxv.h>
+#include <asm/hwcap.h>
+#endif
 
 namespace MathLib
 {
@@ -63,7 +67,7 @@ namespace MathLib
 #endif
     }
 
-    [[nodiscard]] inline std::uint64_t xgetbv(std::uint32_t _index) noexcept
+    [[nodiscard]] static inline std::uint64_t xgetbv(std::uint32_t _index) noexcept
     {
 #if defined(_MSC_VER)
 
@@ -85,7 +89,7 @@ namespace MathLib
 #endif
     }
 
-    [[nodiscard]] constexpr bool hasBit(std::uint32_t _value, std::uint32_t _bit) noexcept
+    [[nodiscard]] static constexpr bool hasBit(std::uint32_t _value, std::uint32_t _bit) noexcept
     {
         return (_value & (std::uint32_t{1} << _bit)) != 0;
     }
@@ -101,23 +105,11 @@ namespace MathLib
         {
             return;
         }
-
-        Cpu::X86InstructionSet& x86InstructionSet = emplace<Cpu::X86InstructionSet>();
-
         const CpuidRegisters leaf1 = cpuid(1);
 
         // CPUID leaf 1, EDX
-        x86InstructionSet.mmx = hasBit(leaf1.edx, 23);
-        x86InstructionSet.sse = hasBit(leaf1.edx, 25);
-        x86InstructionSet.sse2 = hasBit(leaf1.edx, 26);
+        sse = hasBit(leaf1.edx, 25);
 
-        // CPUID leaf 1, ECX
-        x86InstructionSet.sse3 = hasBit(leaf1.ecx, 0);
-        x86InstructionSet.ssse3 = hasBit(leaf1.ecx, 9);
-        x86InstructionSet.sse41 = hasBit(leaf1.ecx, 19);
-        x86InstructionSet.sse42 = hasBit(leaf1.ecx, 20);
-
-        const bool cpuFma = hasBit(leaf1.ecx, 12);
         const bool cpuAvx = hasBit(leaf1.ecx, 28);
         const bool osxsave = hasBit(leaf1.ecx, 27);
 
@@ -133,8 +125,7 @@ namespace MathLib
 
         const bool osSupportsAvx = osxsave && (xcr0 & AvxState) == AvxState;
 
-        x86InstructionSet.avx = cpuAvx && osSupportsAvx;
-        x86InstructionSet.fma = cpuFma && x86InstructionSet.avx;
+        avx = cpuAvx && osSupportsAvx;
 
         if (maximumLeaf < 7)
         {
@@ -142,30 +133,13 @@ namespace MathLib
         }
 
         const CpuidRegisters leaf7 = cpuid(7, 0);
-
-        x86InstructionSet.bmi1 = hasBit(leaf7.ebx, 3);
-        x86InstructionSet.bmi2 = hasBit(leaf7.ebx, 8);
-
         const bool cpuAvx2 = hasBit(leaf7.ebx, 5);
 
-        x86InstructionSet.avx2 = cpuAvx2 && x86InstructionSet.avx;
-
-        constexpr std::uint64_t Avx512State = AvxState | (std::uint64_t{1} << 5) | // Opmask registers
-                                              (std::uint64_t{1} << 6) |            // ZMM0-ZMM15 upper bits
-                                              (std::uint64_t{1} << 7);             // ZMM16-ZMM31
-
-        const bool osSupportsAvx512 = osxsave && (xcr0 & Avx512State) == Avx512State;
-
-        x86InstructionSet.avx512f = hasBit(leaf7.ebx, 16) && osSupportsAvx512;
-
-        // AVX-512 subsets are useful only when AVX512F is available.
-        x86InstructionSet.avx512dq = x86InstructionSet.avx512f && hasBit(leaf7.ebx, 17);
-
-        x86InstructionSet.avx512cd = x86InstructionSet.avx512f && hasBit(leaf7.ebx, 28);
-
-        x86InstructionSet.avx512bw = x86InstructionSet.avx512f && hasBit(leaf7.ebx, 30);
-
-        x86InstructionSet.avx512vl = x86InstructionSet.avx512f && hasBit(leaf7.ebx, 31);
+        avx2 = cpuAvx2 && avx;
+#elif CPU_ARM_64
+        const unsigned long hwcap = getauxval(AT_HWCAP);
+        neon = (hwcap & HWCAP_ASIMD) != 0;
+        sve = (hwcap & HWCAP_SVE) != 0;
 #endif // CPU_X86_64
     }
 
