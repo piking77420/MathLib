@@ -98,7 +98,7 @@
             "inherits": "windows-msvc-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -108,7 +108,7 @@
             "inherits": "windows-msvc-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -118,7 +118,7 @@
             "inherits": "windows-msvc-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -128,7 +128,7 @@
             "inherits": "linux-clang-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -138,7 +138,7 @@
             "inherits": "linux-clang-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -148,7 +148,7 @@
             "inherits": "linux-clang-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -158,7 +158,7 @@
             "inherits": "linux-clang-arm64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "SIMD_LEVEL": "NEON"
+                "MATHLIB_SIMD_EXT": "NEON"
             }
         },
         {
@@ -168,7 +168,7 @@
             "inherits": "linux-clang-arm64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "SIMD_LEVEL": "NEON"
+                "MATHLIB_SIMD_EXT": "NEON"
             }
         },
         {
@@ -178,7 +178,7 @@
             "inherits": "linux-clang-arm64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "SIMD_LEVEL": "NEON"
+                "MATHLIB_SIMD_EXT": "NEON"
             }
         },
         {
@@ -188,7 +188,7 @@
             "inherits": "linux-gcc-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -198,7 +198,7 @@
             "inherits": "linux-gcc-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -208,7 +208,7 @@
             "inherits": "linux-gcc-x64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "SIMD_LEVEL": "AVX2"
+                "MATHLIB_SIMD_EXT": "AVX2"
             }
         },
         {
@@ -218,7 +218,7 @@
             "inherits": "linux-gcc-arm64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "SIMD_LEVEL": "NEON"
+                "MATHLIB_SIMD_EXT": "NEON"
             }
         },
         {
@@ -228,7 +228,7 @@
             "inherits": "linux-gcc-arm64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "SIMD_LEVEL": "NEON"
+                "MATHLIB_SIMD_EXT": "NEON"
             }
         },
         {
@@ -238,7 +238,7 @@
             "inherits": "linux-gcc-arm64-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "SIMD_LEVEL": "NEON"
+                "MATHLIB_SIMD_EXT": "NEON"
             }
         }
     ],

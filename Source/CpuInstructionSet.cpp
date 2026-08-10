@@ -6,6 +6,8 @@
 // NOLINTBEGIN(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(misc-use-anonymous-namespace)
+// NOLINTBEGIN(hicpp-no-assemble)
 
 #if CPU_ARM_64
 #include <sys/auxv.h>
@@ -67,7 +69,7 @@ namespace MathLib
 #endif
     }
 
-    [[nodiscard]] static inline std::uint64_t xgetbv(std::uint32_t _index) noexcept
+    [[nodiscard]] static inline std::uint64_t xgetbv(const std::uint32_t _index) noexcept
     {
 #if defined(_MSC_VER)
 
@@ -89,7 +91,7 @@ namespace MathLib
 #endif
     }
 
-    [[nodiscard]] static constexpr bool hasBit(std::uint32_t _value, std::uint32_t _bit) noexcept
+    [[nodiscard]] static constexpr bool hasBit(const std::uint32_t _value, const std::uint32_t _bit) noexcept
     {
         return (_value & (std::uint32_t{1} << _bit)) != 0;
     }
@@ -145,6 +147,8 @@ namespace MathLib
 
 } // namespace MathLib
 
+// NOLINTEND(hicpp-no-assemble)
+// NOLINTEND(misc-use-anonymous-namespace)
 // NOLINTEND(misc-include-cleaner)
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTEND(cppcoreguidelines-pro-bounds-array-to-pointer-decay)

@@ -1,8 +1,6 @@
 #ifndef MATH_LIB_COMPILER_DETECTION_H
 #define MATH_LIB_COMPILER_DETECTION_H
 
-#include <cstdint>
-
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 
 // Architecture
@@ -40,15 +38,15 @@
 #if CPU_ARM_64
 
 // ARM SIMD
-#if defined(MATHLIB_SIMD_LEVEL_AVX_SVE)
+#if defined(MATHLIB_SIMD_LEVEL_SVE)
 #define SIMD_ARM_SVE 1
 #endif
 
-#if defined(MATHLIB_SIMD_LEVEL_AVX_SVE2)
+#if defined(MATHLIB_SIMD_LEVEL_SVE2)
 #define SIMD_ARM_SVE2 1
 #endif
 
-#if defined(MATHLIB_SIMD_LEVEL_AVX)
+#if defined(MATHLIB_SIMD_LEVEL)
 #define SIMD_ARM_NEON 1
 #endif
 
