@@ -1,8 +1,7 @@
 #ifndef CPU_INSTRUCTION_SET_H
 #define CPU_INSTRUCTION_SET_H
 
-#include <cstdint>
-#include <CompilerDetection.hpp>
+#include <MathLibHeader.hpp>
 
 #if defined(_MSC_VER)
 

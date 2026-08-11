@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(MATHLIB_SOURCES 
     CpuInstructionSet.cpp
     CpuInstructionSet.hpp
-    CompilerDetection.hpp
+    MathLibHeader.hpp
     Vector4.cpp
     Vector4.hpp
     Vector4d.cpp

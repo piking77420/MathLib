@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <CompilerDetection.hpp>
+#include <MathLibHeader.hpp>
 #include <CpuInstructionSet.hpp>
 
 using namespace MathLib;

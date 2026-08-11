@@ -1,5 +1,6 @@
-#include <CpuInstructionSet.hpp>
+#include <cstdint>
 
+#include <CpuInstructionSet.hpp>
 // https://learn.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex?view=msvc-140
 // https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/x86-Built-in-Functions.html
 
@@ -7,7 +8,8 @@
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTBEGIN(misc-include-cleaner)
 // NOLINTBEGIN(misc-use-anonymous-namespace)
-// NOLINTBEGIN(hicpp-no-assemble)
+// NOLINTBEGIN(hicpp-no-assembler)
+// NOLINTBEGIN(misc-const-correctness)
 
 #if CPU_ARM_64
 #include <sys/auxv.h>
@@ -147,7 +149,8 @@ namespace MathLib
 
 } // namespace MathLib
 
-// NOLINTEND(hicpp-no-assemble)
+// NOLINTEND(misc-const-correctness)
+// NOLINTEND(hicpp-no-assembler)
 // NOLINTEND(misc-use-anonymous-namespace)
 // NOLINTEND(misc-include-cleaner)
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
