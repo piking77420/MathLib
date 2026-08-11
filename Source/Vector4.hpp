@@ -21,6 +21,46 @@ namespace MathLib
         {
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE double getX() const noexcept
+        {
+            return m_x;
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE double getY() const noexcept
+        {
+            return m_y;
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE double getZ() const noexcept
+        {
+            return m_z;
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE double getW() const noexcept
+        {
+            return m_w;
+        }
+
+        MATH_LIB_FORCE_INLINE void setX(double _x) noexcept
+        {
+            m_x = _x;
+        }
+
+        MATH_LIB_FORCE_INLINE void setY(double _y) noexcept
+        {
+            m_y = _y;
+        }
+
+        MATH_LIB_FORCE_INLINE void setZ(double _z) noexcept
+        {
+            m_z = _z;
+        }
+
+        MATH_LIB_FORCE_INLINE void setW(double _w) noexcept
+        {
+            m_w = _w;
+        }
+
     private:
         T m_x;
         T m_y;

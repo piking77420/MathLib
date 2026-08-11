@@ -16,4 +16,18 @@ TEST(TestVec4, Constructor)
     EXPECT_DOUBLE_EQ(v.getW(), 4.0);
 }
 
+TEST(TestVec4, Setter)
+{
+    Vector4d v{};
+    v.setX(1.);
+    v.setY(2.);
+    v.setZ(3.);
+    v.setW(4.);
+
+    EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+    EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+    EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+    EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
