@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <array>
 
 #include <MathLibHeader.hpp>
 #include <Vector4d.hpp>
@@ -544,6 +545,52 @@ TEST(TestVec4, isHomogeneous)
     {
         const Vector4d v(1.41, 0.5, -4.0, 0.0);
         EXPECT_FALSE(v.isHomogeneous());
+    }
+}
+
+TEST(TestVec4, streamToUnalignedDouble)
+{
+    {
+        std::array<double, 4> data;
+        const Vector4d v(1.0, 2.0, 3.0, 4.0);
+        v.streamToUnalignedDouble(data.data());
+        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
+        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
+        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
+        EXPECT_NEAR(data[3], 4.0, DoubleEpsilon);
+    }
+
+    {
+        std::array<double, 4> data;
+        const Vector4d v(1.0, 2.0, 3.0, 4.0);
+        v.streamToUnalignedDouble(std::span<double, 4>(data));
+        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
+        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
+        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
+        EXPECT_NEAR(data[3], 4.0, DoubleEpsilon);
+    }
+}
+
+TEST(TestVec4, streamToUnalignedFloat)
+{
+    {
+        std::array<float, 4> data;
+        const Vector4d v(1.0, 2.0, 3.0, 4.0);
+        v.streamToUnalignedFloat(data.data());
+        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
+        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
+        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
+        EXPECT_NEAR(data[3], 4.0f, FloatEpsilon);
+    }
+
+    {
+        std::array<float, 4> data;
+        const Vector4d v(1.0, 2.0, 3.0, 4.0);
+        v.streamToUnalignedFloat(std::span<float, 4>(data));
+        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
+        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
+        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
+        EXPECT_NEAR(data[3], 4.0f, FloatEpsilon);
     }
 }
 

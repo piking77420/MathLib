@@ -2,6 +2,7 @@
 #define MATH_LIB_VECTOR4D_H
 
 #include <cmath>
+#include <span>
 #include <MathLibHeader.hpp>
 
 namespace MathLib
@@ -271,6 +272,58 @@ namespace MathLib
         static Vector4 zero()
         {
             return {0.0, 0.0, 0.0, 1.0};
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(const std::span<double, 4>& _span) const
+        {
+            _span[0] = m_x;
+            _span[1] = m_y;
+            _span[2] = m_z;
+            _span[3] = m_w;
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(double* const _ptr) const
+        {
+            streamToUnalignedDouble(std::span<double, 4>(_ptr, 4));
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToUnalignedFloat(const std::span<float, 4>& _span) const
+        {
+            _span[0] = static_cast<float>(m_x);
+            _span[1] = static_cast<float>(m_y);
+            _span[2] = static_cast<float>(m_z);
+            _span[3] = static_cast<float>(m_w);
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToUnalignedFloat(float* const _ptr) const
+        {
+            streamToUnalignedFloat(std::span<float, 4>(_ptr, 4));
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToAlignedDouble(const std::span<double, 4>& _span) const
+        {
+            _span[0] = m_x;
+            _span[1] = m_y;
+            _span[2] = m_z;
+            _span[3] = m_w;
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToAlignedDouble(double* const _ptr) const
+        {
+            streamToAlignedDouble(std::span<double, 4>(_ptr, 4));
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToAlignedFloat(const std::span<float, 4>& _span) const
+        {
+            _span[0] = static_cast<float>(m_x);
+            _span[1] = static_cast<float>(m_y);
+            _span[2] = static_cast<float>(m_z);
+            _span[3] = static_cast<float>(m_w);
+        }
+
+        MATH_LIB_FORCE_INLINE void streamToAlignedFloat(float* const _ptr) const
+        {
+            streamToUnalignedFloat(std::span<float, 4>(_ptr, 4));
         }
 
     private:
