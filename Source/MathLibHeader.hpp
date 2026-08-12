@@ -3,6 +3,8 @@
 
 #include <cstdlib>
 #include <algorithm>
+#include <bit>
+#include <cstdint>
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 // Architecture
@@ -108,9 +110,16 @@ namespace MathLib
 
     [[nodiscard]] constexpr bool FuzzyEqual(float _a, float _b, float _tolerance = FloatEpsilon)
     {
-        return std::abs(_a - _b) <= _tolerance * std::max({1.0, std::abs(_a), std::abs(_b)});
+        return std::abs(_a - _b) <= _tolerance * std::max({1.0f, std::abs(_a), std::abs(_b)});
     }
 
+    template<std::size_t Alignment>
+    [[nodiscard]] constexpr bool isAligned(const void* const _ptr) noexcept
+    {
+        static_assert(std::has_single_bit(Alignment));
+
+        return (reinterpret_cast<std::uintptr_t>(_ptr) & (Alignment - 1)) == 0;
+    }
 }
 
 // NOLINTEND(cppcoreguidelines-macro-usage)
