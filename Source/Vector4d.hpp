@@ -1,4 +1,4 @@
-#ifndef MATH_LIB_VECTOR4D_H
+    #ifndef MATH_LIB_VECTOR4D_H
 #define MATH_LIB_VECTOR4D_H
 
 #include <cmath>
@@ -65,17 +65,7 @@ namespace MathLib
             m_w = _w;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator+(const Vector4& _other) const
-        {
-            return {m_x + _other.m_x, m_y + _other.m_y, m_z + _other.m_z, m_w + _other.m_w};
-        }
-
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator-(const Vector4& _other) const
-        {
-            return {m_x - _other.m_x, m_y - _other.m_y, m_z - _other.m_z, m_w - _other.m_w};
-        }
-
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4& operator+=(const Vector4& _other) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator+=(const Vector4& _other) noexcept
         {
             m_x += _other.m_x;
             m_y += _other.m_y;
@@ -84,7 +74,7 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4& operator-=(const Vector4& _other) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator-=(const Vector4& _other) noexcept
         {
             m_x -= _other.m_x;
             m_y -= _other.m_y;
@@ -93,27 +83,37 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator+(const double _scalar) const
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 _lhs, const Vector4& _rhs) noexcept
         {
-            return {m_x + _scalar, m_y + _scalar, m_z + _scalar, m_w + _scalar};
+            _lhs += _rhs;
+            return _lhs;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator-(const double _scalar) const
-        {
-            return {m_x - _scalar, m_y - _scalar, m_z - _scalar, m_w - _scalar};
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 _lhs, const Vector4& _rhs) noexcept
+         {
+            _lhs -= _rhs;
+            return _lhs;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator*(const double _scalar) const
+        MATH_LIB_FORCE_INLINE Vector4& operator+=(const double _scalar) noexcept
         {
-            return {m_x * _scalar, m_y * _scalar, m_z * _scalar, m_w * _scalar};
+            m_x += _scalar;
+            m_y += _scalar;
+            m_z += _scalar;
+            m_w += _scalar;
+            return *this;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator/(const double _scalar) const
+        MATH_LIB_FORCE_INLINE Vector4& operator-=(const double _scalar) noexcept
         {
-            return {m_x / _scalar, m_y / _scalar, m_z / _scalar, m_w / _scalar};
+            m_x -= _scalar;
+            m_y -= _scalar;
+            m_z -= _scalar;
+            m_w -= _scalar;
+            return *this;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4& operator*=(double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator*=(double _scalar) noexcept
         {
             m_x *= _scalar;
             m_y *= _scalar;
@@ -122,13 +122,37 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4& operator/=(double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator/=(double _scalar) noexcept
         {
             m_x /= _scalar;
             m_y /= _scalar;
             m_z /= _scalar;
             m_w /= _scalar;
             return *this;
+        }
+        
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 _lhs, const double _scalar) noexcept
+        {
+            _lhs += _scalar;
+            return _lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 _lhs, const double _scalar) noexcept
+        {
+            _lhs -= _scalar;
+            return _lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator*(Vector4 _lhs, const double _scalar) noexcept
+        {
+            _lhs *= _scalar;
+            return _lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator/(Vector4 _lhs, const double _scalar) noexcept
+        {
+            _lhs /= _scalar;
+            return _lhs;
         }
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& _a, const Vector4& _b)
