@@ -120,6 +120,9 @@ namespace MathLib
 
         return (reinterpret_cast<std::uintptr_t>(_ptr) & (Alignment - 1)) == 0;
     }
+
+    static constexpr size_t SSE_ALIGNEMENT = 16;
+    static constexpr size_t AVX_AVX2_ALIGNEMENT = 32;
 }
 
 // NOLINTEND(cppcoreguidelines-macro-usage)

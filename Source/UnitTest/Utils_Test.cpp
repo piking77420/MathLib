@@ -14,8 +14,6 @@ static inline const CpuInstructionSet InstructionSet{};
 // isAligned<32>(ptr); // AVX / AVX2
 // isAligned<64>(ptr); // AVX-512
 
-static constexpr size_t AVX_AVX2_ALIGNEMENT = 32;
-
 TEST(Utils, Aligned)
 {
     alignas(32) std::byte data[64];
@@ -47,6 +45,23 @@ TEST(Utils, AlignmentVector4)
         Vector4d v;
         EXPECT_FALSE(isAligned<32>(&v));
     }
+}
+
+TEST(Utils, Vector4dNotAVXAligned)
+{
+    alignas(32) std::byte storage[64];
+
+    // storage is 32-byte aligned.
+    // +8 is still valid for Vector4d (alignof == 8),
+    // but deliberately not 32-byte aligned.
+    void* ptr = storage + 8;
+
+    auto* v = std::construct_at(static_cast<Vector4d*>(ptr));
+
+    EXPECT_TRUE(isAligned<8>(v));
+    EXPECT_FALSE(isAligned<32>(v));
+
+    std::destroy_at(v);
 }
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <span>
+#include <cassert>
 #include <MathLibHeader.hpp>
 
 namespace MathLib
@@ -287,7 +288,7 @@ namespace MathLib
             streamToUnalignedDouble(std::span<double, 4>(_ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnalignedFloat(const std::span<float, 4>& _span) const
+        MATH_LIB_FORCE_INLINE void streamToUnAlignedFloat(const std::span<float, 4>& _span) const
         {
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
@@ -295,13 +296,15 @@ namespace MathLib
             _span[3] = static_cast<float>(m_w);
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnalignedFloat(float* const _ptr) const
+        MATH_LIB_FORCE_INLINE void streamToUnAlignedFloat(float* const _ptr) const
         {
-            streamToUnalignedFloat(std::span<float, 4>(_ptr, 4));
+            streamToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
         }
 
         MATH_LIB_FORCE_INLINE void streamToAlignedDouble(const std::span<double, 4>& _span) const
         {
+            assert(isAligned<AVX_AVX2_ALIGNEMENT>(&_span[0]));
+
             _span[0] = m_x;
             _span[1] = m_y;
             _span[2] = m_z;
@@ -315,6 +318,8 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToAlignedFloat(const std::span<float, 4>& _span) const
         {
+            assert(isAligned<SSE_ALIGNEMENT>(&_span[0]));
+
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
             _span[2] = static_cast<float>(m_z);
@@ -323,7 +328,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToAlignedFloat(float* const _ptr) const
         {
-            streamToUnalignedFloat(std::span<float, 4>(_ptr, 4));
+            streamToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
         }
 
     private:
