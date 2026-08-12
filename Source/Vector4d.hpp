@@ -1,4 +1,4 @@
-    #ifndef MATH_LIB_VECTOR4D_H
+#ifndef MATH_LIB_VECTOR4D_H
 #define MATH_LIB_VECTOR4D_H
 
 #include <cmath>
@@ -90,7 +90,7 @@ namespace MathLib
         }
 
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 _lhs, const Vector4& _rhs) noexcept
-         {
+        {
             _lhs -= _rhs;
             return _lhs;
         }
@@ -130,7 +130,7 @@ namespace MathLib
             m_w /= _scalar;
             return *this;
         }
-        
+
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 _lhs, const double _scalar) noexcept
         {
             _lhs += _scalar;
@@ -153,6 +153,17 @@ namespace MathLib
         {
             _lhs /= _scalar;
             return _lhs;
+        }
+
+        [[nodiscard]] bool operator==(const Vector4& _other) const
+        {
+            return FuzzyZero(m_x - _other.m_x) && FuzzyZero(m_y - _other.m_y) && FuzzyZero(m_z - _other.m_z) &&
+                   FuzzyZero(m_w - _other.m_w);
+        }
+
+        [[nodiscard]] bool operator!=(const Vector4& _other) const
+        {
+            return !(*this == _other);
         }
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& _a, const Vector4& _b)
@@ -180,64 +191,55 @@ namespace MathLib
             return std::sqrt(distanceSquare(_a, _b));
         }
 
-        [[nodiscard]] bool operator==(const Vector4& _other) const
-        {
-            return FuzzyZero(m_x - _other.m_x) && FuzzyZero(m_y - _other.m_y) && FuzzyZero(m_z - _other.m_z) &&
-                   FuzzyZero(m_w - _other.m_w);
-        }
-
-        [[nodiscard]] bool operator!=(const Vector4& _other) const
-        {
-            return !this->operator==(_other);
-        }
-
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 getNormalize() const
         {
-            const double currentlength = length();
+            const double currentLength = length();
 
-            if (FuzzyZero(currentlength))
+            if (FuzzyZero(currentLength))
             {
                 return *this;
             }
 
-            return *this / currentlength;
+            return *this / currentLength;
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 getNormalizeFast() const
         {
-            const double currentlength = length();
+            const double currentLength = length();
 
-            if (FuzzyZero(currentlength))
+            if (FuzzyZero(currentLength))
             {
                 return *this;
             }
-            const double invCurrentlength = 1.0 / currentlength;
 
-            return *this * invCurrentlength;
+            const double invLength = 1.0 / currentLength;
+            return *this * invLength;
         }
 
-        [[nodiscard]] Vector4& normalize()
+        Vector4& normalize()
         {
-            const double currentlength = length();
+            const double currentLength = length();
 
-            if (!FuzzyZero(currentlength))
+            if (FuzzyZero(currentLength))
             {
-                *this = *this / currentlength;
+                return *this;
             }
 
+            *this /= currentLength;
             return *this;
         }
 
-        [[nodiscard]] Vector4& normalizeFast()
+        Vector4& normalizeFast()
         {
-            const double currentlength = length();
+            const double currentLength = length();
 
-            if (!FuzzyZero(currentlength))
+            if (FuzzyZero(currentLength))
             {
-                const double invCurrentlength = 1.0 / currentlength;
-                *this = *this * invCurrentlength;
+                return *this;
             }
 
+            const double invLength = 1.0 / currentLength;
+            *this *= invLength;
             return *this;
         }
 

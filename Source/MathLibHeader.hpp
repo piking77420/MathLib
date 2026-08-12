@@ -108,7 +108,7 @@ namespace MathLib
 
     [[nodiscard]] constexpr bool FuzzyEqual(float _a, float _b, float _tolerance = FloatEpsilon)
     {
-        return std::abs(_a - _b) <= _tolerance * std::max({1.0f, std::abs(_a), std::abs(_b)});
+        return std::abs(_a - _b) <= _tolerance * std::max({1.0, std::abs(_a), std::abs(_b)});
     }
 
 }
