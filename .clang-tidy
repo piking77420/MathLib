@@ -12,7 +12,7 @@ CheckOptions:
   # Public members: value
   readability-identifier-naming.PublicMemberCase: camelBack
 
-  cppcoreguidelines-pro-type-member-init.IgnoreArrays: true
+  cppcoreguidelines-pro-type-member-init : false
   cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
   misc-const-correctness.WarnPointersAsValues: true
   cppcoreguidelines-non-private-member-variables-in-classes.IgnorePublicMemberVariables: true

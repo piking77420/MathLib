@@ -40,10 +40,15 @@ TEST(Utils, AlignmentVector4)
         alignas(32) Vector4d v;
         EXPECT_TRUE(isAligned<32>(&v));
     }
-    
+
     {
-        Vector4d v;
-        EXPECT_FALSE(isAligned<32>(&v));
+        alignas(32) std::byte storage[sizeof(Vector4d)];
+
+        Vector4d* v = std::construct_at(reinterpret_cast<Vector4d*>(storage));
+
+        EXPECT_TRUE(isAligned<32>(v));
+
+        std::destroy_at(v);
     }
 }
 
