@@ -18,11 +18,11 @@ namespace MathLib
     class Vector4<double>
     {
     public:
-        Vector4() = default;
+        explicit Vector4() = default;
 
         ~Vector4() = default;
 
-        MATH_LIB_FORCE_INLINE Vector4(double _x, double _y, double _z, double _w)
+        MATH_LIB_FORCE_INLINE explicit Vector4(double _x, double _y, double _z, double _w)
             : m_x(_x)
             , m_y(_y)
             , m_z(_z)
@@ -255,27 +255,27 @@ namespace MathLib
 
         static Vector4 unitX()
         {
-            return {1.0, 0.0, 0.0, 0.0};
+            return Vector4(1.0, 0.0, 0.0, 0.0);
         }
 
         static Vector4 unitY()
         {
-            return {0.0, 1.0, 0.0, 0.0};
+            return Vector4(0.0, 1.0, 0.0, 0.0);
         }
 
         static Vector4 unitZ()
         {
-            return {0.0, 0.0, 1.0, 0.0};
+            return Vector4(0.0, 0.0, 1.0, 0.0);
         }
 
         static Vector4 unitW()
         {
-            return {0.0, 0.0, 0.0, 1.0};
+            return Vector4(0.0, 0.0, 0.0, 1.0);
         }
 
         static Vector4 zero()
         {
-            return {0.0, 0.0, 0.0, 1.0};
+            return Vector4(0.0, 0.0, 0.0, 1.0);
         }
 
         MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(const std::span<double, 4>& _span) const
