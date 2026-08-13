@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <array>
+#include <span>
 
 #include <MathLibHeader.hpp>
 #include <Vector4d.hpp>
@@ -743,6 +744,98 @@ TEST(TestVec4, streamToUnalignedFloat)
         EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
         EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
         EXPECT_NEAR(data[3], 4.0f, FloatEpsilon);
+    }
+}
+
+TEST(TestVec4, fromUnAlignedDouble)
+{
+    {
+        std::array<double, 4> data = {1.0, 2.0, 3.0, 4.0};
+        Vector4d v;
+        v.fromUnalignedDouble(data);
+        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
+    }
+
+    {
+        std::array<double, 4> data = {1.0, 2.0, 3.0, 4.0};
+        Vector4d v;
+        v.fromUnalignedDouble(std::span<const double, 4>(data));
+        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
+    }
+}
+
+TEST(TestVec4, fromUnAlignedFloat)
+{
+    {
+        std::array<float, 4> data = {1.0, 2.0, 3.0, 4.0};
+        Vector4d v;
+        v.fromUnAlignedFloat(data);
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
+    }
+
+    {
+        std::array<float, 4> data = {1.0, 2.0, 3.0, 4.0};
+        Vector4d v;
+        v.fromUnAlignedFloat(std::span<const float, 4>(data));
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
+    }
+}
+
+TEST(TestVec4, fromAlignedDouble)
+{
+    {
+        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
+        Vector4d v;
+        v.fromAlignedDouble(data.data());
+        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
+    }
+
+    {
+        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
+        Vector4d v;
+        v.fromAlignedDouble(std::span<double, 4>(data));
+        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
+    }
+}
+
+TEST(TestVec4, fromAlignedFloat)
+{
+    {
+        alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
+        Vector4d v;
+        v.fromAlignedFloat(data.data());
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
+    }
+
+    {
+        alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
+        Vector4d v;
+        v.fromAlignedFloat(std::span<float, 4>(data));
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
+        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
     }
 }
 

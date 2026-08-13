@@ -334,6 +334,62 @@ namespace MathLib
             streamToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
         }
 
+        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 4>& _span)
+        {
+            m_x = _span[0];
+            m_y = _span[1];
+            m_z = _span[2];
+            m_w = _span[3];
+        }
+
+        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(double* const _ptr)
+        {
+            fromUnalignedDouble(std::span<double, 4>(_ptr, 4));
+        }
+
+        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const std::span<const float, 4>& _span)
+        {
+            m_x = static_cast<double>(_span[0]);
+            m_y = static_cast<double>(_span[1]);
+            m_z = static_cast<double>(_span[2]);
+            m_w = static_cast<double>(_span[3]);
+        }
+
+        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(float* const _ptr)
+        {
+            fromUnAlignedFloat(std::span<float, 4>(_ptr, 4));
+        }
+
+        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 4>& _span)
+        {
+            assert(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+
+            m_x = _span[0];
+            m_y = _span[1];
+            m_z = _span[2];
+            m_w = _span[3];
+        }
+
+        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const _ptr)
+        {
+            fromAlignedDouble(std::span<const double, 4>(_ptr, 4));
+        }
+
+        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 4>& _span)
+        {
+            assert(isAligned<SSE_ALIGNEMENT>(_span.data()));
+
+            m_x = static_cast<double>(_span[0]);
+            m_y = static_cast<double>(_span[1]);
+            m_z = static_cast<double>(_span[2]);
+            m_w = static_cast<double>(_span[3]);
+        }
+
+        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const _ptr)
+        {
+            fromAlignedFloat(std::span<const float, 4>(_ptr, 4));
+        }
+
         friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& _ostream, const Vector4& _vec)
         {
             alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data;
