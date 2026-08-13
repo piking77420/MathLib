@@ -66,6 +66,8 @@ Checks: >
     -readability-use-concise-preprocessor-directives,
     -zircon-*,
     -readability-uppercase-literal-suffix,
-    -cppcoreguidelines-pro-type-reinterpret-cast
+    -hicpp-uppercase-literal-suffix,
+    -cppcoreguidelines-pro-type-reinterpret-cast,
+    -cppcoreguidelines-pro-type-member-init,
 HeaderFileExtensions: [h, hpp, cppm]
 HeaderFilterRegex: .*

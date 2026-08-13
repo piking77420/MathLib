@@ -521,6 +521,112 @@ TEST(TestVec4, normalize)
     }
 }
 
+TEST(TestVec4, getNormalizeFast)
+{
+    {
+        const Vector4d v(3.0, 4.0, 0.0, 0.0);
+        const Vector4d normalized = v.getNormalizeFast();
+
+        EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+
+        // getNormalizeFast() must not modify the original vector.
+        EXPECT_DOUBLE_EQ(v.getX(), 3.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 4.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+    }
+
+    {
+        const Vector4d v(-1.0, -2.0, 4.0, 8.0);
+        const Vector4d normalized = v.getNormalizeFast();
+
+        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+    }
+
+    // Already normalized.
+    {
+        const Vector4d v = Vector4d::unitX();
+        const Vector4d normalized = v.getNormalizeFast();
+
+        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
+    }
+
+    // Zero vector.
+    {
+        const Vector4d v(0.0, 0.0, 0.0, 0.0);
+        const Vector4d normalized = v.getNormalizeFast();
+
+        EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(normalized.getZ(), 0.0);
+        EXPECT_DOUBLE_EQ(normalized.getW(), 0.0);
+    }
+}
+
+TEST(TestVec4, normalizeFast)
+{
+    {
+        Vector4d v(3.0, 4.0, 0.0, 0.0);
+
+        v.normalizeFast();
+
+        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
+        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getW(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        Vector4d v(-1.0, -2.0, 4.0, 8.0);
+
+        v.normalizeFast();
+
+        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+    }
+
+    // Already normalizeFastd.
+    {
+        Vector4d v = Vector4d::unitX();
+
+        v.normalizeFast();
+
+        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+    }
+
+    // Zero vector should remain zero.
+    {
+        Vector4d v(0.0, 0.0, 0.0, 0.0);
+
+        v.normalizeFast();
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+    }
+
+    // normalizeFast() should return *this.
+    {
+        Vector4d v(3.0, 4.0, 0.0, 0.0);
+
+        Vector4d const& result = v.normalizeFast();
+
+        EXPECT_EQ(&result, &v);
+    }
+}
+
 TEST(TestVec4, isHomogeneous)
 {
     // Zero with w equal 1

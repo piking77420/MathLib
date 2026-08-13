@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <span>
+
 #include <MathLibHeader.hpp>
 #include <CpuInstructionSet.hpp>
 #include <Vector4d.hpp>

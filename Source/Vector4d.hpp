@@ -1,9 +1,12 @@
 #ifndef MATH_LIB_VECTOR4D_H
 #define MATH_LIB_VECTOR4D_H
 
-#include <cmath>
-#include <span>
+#include <array>
 #include <cassert>
+#include <cmath>
+#include <format>
+#include <ostream>
+#include <span>
 #include <MathLibHeader.hpp>
 
 namespace MathLib
@@ -303,7 +306,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToAlignedDouble(const std::span<double, 4>& _span) const
         {
-            assert(isAligned<AVX_AVX2_ALIGNEMENT>(&_span[0]));
+            assert(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
 
             _span[0] = m_x;
             _span[1] = m_y;
@@ -318,7 +321,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToAlignedFloat(const std::span<float, 4>& _span) const
         {
-            assert(isAligned<SSE_ALIGNEMENT>(&_span[0]));
+            assert(isAligned<SSE_ALIGNEMENT>(_span.data()));
 
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
@@ -331,6 +334,15 @@ namespace MathLib
             streamToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
         }
 
+        friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& _ostream, const Vector4& _vec)
+        {
+            alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data;
+            _vec.streamToUnalignedDouble(data);
+            _ostream << "x: " << data[0] << ", y: " << data[1] << ", z: " << data[2] << ", w: " << data[3];
+
+            return _ostream;
+        }
+
     private:
         double m_x;
         double m_y;
@@ -341,5 +353,23 @@ namespace MathLib
     using Vector4d = Vector4<double>;
 
 } // MathLib
+
+template<>
+struct std::formatter<MathLib::Vector4d>
+{
+    constexpr static std::format_parse_context::const_iterator parse(std::format_parse_context& _ctx)
+    {
+        return _ctx.begin();
+    }
+
+    static std::format_context::iterator format(const MathLib::Vector4d& _v, std::format_context& _ctx)
+    {
+        std::array<double, 4> data;
+
+        _v.streamToUnalignedDouble(data);
+
+        return std::format_to(_ctx.out(), "x: {}, y: {}, z: {}, w: {}", data[0], data[1], data[2], data[3]);
+    }
+};
 
 #endif // MATH_LIB_VECTOR4D_H
