@@ -213,6 +213,11 @@ namespace MathLib
             return *this;
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static double cross(const Vector2& _a, const Vector2& _b)
+        {
+            return _b.getY() * _a.getX() - _b.getX() * _a.getY();
+        }
+
         static Vector2 unitX()
         {
             return Vector2(1.0, 0.0);
@@ -341,5 +346,23 @@ namespace MathLib
     using Vector2d = Vector2<double>;
 
 } // MathLib
+
+template<>
+struct std::formatter<MathLib::Vector2d>
+{
+    constexpr static std::format_parse_context::const_iterator parse(std::format_parse_context& _ctx)
+    {
+        return _ctx.begin();
+    }
+
+    static std::format_context::iterator format(const MathLib::Vector2d& _v, std::format_context& _ctx)
+    {
+        std::array<double, 2> data;
+
+        _v.streamToUnalignedDouble(data);
+
+        return std::format_to(_ctx.out(), "x: {}, y: {}", data[0], data[1]);
+    }
+};
 
 #endif // MATH_LIB_VECTOR2D_H
