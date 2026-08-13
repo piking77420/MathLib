@@ -1,6 +1,11 @@
 #ifndef MATH_LIB_MATH_LIB_HEADER_H
 #define MATH_LIB_MATH_LIB_HEADER_H
 
+#include <cstdlib>
+#include <algorithm>
+#include <bit>
+#include <cstdint>
+
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 // Architecture
 #if defined(_M_X64) || defined(__x86_64__)
@@ -79,6 +84,46 @@
 #else
 #define MATH_LIB_FORCE_INLINE inline
 #endif
+
+namespace MathLib
+{
+    constexpr double DoubleEpsilon = 0.0001;
+    constexpr float FloatEpsilon = 0.001f;
+
+    constexpr double SquareDoubleEpsilon = DoubleEpsilon * DoubleEpsilon;
+    constexpr float SquareFloatEpsilon = FloatEpsilon * FloatEpsilon;
+
+    [[nodiscard]] constexpr bool FuzzyZero(double _value, double _tolerance = DoubleEpsilon)
+    {
+        return std::abs(_value) < _tolerance;
+    }
+
+    [[nodiscard]] constexpr bool FuzzyZero(float _value, float _tolerance = FloatEpsilon)
+    {
+        return std::abs(_value) < _tolerance;
+    }
+
+    [[nodiscard]] constexpr bool FuzzyEqual(double _a, double _b, double _tolerance = DoubleEpsilon)
+    {
+        return std::abs(_a - _b) <= _tolerance * std::max({1.0, std::abs(_a), std::abs(_b)});
+    }
+
+    [[nodiscard]] constexpr bool FuzzyEqual(float _a, float _b, float _tolerance = FloatEpsilon)
+    {
+        return std::abs(_a - _b) <= _tolerance * std::max({1.0f, std::abs(_a), std::abs(_b)});
+    }
+
+    template<std::size_t Alignment>
+    [[nodiscard]] constexpr bool isAligned(const void* const _ptr) noexcept
+    {
+        static_assert(std::has_single_bit(Alignment));
+
+        return (reinterpret_cast<std::uintptr_t>(_ptr) & (Alignment - 1)) == 0;
+    }
+
+    static constexpr size_t SSE_ALIGNEMENT = 16;
+    static constexpr size_t AVX_AVX2_ALIGNEMENT = 32;
+}
 
 // NOLINTEND(cppcoreguidelines-macro-usage)
 #endif // MATH_LIB_MATH_LIB_HEADER_H

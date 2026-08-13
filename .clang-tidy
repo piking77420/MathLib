@@ -12,7 +12,7 @@ CheckOptions:
   # Public members: value
   readability-identifier-naming.PublicMemberCase: camelBack
 
-  cppcoreguidelines-pro-type-member-init.IgnoreArrays: true
+  cppcoreguidelines-pro-type-member-init : false
   cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
   misc-const-correctness.WarnPointersAsValues: true
   cppcoreguidelines-non-private-member-variables-in-classes.IgnorePublicMemberVariables: true
@@ -65,5 +65,9 @@ Checks: >
     -readability-magic-numbers,
     -readability-use-concise-preprocessor-directives,
     -zircon-*,
+    -readability-uppercase-literal-suffix,
+    -hicpp-uppercase-literal-suffix,
+    -cppcoreguidelines-pro-type-reinterpret-cast,
+    -cppcoreguidelines-pro-type-member-init,
 HeaderFileExtensions: [h, hpp, cppm]
 HeaderFilterRegex: .*
