@@ -259,7 +259,6 @@ TEST(TestVector2d, distanceSquare)
     }
 }
 
-/*
 TEST(TestVector2d, distance)
 {
     // unit vector
@@ -272,78 +271,62 @@ TEST(TestVector2d, distance)
 
     // Same arbitrary vector
     {
-        const Vector2d v1(10.0, 20.0, -12.0, -44.0);
-        const Vector2d v2(10.0, 20.0, -12.0, -44.0);
+        const Vector2d v1(10.0, 20.0);
+        const Vector2d v2(10.0, 20.0);
 
         EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), 0.0);
     }
 
     // Difference only on X
     {
-        const Vector2d v1(1.0, 2.0, 3.0, 4.0);
-        const Vector2d v2(4.0, 2.0, 3.0, 4.0);
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v2(4.0, 2.0);
 
         EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), 3.0);
     }
 
     // Difference only on Y
     {
-        const Vector2d v1(1.0, 2.0, 3.0, 4.0);
-        const Vector2d v2(1.0, 6.0, 3.0, 4.0);
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v2(1.0, 6.0);
 
         EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), 4.0);
     }
 
-    // Difference only on Z
-    {
-        const Vector2d v1(1.0, 2.0, 3.0, 4.0);
-        const Vector2d v2(1.0, 2.0, 8.0, 4.0);
-
-        EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), 5.0);
-    }
-
-    // Difference only on W
-    {
-        const Vector2d v1(1.0, 2.0, 3.0, 4.0);
-        const Vector2d v2(1.0, 2.0, 3.0, 10.0);
-
-        EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), 6.0);
-    }
-
     // Difference on every component
     {
-        const Vector2d v1(-1.0, -2.0, 4.0, 8.0);
-        const Vector2d v2(1.0, 2.0, 0.0, 4.0);
+        const Vector2d v1(-1.0, -2.0);
+        const Vector2d v2(1.0, 2.0);
 
-        // (-2)^2 + (-4)^2 + 4^2 + 4^2
-        // = 4 + 16 + 16 + 16
-        // = 52
-        EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), std::sqrt(52.0));
+        // (-2)^2 + (-4)^2
+        // = 4 + 16
+        // = 20
+        EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), std::sqrt(20.0));
     }
 
     // Negative and positive values
     {
-        const Vector2d v1(-1.0, -2.0, -3.0, -4.0);
-        const Vector2d v2(1.0, 2.0, 3.0, 4.0);
+        const Vector2d v1(-1.0, -2.0);
+        const Vector2d v2(1.0, 2.0);
 
-        // 2^2 + 4^2 + 6^2 + 8^2
-        // = 4 + 16 + 36 + 64
-        // = 120
-        EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), std::sqrt(120.0));
+        // 2^2 + 4^2
+        // = 4 + 16
+        // = 20
+        EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), std::sqrt(20.0));
     }
 
     // Symmetry
     {
-        const Vector2d v1(2.0, -3.0, 5.0, 7.0);
-        const Vector2d v2(-4.0, 8.0, 1.0, -2.0);
+        const Vector2d v1(2.0, -3.0);
+        const Vector2d v2(-4.0, 8.0);
 
         EXPECT_DOUBLE_EQ(Vector2d::distance(v1, v2), Vector2d::distance(v2, v1));
     }
 
     // distance(a, b) == (a - b).length()
     {
-        const Vector2d v1(-4.0, 7.0, 2.0, 12.0);
-        const Vector2d v2(3.0, -2.0, 6.0, 5.0);
+        const Vector2d v1(-4.0, 7.0);
+        const Vector2d v2(3.0, -2.0);
 
         const Vector2d difference = v1 - v2;
 
@@ -354,25 +337,21 @@ TEST(TestVector2d, distance)
 TEST(TestVector2d, getNormalize)
 {
     {
-        const Vector2d v(3.0, 4.0, 0.0, 0.0);
+        const Vector2d v(3.0, 4.0);
         const Vector2d normalized = v.getNormalize();
 
         EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
         EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
 
         // getNormalize() must not modify the original vector.
         EXPECT_DOUBLE_EQ(v.getX(), 3.0);
         EXPECT_DOUBLE_EQ(v.getY(), 4.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
     }
 
     {
-        const Vector2d v(-1.0, -2.0, 4.0, 8.0);
+        const Vector2d v(-1.0, -2.0);
         const Vector2d normalized = v.getNormalize();
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
@@ -385,40 +364,33 @@ TEST(TestVector2d, getNormalize)
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
         EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
     }
 
     // Zero vector.
     {
-        const Vector2d v(0.0, 0.0, 0.0, 0.0);
+        const Vector2d v(Vector2d::zero());
         const Vector2d normalized = v.getNormalize();
 
         EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
         EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getW(), 0.0);
     }
 }
 
 TEST(TestVector2d, normalize)
 {
     {
-        Vector2d v(3.0, 4.0, 0.0, 0.0);
+        Vector2d v(3.0, 4.0);
 
         v.normalize();
 
         EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
         EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getW(), 0.0, DoubleEpsilon);
 
         EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
     }
 
     {
-        Vector2d v(-1.0, -2.0, 4.0, 8.0);
+        Vector2d v(-1.0, -2.0);
 
         v.normalize();
 
@@ -437,19 +409,17 @@ TEST(TestVector2d, normalize)
 
     // Zero vector should remain zero.
     {
-        Vector2d v(0.0, 0.0, 0.0, 0.0);
+        Vector2d v(Vector2d::zero());
 
         v.normalize();
 
         EXPECT_DOUBLE_EQ(v.getX(), 0.0);
         EXPECT_DOUBLE_EQ(v.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
     }
 
     // normalize() should return *this.
     {
-        Vector2d v(3.0, 4.0, 0.0, 0.0);
+        Vector2d v(3.0, 4.0);
 
         Vector2d const& result = v.normalize();
 
@@ -460,25 +430,21 @@ TEST(TestVector2d, normalize)
 TEST(TestVector2d, getNormalizeFast)
 {
     {
-        const Vector2d v(3.0, 4.0, 0.0, 0.0);
+        const Vector2d v(3.0, 4.0);
         const Vector2d normalized = v.getNormalizeFast();
 
         EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
         EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
 
         // getNormalizeFast() must not modify the original vector.
         EXPECT_DOUBLE_EQ(v.getX(), 3.0);
         EXPECT_DOUBLE_EQ(v.getY(), 4.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
     }
 
     {
-        const Vector2d v(-1.0, -2.0, 4.0, 8.0);
+        const Vector2d v(-1.0, -2.0);
         const Vector2d normalized = v.getNormalizeFast();
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
@@ -492,78 +458,96 @@ TEST(TestVector2d, getNormalizeFast)
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
         EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
         EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
     }
 
     // Zero vector.
     {
-        const Vector2d v(0.0, 0.0, 0.0, 0.0);
+        const Vector2d v(0.0, 0.0);
         const Vector2d normalized = v.getNormalizeFast();
 
         EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
         EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getW(), 0.0);
     }
 }
 
-TEST(TestVector2d, normalizeFast){{Vector2d v(3.0, 4.0, 0.0, 0.0);
-
-v.normalizeFast();
-
-EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
-EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
-EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
-EXPECT_NEAR(v.getW(), 0.0, DoubleEpsilon);
-
-EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-}
-
+TEST(TestVector2d, normalizeFast)
 {
-    Vector2d v(-1.0, -2.0, 4.0, 8.0);
+    {
+        Vector2d v(3.0, 4.0);
 
-    v.normalizeFast();
+        v.normalizeFast();
 
-    EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
+
+        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        Vector2d v(-1.0, -2.0);
+
+        v.normalizeFast();
+
+        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+    }
+
+    // Already normalizeFastd.
+    {
+        Vector2d v = Vector2d::unitX();
+
+        v.normalizeFast();
+
+        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+    }
+
+    // Zero vector should remain zero.
+    {
+        Vector2d v(0.0, 0.0);
+
+        v.normalizeFast();
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.0);
+    }
+
+    // normalizeFast() should return *this.
+    {
+        Vector2d v(3.0, 4.0);
+
+        Vector2d const& result = v.normalizeFast();
+
+        EXPECT_EQ(&result, &v);
+    }
 }
-
-// Already normalizeFastd.
-{
-    Vector2d v = Vector2d::unitX();
-
-    v.normalizeFast();
-
-    EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-    EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-}
-
-// Zero vector should remain zero.
-{
-    Vector2d v(0.0, 0.0, 0.0, 0.0);
-
-    v.normalizeFast();
-
-    EXPECT_DOUBLE_EQ(v.getX(), 0.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 0.0);
-    EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-    EXPECT_DOUBLE_EQ(v.getW(), 0.0);
-}
-
-// normalizeFast() should return *this.
-{
-    Vector2d v(3.0, 4.0, 0.0, 0.0);
-
-    Vector2d const& result = v.normalizeFast();
-
-    EXPECT_EQ(&result, &v);
-}
-}
-*/
 
 TEST(TestVector2d, cross)
 {
-    // TODO
+    { // Collinear => 0.0
+        const Vector2d v0 = Vector2d::unitX();
+
+        const double cross = Vector2d::cross(v0, v0);
+
+        EXPECT_NEAR(cross, 0.0, DoubleEpsilon);
+    }
+
+    { // Perpendicular CCW => 1.0
+        const Vector2d v0 = Vector2d::unitX();
+        const Vector2d v1 = Vector2d::unitY();
+
+        const double cross = Vector2d::cross(v0, v1);
+
+        EXPECT_NEAR(cross, 1.0, DoubleEpsilon);
+    }
+
+    { // Perpendicular => cross magnitude equals product of magnitudes
+        const Vector2d v0(8.0, 0.0);
+        const Vector2d v1(0.0, 12.0);
+
+        const double cross = Vector2d::cross(v0, v1);
+
+        EXPECT_NEAR(cross, v0.length() * v1.length(), DoubleEpsilon);
+    }
 }
 
 TEST(TestVector2d, streamToUnAlignedDouble)
