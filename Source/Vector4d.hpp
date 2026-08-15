@@ -163,8 +163,8 @@ namespace MathLib
 
         [[nodiscard]] bool operator==(const Vector4& _other) const
         {
-            return FuzzyZero(m_x - _other.m_x) && FuzzyZero(m_y - _other.m_y) && FuzzyZero(m_z - _other.m_z) &&
-                   FuzzyZero(m_w - _other.m_w);
+            return fuzzyZero(m_x - _other.m_x) && fuzzyZero(m_y - _other.m_y) && fuzzyZero(m_z - _other.m_z) &&
+                   fuzzyZero(m_w - _other.m_w);
         }
 
         [[nodiscard]] bool operator!=(const Vector4& _other) const
@@ -206,7 +206,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
@@ -218,7 +218,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
@@ -231,7 +231,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
@@ -244,7 +244,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
@@ -256,7 +256,7 @@ namespace MathLib
 
         [[nodiscard]] bool isHomogeneous() const
         {
-            return FuzzyEqual(m_w, 1.0);
+            return fuzzyEqual(m_w, 1.0);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 min(const Vector4& _a, const Vector4& _b) noexcept

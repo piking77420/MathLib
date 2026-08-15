@@ -148,7 +148,7 @@ namespace MathLib
 
         [[nodiscard]] bool operator==(const Vector3& _other) const
         {
-            return FuzzyZero(m_x - _other.m_x) && FuzzyZero(m_y - _other.m_y) && FuzzyZero(m_z - _other.m_z);
+            return fuzzyZero(m_x - _other.m_x) && fuzzyZero(m_y - _other.m_y) && fuzzyZero(m_z - _other.m_z);
         }
 
         [[nodiscard]] bool operator!=(const Vector3& _other) const
@@ -190,7 +190,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
@@ -202,7 +202,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
@@ -215,7 +215,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
@@ -228,7 +228,7 @@ namespace MathLib
         {
             const double currentLength = length();
 
-            if (FuzzyZero(currentLength))
+            if (fuzzyZero(currentLength))
             {
                 return *this;
             }
