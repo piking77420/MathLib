@@ -48,7 +48,7 @@ TEST(TestVector2d, addVectorOperator)
     }
 }
 
-TEST(TestVector2d, subVectorOperator)
+TEST(TestVector2d, subOperator)
 {
     {
         Vector2d v(1.0, 2.0);
@@ -87,6 +87,24 @@ TEST(TestVector2d, addScalarOperator)
     }
 }
 
+TEST(TestVector2d, subScalarOperator)
+{
+    {
+        Vector2d v = Vector2d(1., 2.);
+        v -= 5.0;
+        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
+    }
+
+    {
+        const Vector2d v1 = Vector2d(1., 2.);
+        const Vector2d v = v1 - 5.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
+    }
+}
+
 TEST(TestVector2d, mulScalarOperator)
 {
     {
@@ -122,7 +140,7 @@ TEST(TestVector2d, mulScalarOperator)
     }
 }
 
-TEST(TestVector2d, divideScalarOperator)
+TEST(TestVector2d, divScalarOperator)
 {
     {
         Vector2d v(1.0, 2.0);
@@ -157,7 +175,7 @@ TEST(TestVector2d, divideScalarOperator)
     }
 }
 
-TEST(TestVector2d, EqualOperator)
+TEST(TestVector2d, CmpOperator)
 {
     {
         const Vector2d v1 = Vector2d::unitX();
@@ -185,6 +203,33 @@ TEST(TestVector2d, EqualOperator)
 
         EXPECT_TRUE(v1 != v2);
         EXPECT_FALSE(v1 == v2);
+    }
+}
+
+TEST(TestVector2, NegateOperator)
+{
+    // all positive
+    {
+        const Vector2d v = -Vector2d(1., 2.);
+
+        EXPECT_DOUBLE_EQ(v.getX(), -1.);
+        EXPECT_DOUBLE_EQ(v.getY(), -2.);
+    }
+
+    // all negative
+    {
+        const Vector2d v = -Vector2d(-1., -2.);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.);
+    }
+
+    // all randome values
+    {
+        const Vector2d v = -Vector2d(-1.25, 14.04);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.25);
+        EXPECT_DOUBLE_EQ(v.getY(), -14.04);
     }
 }
 
@@ -742,6 +787,7 @@ TEST(TestVector2d, max)
         EXPECT_DOUBLE_EQ(result.getY(), -2.0);
     }
 }
+
 TEST(TestVector2d, streamToUnAlignedDouble)
 {
     {

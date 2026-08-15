@@ -172,6 +172,11 @@ namespace MathLib
             return !(*this == _other);
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator-() const noexcept
+        {
+            return Vector4(-m_x, -m_y, -m_z, -m_w);
+        }
+
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& _a, const Vector4& _b)
         {
             return (_a.m_x * _b.m_x) + (_a.m_y * _b.m_y) + (_a.m_z * _b.m_z) + (_a.m_w * _b.m_w);
