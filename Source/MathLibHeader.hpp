@@ -1,10 +1,11 @@
 #ifndef MATH_LIB_MATH_LIB_HEADER_H
 #define MATH_LIB_MATH_LIB_HEADER_H
 
-#include <cstdlib>
 #include <algorithm>
 #include <bit>
+#include <cassert>
 #include <cstdint>
+#include <cstdlib>
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 // Architecture
@@ -84,6 +85,14 @@
 #else
 #define MATH_LIB_FORCE_INLINE inline
 #endif
+
+#if !defined(NDEBUG)
+#define MATHLIB_ASSERT(x) assert(x)
+#else
+#define MATHLIB_ASSERT(x) ((void)0)
+#endif
+
+#define ASSERT_IS_FINITE(x) MATHLIB_ASSERT((x).isFinite());
 
 namespace MathLib
 {

@@ -29,6 +29,7 @@ namespace MathLib
             , m_z(_z)
             , m_w(_w)
         {
+            ASSERT_IS_FINITE(*this)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double getX() const noexcept
@@ -54,21 +55,25 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE void setX(double _x) noexcept
         {
             m_x = _x;
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE void setY(double _y) noexcept
         {
             m_y = _y;
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE void setZ(double _z) noexcept
         {
             m_z = _z;
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE void setW(double _w) noexcept
         {
             m_w = _w;
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator+=(const Vector4& _other) noexcept
@@ -77,6 +82,7 @@ namespace MathLib
             m_y += _other.m_y;
             m_z += _other.m_z;
             m_w += _other.m_w;
+            ASSERT_IS_FINITE(*this)
             return *this;
         }
 
@@ -86,6 +92,7 @@ namespace MathLib
             m_y -= _other.m_y;
             m_z -= _other.m_z;
             m_w -= _other.m_w;
+            ASSERT_IS_FINITE(*this)
             return *this;
         }
 
@@ -107,6 +114,7 @@ namespace MathLib
             m_y += _scalar;
             m_z += _scalar;
             m_w += _scalar;
+            ASSERT_IS_FINITE(*this)
             return *this;
         }
 
@@ -116,6 +124,7 @@ namespace MathLib
             m_y -= _scalar;
             m_z -= _scalar;
             m_w -= _scalar;
+            ASSERT_IS_FINITE(*this)
             return *this;
         }
 
@@ -125,6 +134,7 @@ namespace MathLib
             m_y *= _scalar;
             m_z *= _scalar;
             m_w *= _scalar;
+            ASSERT_IS_FINITE(*this)
             return *this;
         }
 
@@ -134,6 +144,7 @@ namespace MathLib
             m_y /= _scalar;
             m_z /= _scalar;
             m_w /= _scalar;
+            ASSERT_IS_FINITE(*this)
             return *this;
         }
 
@@ -179,11 +190,14 @@ namespace MathLib
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& _a, const Vector4& _b)
         {
+            ASSERT_IS_FINITE(_a)
+            ASSERT_IS_FINITE(_b)
             return (_a.m_x * _b.m_x) + (_a.m_y * _b.m_y) + (_a.m_z * _b.m_z) + (_a.m_w * _b.m_w);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
         {
+            ASSERT_IS_FINITE(*this)
             return dot(*this, *this);
         }
 
@@ -194,6 +208,8 @@ namespace MathLib
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double distanceSquare(const Vector4& _a, const Vector4& _b)
         {
+            ASSERT_IS_FINITE(_a)
+            ASSERT_IS_FINITE(_b)
             return (_b - _a).lengthSquare();
         }
 
@@ -261,12 +277,16 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 min(const Vector4& _a, const Vector4& _b) noexcept
         {
+            ASSERT_IS_FINITE(_a)
+            ASSERT_IS_FINITE(_b)
             return Vector4(std::min(_a.getX(), _b.getX()), std::min(_a.getY(), _b.getY()),
                            std::min(_a.getZ(), _b.getZ()), std::min(_a.getW(), _b.getW()));
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 max(const Vector4& _a, const Vector4& _b) noexcept
         {
+            ASSERT_IS_FINITE(_a)
+            ASSERT_IS_FINITE(_b)
             return Vector4(std::max(_a.getX(), _b.getX()), std::max(_a.getY(), _b.getY()),
                            std::max(_a.getZ(), _b.getZ()), std::max(_a.getW(), _b.getW()));
         }
@@ -298,6 +318,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(const std::span<double, 4>& _span) const
         {
+            ASSERT_IS_FINITE(*this)
             _span[0] = m_x;
             _span[1] = m_y;
             _span[2] = m_z;
@@ -311,6 +332,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToUnAlignedFloat(const std::span<float, 4>& _span) const
         {
+            ASSERT_IS_FINITE(*this)
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
             _span[2] = static_cast<float>(m_z);
@@ -324,7 +346,8 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToAlignedDouble(const std::span<double, 4>& _span) const
         {
-            assert(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+            ASSERT_IS_FINITE(*this)
 
             _span[0] = m_x;
             _span[1] = m_y;
@@ -339,7 +362,8 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void streamToAlignedFloat(const std::span<float, 4>& _span) const
         {
-            assert(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            ASSERT_IS_FINITE(*this)
 
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
@@ -358,6 +382,7 @@ namespace MathLib
             m_y = _span[1];
             m_z = _span[2];
             m_w = _span[3];
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE void fromUnalignedDouble(double* const _ptr)
@@ -371,6 +396,7 @@ namespace MathLib
             m_y = static_cast<double>(_span[1]);
             m_z = static_cast<double>(_span[2]);
             m_w = static_cast<double>(_span[3]);
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(float* const _ptr)
@@ -380,12 +406,13 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 4>& _span)
         {
-            assert(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
 
             m_x = _span[0];
             m_y = _span[1];
             m_z = _span[2];
             m_w = _span[3];
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const _ptr)
@@ -395,12 +422,13 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 4>& _span)
         {
-            assert(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
 
             m_x = static_cast<double>(_span[0]);
             m_y = static_cast<double>(_span[1]);
             m_z = static_cast<double>(_span[2]);
             m_w = static_cast<double>(_span[3]);
+            ASSERT_IS_FINITE(*this)
         }
 
         MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const _ptr)
@@ -410,11 +438,16 @@ namespace MathLib
 
         friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& _ostream, const Vector4& _vec)
         {
-            alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data;
+            std::array<double, 4> data;
             _vec.streamToUnalignedDouble(data);
             _ostream << "x: " << data[0] << ", y: " << data[1] << ", z: " << data[2] << ", w: " << data[3];
 
             return _ostream;
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE bool isFinite() const
+        {
+            return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z) && std::isfinite(m_w);
         }
 
     private:

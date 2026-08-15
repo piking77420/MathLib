@@ -1005,4 +1005,37 @@ TEST(TestVector3, fromAlignedFloat)
     }
 }
 
+TEST(TestVector3, IsFinite)
+{
+    {
+        const Vector3d v = Vector3d(1., 2., 3.);
+        EXPECT_TRUE(v.isFinite());
+    }
+#if !defined(NDEBUG)
+    EXPECT_DEATH(
+        {
+            const Vector3d v(NAN, 2.0, 3.0);
+            (void)v;
+        },
+        ".*");
+
+    EXPECT_DEATH(
+        {
+            const Vector3d v(0.0, INFINITY, 3.0);
+            (void)v;
+        },
+        ".*");
+#else
+    {
+        const Vector3d v = Vector3d(NAN, 2.0, 3.0);
+        EXPECT_FALSE(v.isFinite());
+    }
+
+    {
+        const Vector3d v = Vector3d(0.0, INFINITY, 3.0);
+        EXPECT_FALSE(v.isFinite());
+    }
+#endif
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
