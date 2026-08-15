@@ -1,0 +1,5 @@
+
+namespace MathLib
+{
+
+} // namespace MathLib

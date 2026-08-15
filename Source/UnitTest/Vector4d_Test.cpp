@@ -11,7 +11,7 @@
 
 using namespace MathLib;
 
-TEST(TestVec4, Constructor)
+TEST(TestVector4d, Constructor)
 {
     const Vector4d v = Vector4d(1., 2., 3., 4.);
 
@@ -21,7 +21,7 @@ TEST(TestVec4, Constructor)
     EXPECT_DOUBLE_EQ(v.getW(), 4.0);
 }
 
-TEST(TestVec4, Setter)
+TEST(TestVector4d, Setter)
 {
     Vector4d v{};
     v.setX(1.);
@@ -35,32 +35,187 @@ TEST(TestVec4, Setter)
     EXPECT_DOUBLE_EQ(v.getW(), 4.0);
 }
 
-TEST(TestVec4, addOperator)
+TEST(TestVector4d, addVectorOperator)
 {
-    const Vector4d v1 = Vector4d(1., 2., 3., 4.);
-    const Vector4d v2 = Vector4d(4., 5., 6., 7.);
-    const Vector4d v = v1 + v2;
+    {
+        Vector4d v = Vector4d(1., 2., 3., 4.);
+        const Vector4d v1 = Vector4d(4., 5., 6., 7.);
+        v += v1;
 
-    EXPECT_DOUBLE_EQ(v.getX(), 5.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-    EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
-    EXPECT_DOUBLE_EQ(v.getW(), 11.0);
+        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 11.0);
+    }
+
+    {
+        const Vector4d v1 = Vector4d(1., 2., 3., 4.);
+        const Vector4d v2 = Vector4d(4., 5., 6., 7.);
+        const Vector4d v = v1 + v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 11.0);
+    }
 }
 
-TEST(TestVec4, subOperator)
+TEST(TestVector4d, subVectorOperator)
 {
-    const Vector4d v1(1.0, 2.0, 3.0, 4.0);
-    const Vector4d v2(8.0, 10.0, 2.0, 4.0);
+    {
+        Vector4d v(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v2(8.0, 10.0, 2.0, 4.0);
 
-    const Vector4d v = v1 - v2;
+        v -= v2;
 
-    EXPECT_DOUBLE_EQ(v.getX(), -7.0);
-    EXPECT_DOUBLE_EQ(v.getY(), -8.0);
-    EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
-    EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+    }
+
+    {
+        const Vector4d v1(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v2(8.0, 10.0, 2.0, 4.0);
+
+        const Vector4d v = v1 - v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+    }
 }
 
-TEST(TestVec4, EqualOperator)
+TEST(TestVector4d, addScalarOperator)
+{
+    {
+        Vector4d v = Vector4d(1., 2., 3., 4.);
+        v += 5.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 9.0);
+    }
+
+    {
+        const Vector4d v = Vector4d(1., 2., 3., 4.) + 5.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 9.0);
+    }
+}
+
+TEST(TestVector4d, subScalarOperator)
+{
+    {
+        Vector4d v = Vector4d(1., 2., 3., 4.);
+        v -= 5.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
+        EXPECT_DOUBLE_EQ(v.getW(), -1.0);
+    }
+
+    {
+        const Vector4d v = Vector4d(1., 2., 3., 4.) - 5.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
+        EXPECT_DOUBLE_EQ(v.getW(), -1.0);
+    }
+}
+
+TEST(TestVector4d, mulScalarOperator)
+{
+
+    {
+        Vector4d v = Vector4d(1., 2., 3., 4.);
+        v *= 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+    }
+
+    {
+        const Vector4d v = Vector4d(1., 2., 3., 4.) * 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+    }
+
+    {
+        Vector4d v = Vector4d(1., 2., 3., 4.);
+        v *= 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 40.0);
+    }
+
+    {
+        const Vector4d v = Vector4d(1., 2., 3., 4.) * 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 40.0);
+    }
+}
+
+TEST(TestVector4d, divScalarOperator)
+{
+
+    {
+        Vector4d v = Vector4d(1., 2., 3., 4.);
+        v /= 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+    }
+
+    {
+        const Vector4d v = Vector4d(1., 2., 3., 4.) / 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+    }
+
+    {
+        Vector4d v = Vector4d(1., 2., 3., 4.);
+        v /= 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+        EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
+        EXPECT_DOUBLE_EQ(v.getW(), 0.4);
+    }
+
+    {
+        const Vector4d v = Vector4d(1., 2., 3., 4.) / 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+        EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
+        EXPECT_DOUBLE_EQ(v.getW(), 0.4);
+    }
+}
+
+TEST(TestVector4d, CmpOperator)
 {
     {
         const Vector4d v1 = Vector4d::unitX();
@@ -92,7 +247,40 @@ TEST(TestVec4, EqualOperator)
     }
 }
 
-TEST(TestVec4, Dot)
+TEST(TestVector4d, NegateOperator)
+{
+    // all positive
+    {
+        const Vector4d v = -Vector4d(1., 2., 3., 4.);
+
+        EXPECT_DOUBLE_EQ(v.getX(), -1.);
+        EXPECT_DOUBLE_EQ(v.getY(), -2.);
+        EXPECT_DOUBLE_EQ(v.getZ(), -3.);
+        EXPECT_DOUBLE_EQ(v.getW(), -4.);
+    }
+
+    // all negative
+    {
+        const Vector4d v = -Vector4d(-1., -2., -3., -4.);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.);
+        EXPECT_DOUBLE_EQ(v.getW(), 4.);
+    }
+
+    // all randome values
+    {
+        const Vector4d v = -Vector4d(-1.25, 14.04, 45.0, -820.0);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.25);
+        EXPECT_DOUBLE_EQ(v.getY(), -14.04);
+        EXPECT_DOUBLE_EQ(v.getZ(), -45.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 820.0);
+    }
+}
+
+TEST(TestVector4d, Dot)
 {
     {
         const Vector4d v1 = Vector4d::unitX();
@@ -175,7 +363,7 @@ TEST(TestVec4, Dot)
     }
 }
 
-TEST(TestVec4, lengthSquare)
+TEST(TestVector4d, lengthSquare)
 {
     // unit vector lengthSquare by definition is 1
     {
@@ -202,7 +390,7 @@ TEST(TestVec4, lengthSquare)
     }
 }
 
-TEST(TestVec4, length)
+TEST(TestVector4d, length)
 {
     // unit vector length by definition is 1
     {
@@ -234,7 +422,7 @@ TEST(TestVec4, length)
     }
 }
 
-TEST(TestVec4, distanceSquare)
+TEST(TestVector4d, distanceSquare)
 {
     // unit vector
     {
@@ -325,7 +513,7 @@ TEST(TestVec4, distanceSquare)
     }
 }
 
-TEST(TestVec4, distance)
+TEST(TestVector4d, distance)
 {
     // unit vector
     {
@@ -416,7 +604,7 @@ TEST(TestVec4, distance)
     }
 }
 
-TEST(TestVec4, getNormalize)
+TEST(TestVector4d, getNormalize)
 {
     {
         const Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -467,7 +655,7 @@ TEST(TestVec4, getNormalize)
     }
 }
 
-TEST(TestVec4, normalize)
+TEST(TestVector4d, normalize)
 {
     {
         Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -522,7 +710,7 @@ TEST(TestVec4, normalize)
     }
 }
 
-TEST(TestVec4, getNormalizeFast)
+TEST(TestVector4d, getNormalizeFast)
 {
     {
         const Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -573,7 +761,7 @@ TEST(TestVec4, getNormalizeFast)
     }
 }
 
-TEST(TestVec4, normalizeFast)
+TEST(TestVector4d, normalizeFast)
 {
     {
         Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -628,7 +816,7 @@ TEST(TestVec4, normalizeFast)
     }
 }
 
-TEST(TestVec4, isHomogeneous)
+TEST(TestVector4d, isHomogeneous)
 {
     // Zero with w equal 1
     {
@@ -655,7 +843,85 @@ TEST(TestVec4, isHomogeneous)
     }
 }
 
-TEST(TestVec4, streamToUnAlignedDouble)
+TEST(TestVector4dd, min)
+{
+    {
+        const Vector4d v0(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v1(5.0, 6.0, 7.0, 8.0);
+
+        const Vector4d result = Vector4d::min(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+    }
+
+    { // Minimum comes from different vectors
+        const Vector4d v0(8.0, -4.0, 15.0, -20.0);
+        const Vector4d v1(2.0, 12.0, -3.0, -10.0);
+
+        const Vector4d result = Vector4d::min(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getY(), -4.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), -3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), -20.0);
+    }
+
+    { // Equal components
+        const Vector4d v0(5.0, 3.0, -2.0, 8.0);
+        const Vector4d v1(5.0, 3.0, -2.0, 8.0);
+
+        const Vector4d result = Vector4d::min(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), -2.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 8.0);
+    }
+}
+
+TEST(TestVector4dd, max)
+{
+    {
+        const Vector4d v0(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v1(5.0, 6.0, 7.0, 8.0);
+
+        const Vector4d result = Vector4d::max(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 6.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 7.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 8.0);
+    }
+
+    { // Maximum comes from different vectors
+        const Vector4d v0(8.0, -4.0, 15.0, -20.0);
+        const Vector4d v1(2.0, 12.0, -3.0, -10.0);
+
+        const Vector4d result = Vector4d::max(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 12.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 15.0);
+        EXPECT_DOUBLE_EQ(result.getW(), -10.0);
+    }
+
+    { // Equal components
+        const Vector4d v0(5.0, 3.0, -2.0, 8.0);
+        const Vector4d v1(5.0, 3.0, -2.0, 8.0);
+
+        const Vector4d result = Vector4d::max(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), -2.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 8.0);
+    }
+}
+
+TEST(TestVector4d, streamToUnAlignedDouble)
 {
     {
         std::array<double, 4> data;
@@ -678,7 +944,7 @@ TEST(TestVec4, streamToUnAlignedDouble)
     }
 }
 
-TEST(TestVec4, streamToUnAlignedFloat)
+TEST(TestVector4d, streamToUnAlignedFloat)
 {
     {
         std::array<float, 4> data;
@@ -701,7 +967,7 @@ TEST(TestVec4, streamToUnAlignedFloat)
     }
 }
 
-TEST(TestVec4, streamToAlignedDouble)
+TEST(TestVector4d, streamToAlignedDouble)
 {
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data;
@@ -724,7 +990,7 @@ TEST(TestVec4, streamToAlignedDouble)
     }
 }
 
-TEST(TestVec4, streamToUnalignedFloat)
+TEST(TestVector4d, streamToUnalignedFloat)
 {
     {
         alignas(SSE_ALIGNEMENT) std::array<float, 4> data;
@@ -747,7 +1013,7 @@ TEST(TestVec4, streamToUnalignedFloat)
     }
 }
 
-TEST(TestVec4, fromUnAlignedDouble)
+TEST(TestVector4d, fromUnAlignedDouble)
 {
     {
         std::array<double, 4> data = {1.0, 2.0, 3.0, 4.0};
@@ -770,7 +1036,7 @@ TEST(TestVec4, fromUnAlignedDouble)
     }
 }
 
-TEST(TestVec4, fromUnAlignedFloat)
+TEST(TestVector4d, fromUnAlignedFloat)
 {
     {
         std::array<float, 4> data = {1.0, 2.0, 3.0, 4.0};
@@ -793,7 +1059,7 @@ TEST(TestVec4, fromUnAlignedFloat)
     }
 }
 
-TEST(TestVec4, fromAlignedDouble)
+TEST(TestVector4d, fromAlignedDouble)
 {
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
@@ -816,7 +1082,7 @@ TEST(TestVec4, fromAlignedDouble)
     }
 }
 
-TEST(TestVec4, fromAlignedFloat)
+TEST(TestVector4d, fromAlignedFloat)
 {
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
