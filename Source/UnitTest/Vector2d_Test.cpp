@@ -13,18 +13,33 @@ using namespace MathLib;
 
 TEST(TestVector2d, Constructor)
 {
-    const Vector2d v = Vector2d(1., 2.);
+    {
+        const Vector2d v = Vector2d(1., 2.);
 
-    EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+    }
+
+    {
+        const Vector2d v = Vector2d(3.0);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 3.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 3.0);
+    }
 }
 
 TEST(TestVector2d, Setter)
 {
     Vector2d v{};
+    v.setX(8.);
+    v.setY(4.0);
+    EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+    EXPECT_DOUBLE_EQ(v.getY(), 4.0);
+    v.setX(1.);
+    EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+    EXPECT_DOUBLE_EQ(v.getY(), 4.0);
     v.setX(1.);
     v.setY(2.);
-
     EXPECT_DOUBLE_EQ(v.getX(), 1.0);
     EXPECT_DOUBLE_EQ(v.getY(), 2.0);
 }
@@ -785,6 +800,37 @@ TEST(TestVector2d, max)
 
         EXPECT_DOUBLE_EQ(result.getX(), -4.0);
         EXPECT_DOUBLE_EQ(result.getY(), -2.0);
+    }
+}
+
+TEST(TestVector2d, abs)
+{
+    // Full Positive
+    {
+        const Vector2d result = Vector2d(1.0, 2.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+    }
+
+    // X negative
+    {
+        const Vector2d result = Vector2d(-1.0, 2.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+    }
+
+    // Y negative
+    {
+        const Vector2d result = Vector2d(1.0, -2.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+    }
+
+    // X and Y negative
+    {
+        const Vector2d result = Vector2d(-1.0, -2.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
     }
 }
 
