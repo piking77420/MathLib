@@ -29,25 +29,132 @@ TEST(TestVector2d, Setter)
     EXPECT_DOUBLE_EQ(v.getY(), 2.0);
 }
 
-TEST(TestVector2d, addOperator)
+TEST(TestVector2d, addVectorOperator)
 {
-    const Vector2d v1 = Vector2d(1., 2.);
-    const Vector2d v2 = Vector2d(4., 5.);
-    const Vector2d v = v1 + v2;
+    {
+        Vector2d v = Vector2d(1., 2.);
+        v += Vector2d(4., 5.);
+        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+    }
 
-    EXPECT_DOUBLE_EQ(v.getX(), 5.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+    {
+        const Vector2d v1 = Vector2d(1., 2.);
+        const Vector2d v2 = Vector2d(4., 5.);
+        const Vector2d v = v1 + v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+    }
 }
 
-TEST(TestVector2d, subOperator)
+TEST(TestVector2d, subVectorOperator)
 {
-    const Vector2d v1(1.0, 2.0);
-    const Vector2d v2(8.0, 10.0);
+    {
+        Vector2d v(1.0, 2.0);
+        v -= Vector2d(8.0, 10.0);
 
-    const Vector2d v = v1 - v2;
+        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
+    }
 
-    EXPECT_DOUBLE_EQ(v.getX(), -7.0);
-    EXPECT_DOUBLE_EQ(v.getY(), -8.0);
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v2(8.0, 10.0);
+
+        const Vector2d v = v1 - v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
+        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
+    }
+}
+
+TEST(TestVector2d, addScalarOperator)
+{
+    {
+        Vector2d v = Vector2d(1., 2.);
+        v += 5.0;
+        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+    }
+
+    {
+        const Vector2d v1 = Vector2d(1., 2.);
+        const Vector2d v = v1 + 5;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
+    }
+}
+
+TEST(TestVector2d, mulScalarOperator)
+{
+    {
+        Vector2d v(1.0, 2.0);
+        v *= 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+    }
+
+    {
+        Vector2d v(1.0, 2.0);
+        v *= 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v = v1 * 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v = v1 * 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+    }
+}
+
+TEST(TestVector2d, divideScalarOperator)
+{
+    {
+        Vector2d v(1.0, 2.0);
+        v /= 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+    }
+
+    {
+        Vector2d v(1.0, 2.0);
+        v /= 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v = v1 / 10.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v = v1 / 1.0;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
+    }
 }
 
 TEST(TestVector2d, EqualOperator)
@@ -550,6 +657,91 @@ TEST(TestVector2d, cross)
     }
 }
 
+TEST(TestVector2d, min)
+{
+    {
+        const Vector2d v0(1.0, 2.0);
+        const Vector2d v1(3.0, 4.0);
+
+        const Vector2d result = Vector2d::min(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+    }
+
+    { // Minimum comes from different vectors
+        const Vector2d v0(8.0, -4.0);
+        const Vector2d v1(2.0, 12.0);
+
+        const Vector2d result = Vector2d::min(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getY(), -4.0);
+    }
+
+    { // Equal components
+        const Vector2d v0(5.0, 3.0);
+        const Vector2d v1(5.0, 3.0);
+
+        const Vector2d result = Vector2d::min(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
+    }
+
+    { // Negative values
+        const Vector2d v0(-10.0, -2.0);
+        const Vector2d v1(-4.0, -8.0);
+
+        const Vector2d result = Vector2d::min(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), -10.0);
+        EXPECT_DOUBLE_EQ(result.getY(), -8.0);
+    }
+}
+
+TEST(TestVector2d, max)
+{
+    {
+        const Vector2d v0(1.0, 2.0);
+        const Vector2d v1(3.0, 4.0);
+
+        const Vector2d result = Vector2d::max(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 4.0);
+    }
+
+    { // Maximum comes from different vectors
+        const Vector2d v0(8.0, -4.0);
+        const Vector2d v1(2.0, 12.0);
+
+        const Vector2d result = Vector2d::max(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 12.0);
+    }
+
+    { // Equal components
+        const Vector2d v0(5.0, 3.0);
+        const Vector2d v1(5.0, 3.0);
+
+        const Vector2d result = Vector2d::max(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
+    }
+
+    { // Negative values
+        const Vector2d v0(-10.0, -2.0);
+        const Vector2d v1(-4.0, -8.0);
+
+        const Vector2d result = Vector2d::max(v0, v1);
+
+        EXPECT_DOUBLE_EQ(result.getX(), -4.0);
+        EXPECT_DOUBLE_EQ(result.getY(), -2.0);
+    }
+}
 TEST(TestVector2d, streamToUnAlignedDouble)
 {
     {

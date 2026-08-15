@@ -2,6 +2,7 @@
 #define MATH_LIB_VECTOR2D_H
 
 #include <array>
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <format>
@@ -216,6 +217,16 @@ namespace MathLib
         [[nodiscard]] MATH_LIB_FORCE_INLINE static double cross(const Vector2& _a, const Vector2& _b)
         {
             return _b.getY() * _a.getX() - _b.getX() * _a.getY();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector2 min(const Vector2& _a, const Vector2& _b) noexcept
+        {
+            return Vector2(std::min(_a.getX(), _b.getX()), std::min(_a.getY(), _b.getY()));
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector2 max(const Vector2& _a, const Vector2& _b) noexcept
+        {
+            return Vector2(std::max(_a.getX(), _b.getX()), std::max(_a.getY(), _b.getY()));
         }
 
         static Vector2 unitX()

@@ -2,6 +2,7 @@
 #define MATH_LIB_VECTOR4D_H
 
 #include <array>
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <format>
@@ -251,6 +252,18 @@ namespace MathLib
         [[nodiscard]] bool isHomogeneous() const
         {
             return FuzzyEqual(m_w, 1.0);
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 min(const Vector4& _a, const Vector4& _b) noexcept
+        {
+            return Vector4(std::min(_a.getX(), _b.getX()), std::min(_a.getY(), _b.getY()),
+                           std::min(_a.getZ(), _b.getZ()), std::min(_a.getW(), _b.getW()));
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 max(const Vector4& _a, const Vector4& _b) noexcept
+        {
+            return Vector4(std::max(_a.getX(), _b.getX()), std::max(_a.getY(), _b.getY()),
+                           std::max(_a.getZ(), _b.getZ()), std::max(_a.getW(), _b.getW()));
         }
 
         static Vector4 unitX()
