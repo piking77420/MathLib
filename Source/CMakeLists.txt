@@ -13,6 +13,10 @@ set(MATHLIB_SOURCES
     Vector2.hpp
     Vector2d.cpp
     Vector2d.hpp
+    Vector3.cpp
+    Vector3.hpp
+    Vector3d.cpp
+    Vector3d.hpp
     Vector4.cpp
     Vector4.hpp
     Vector4d.cpp

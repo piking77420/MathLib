@@ -25,6 +25,7 @@ set(TEST_SOURCES
     Utils_Test.cpp
     SimdExtension_Test.cpp
     Vector2d_Test.cpp
+    Vector3d_Test.cpp
     Vector4d_Test.cpp)
 
 add_executable(
