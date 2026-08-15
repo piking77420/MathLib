@@ -11,7 +11,7 @@
 
 using namespace MathLib;
 
-TEST(TestVector4, Constructor)
+TEST(TestVector4d, Constructor)
 {
     const Vector4d v = Vector4d(1., 2., 3., 4.);
 
@@ -21,7 +21,7 @@ TEST(TestVector4, Constructor)
     EXPECT_DOUBLE_EQ(v.getW(), 4.0);
 }
 
-TEST(TestVector4, Setter)
+TEST(TestVector4d, Setter)
 {
     Vector4d v{};
     v.setX(1.);
@@ -35,7 +35,7 @@ TEST(TestVector4, Setter)
     EXPECT_DOUBLE_EQ(v.getW(), 4.0);
 }
 
-TEST(TestVector4, addVectorOperator)
+TEST(TestVector4d, addVectorOperator)
 {
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
@@ -60,7 +60,7 @@ TEST(TestVector4, addVectorOperator)
     }
 }
 
-TEST(TestVector4, subVectorOperator)
+TEST(TestVector4d, subVectorOperator)
 {
     {
         Vector4d v(1.0, 2.0, 3.0, 4.0);
@@ -87,7 +87,7 @@ TEST(TestVector4, subVectorOperator)
     }
 }
 
-TEST(TestVector4, addScalarOperator)
+TEST(TestVector4d, addScalarOperator)
 {
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
@@ -109,7 +109,7 @@ TEST(TestVector4, addScalarOperator)
     }
 }
 
-TEST(TestVector4, subScalarOperator)
+TEST(TestVector4d, subScalarOperator)
 {
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
@@ -131,7 +131,7 @@ TEST(TestVector4, subScalarOperator)
     }
 }
 
-TEST(TestVector4, mulScalarOperator)
+TEST(TestVector4d, mulScalarOperator)
 {
 
     {
@@ -173,7 +173,7 @@ TEST(TestVector4, mulScalarOperator)
     }
 }
 
-TEST(TestVector4, divScalarOperator)
+TEST(TestVector4d, divScalarOperator)
 {
 
     {
@@ -215,7 +215,7 @@ TEST(TestVector4, divScalarOperator)
     }
 }
 
-TEST(TestVector4, CmpOperator)
+TEST(TestVector4d, CmpOperator)
 {
     {
         const Vector4d v1 = Vector4d::unitX();
@@ -247,7 +247,7 @@ TEST(TestVector4, CmpOperator)
     }
 }
 
-TEST(TestVector4, NegateOperator)
+TEST(TestVector4d, NegateOperator)
 {
     // all positive
     {
@@ -280,7 +280,7 @@ TEST(TestVector4, NegateOperator)
     }
 }
 
-TEST(TestVector4, Dot)
+TEST(TestVector4d, Dot)
 {
     {
         const Vector4d v1 = Vector4d::unitX();
@@ -363,7 +363,7 @@ TEST(TestVector4, Dot)
     }
 }
 
-TEST(TestVector4, lengthSquare)
+TEST(TestVector4d, lengthSquare)
 {
     // unit vector lengthSquare by definition is 1
     {
@@ -390,7 +390,7 @@ TEST(TestVector4, lengthSquare)
     }
 }
 
-TEST(TestVector4, length)
+TEST(TestVector4d, length)
 {
     // unit vector length by definition is 1
     {
@@ -422,7 +422,7 @@ TEST(TestVector4, length)
     }
 }
 
-TEST(TestVector4, distanceSquare)
+TEST(TestVector4d, distanceSquare)
 {
     // unit vector
     {
@@ -513,7 +513,7 @@ TEST(TestVector4, distanceSquare)
     }
 }
 
-TEST(TestVector4, distance)
+TEST(TestVector4d, distance)
 {
     // unit vector
     {
@@ -604,7 +604,7 @@ TEST(TestVector4, distance)
     }
 }
 
-TEST(TestVector4, getNormalize)
+TEST(TestVector4d, getNormalize)
 {
     {
         const Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -655,7 +655,7 @@ TEST(TestVector4, getNormalize)
     }
 }
 
-TEST(TestVector4, normalize)
+TEST(TestVector4d, normalize)
 {
     {
         Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -710,7 +710,7 @@ TEST(TestVector4, normalize)
     }
 }
 
-TEST(TestVector4, getNormalizeFast)
+TEST(TestVector4d, getNormalizeFast)
 {
     {
         const Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -761,7 +761,7 @@ TEST(TestVector4, getNormalizeFast)
     }
 }
 
-TEST(TestVector4, normalizeFast)
+TEST(TestVector4d, normalizeFast)
 {
     {
         Vector4d v(3.0, 4.0, 0.0, 0.0);
@@ -816,7 +816,7 @@ TEST(TestVector4, normalizeFast)
     }
 }
 
-TEST(TestVector4, isHomogeneous)
+TEST(TestVector4d, isHomogeneous)
 {
     // Zero with w equal 1
     {
@@ -843,7 +843,7 @@ TEST(TestVector4, isHomogeneous)
     }
 }
 
-TEST(TestVector4d, min)
+TEST(TestVector4dd, min)
 {
     {
         const Vector4d v0(1.0, 2.0, 3.0, 4.0);
@@ -882,7 +882,7 @@ TEST(TestVector4d, min)
     }
 }
 
-TEST(TestVector4d, max)
+TEST(TestVector4dd, max)
 {
     {
         const Vector4d v0(1.0, 2.0, 3.0, 4.0);
@@ -921,7 +921,7 @@ TEST(TestVector4d, max)
     }
 }
 
-TEST(TestVector4, streamToUnAlignedDouble)
+TEST(TestVector4d, streamToUnAlignedDouble)
 {
     {
         std::array<double, 4> data;
@@ -944,7 +944,7 @@ TEST(TestVector4, streamToUnAlignedDouble)
     }
 }
 
-TEST(TestVector4, streamToUnAlignedFloat)
+TEST(TestVector4d, streamToUnAlignedFloat)
 {
     {
         std::array<float, 4> data;
@@ -967,7 +967,7 @@ TEST(TestVector4, streamToUnAlignedFloat)
     }
 }
 
-TEST(TestVector4, streamToAlignedDouble)
+TEST(TestVector4d, streamToAlignedDouble)
 {
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data;
@@ -990,7 +990,7 @@ TEST(TestVector4, streamToAlignedDouble)
     }
 }
 
-TEST(TestVector4, streamToUnalignedFloat)
+TEST(TestVector4d, streamToUnalignedFloat)
 {
     {
         alignas(SSE_ALIGNEMENT) std::array<float, 4> data;
@@ -1013,7 +1013,7 @@ TEST(TestVector4, streamToUnalignedFloat)
     }
 }
 
-TEST(TestVector4, fromUnAlignedDouble)
+TEST(TestVector4d, fromUnAlignedDouble)
 {
     {
         std::array<double, 4> data = {1.0, 2.0, 3.0, 4.0};
@@ -1036,7 +1036,7 @@ TEST(TestVector4, fromUnAlignedDouble)
     }
 }
 
-TEST(TestVector4, fromUnAlignedFloat)
+TEST(TestVector4d, fromUnAlignedFloat)
 {
     {
         std::array<float, 4> data = {1.0, 2.0, 3.0, 4.0};
@@ -1059,7 +1059,7 @@ TEST(TestVector4, fromUnAlignedFloat)
     }
 }
 
-TEST(TestVector4, fromAlignedDouble)
+TEST(TestVector4d, fromAlignedDouble)
 {
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
@@ -1082,7 +1082,7 @@ TEST(TestVector4, fromAlignedDouble)
     }
 }
 
-TEST(TestVector4, fromAlignedFloat)
+TEST(TestVector4d, fromAlignedFloat)
 {
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};

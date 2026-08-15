@@ -1,4 +1,3 @@
-#include <Vector3d.hpp>
 
 namespace MathLib
 {
