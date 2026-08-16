@@ -351,8 +351,20 @@ namespace MathLib
         {
             ASSERT_IS_FINITE(_a);
             ASSERT_IS_FINITE(_b);
+#if defined(SIMD_SSE2)
+            // swap b's lanes
+            // from x y
+            // to y x
+            const __m128d bSwapped = _mm_shuffle_pd(_b, _b, 0b01);
 
+            const __m128d mul = _mm_mul_pd(_a, bSwapped);
+            const __m128d high = _mm_unpackhi_pd(mul, mul);
+            const __m128d result = _mm_sub_sd(mul, high);
+
+            return _mm_cvtsd_f64(result);
+#else
             return _b.getY() * _a.getX() - _b.getX() * _a.getY();
+#endif // defined(SIMD_SSE2)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector2 min(const Vector2& _a, const Vector2& _b) noexcept
@@ -462,7 +474,12 @@ namespace MathLib
             ASSERT_IS_FINITE(*this);
             MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
 #if defined(SIMD_SSE2)
+            const __m128 values = _mm_cvtpd_ps(m_data);
 
+            std::uint64_t packed;
+            _mm_storel_epi64(reinterpret_cast<__m128i*>(&packed), _mm_castps_si128(values));
+
+            std::memcpy(_span.data(), &packed, sizeof(packed));
 #else
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
