@@ -251,7 +251,11 @@ namespace MathLib
             // TODO may add ext for dot procudt simd SSE4.1
             ASSERT_IS_FINITE(_a);
             ASSERT_IS_FINITE(_b);
-#if defined(SIMD_SSE2)
+#if defined(SIMD_SSE2) || defined(SIMD_SSE42)
+#if defined(SIMD_SSE42)
+            static constexpr int mask = 0b00110001;
+            return _mm_cvtsd_f64(_mm_dp_pd(_a, _b, mask));
+#else
             // make multiplication
             // lane low := a.x * b.x
             // lane high := a.y * b.y
@@ -267,9 +271,11 @@ namespace MathLib
 
             // return lower lane so (a.x * b.x) + (a.y * b.y)
             return _mm_cvtsd_f64(addOp);
+#endif // defined(SIMD_SSE42)
+
 #else
             return (_a.getX() * _b.getX()) + (_a.getY() * _b.getY());
-#endif // defined(SIMD_SSE2)
+#endif // defined(SIMD_SSE2) || defined(SIMD_SSE42)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
