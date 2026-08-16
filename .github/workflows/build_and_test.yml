@@ -2,10 +2,10 @@ name: Build and Test C/C++ Code
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main]
 
   pull_request:
-    branches: [main, dev]
+    branches: [dev]
 
 jobs:
   build:
