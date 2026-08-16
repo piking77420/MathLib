@@ -43,3 +43,7 @@ if (BUILD_UNIT_TEST)
     add_subdirectory(UnitTest)
 endif()
 
+if (BUILD_BENCHMARK)
+    add_subdirectory(Benchmark)
+endif()
+
