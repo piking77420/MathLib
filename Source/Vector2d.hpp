@@ -391,7 +391,7 @@ namespace MathLib
             return Vector2(0.0, 0.0);
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(const std::span<double, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 2>& _span) const
         {
             ASSERT_IS_FINITE(*this);
 #if defined(SIMD_SSE2)
@@ -402,12 +402,12 @@ namespace MathLib
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(double* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const _ptr) const
         {
-            streamToUnalignedDouble(std::span<double, 2>(_ptr, 2));
+            storeToUnalignedDouble(std::span<double, 2>(_ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnAlignedFloat(const std::span<float, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 2>& _span) const
         {
             ASSERT_IS_FINITE(*this);
 #if defined(SIMD_SSE2)
@@ -418,29 +418,29 @@ namespace MathLib
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnAlignedFloat(float* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const _ptr) const
         {
-            streamToUnAlignedFloat(std::span<float, 2>(_ptr, 2));
+            storeToUnAlignedFloat(std::span<float, 2>(_ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedDouble(const std::span<double, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 2>& _span) const
         {
             ASSERT_IS_FINITE(*this);
             MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
 #if defined(SIMD_SSE2)
-            _mm_stream_pd(_span.data(), m_data);
+            _mm_store_pd(_span.data(), m_data);
 #else
             _span[0] = m_x;
             _span[1] = m_y;
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedDouble(double* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const _ptr) const
         {
-            streamToAlignedDouble(std::span<double, 2>(_ptr, 2));
+            storeToAlignedDouble(std::span<double, 2>(_ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedFloat(const std::span<float, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 2>& _span) const
         {
             ASSERT_IS_FINITE(*this);
             MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
@@ -452,9 +452,9 @@ namespace MathLib
 #endif
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedFloat(float* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const _ptr) const
         {
-            streamToUnAlignedFloat(std::span<float, 2>(_ptr, 2));
+            storeToUnAlignedFloat(std::span<float, 2>(_ptr, 2));
         }
 
         MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 2>& _span)
@@ -494,9 +494,9 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 2>& _span)
         {
-            MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
 #if defined(SIMD_SSE2)
-            m_data = _mm_load_pd(_span.data());
+            m_data = _mm_cvtps_pd(_mm_setr_ps(_span[0], _span[1], 0.0f, 0.0f));
 #else
             m_x = _span[0];
             m_y = _span[1];
@@ -532,7 +532,7 @@ namespace MathLib
         friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& _ostream, const Vector2& _vec)
         {
             std::array<double, 2> data;
-            _vec.streamToUnalignedDouble(data);
+            _vec.storeToUnalignedDouble(data);
             _ostream << "x: " << data[0] << ", y: " << data[1];
 
             return _ostream;
@@ -579,7 +579,7 @@ struct std::formatter<MathLib::Vector2d>
     {
         std::array<double, 2> data;
 
-        _v.streamToUnalignedDouble(data);
+        _v.storeToUnalignedDouble(data);
 
         return std::format_to(_ctx.out(), "x: {}, y: {}", data[0], data[1]);
     }

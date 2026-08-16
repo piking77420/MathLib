@@ -844,7 +844,7 @@ TEST(TestVector3, streamToUnAlignedDouble)
 
     {
         std::array<double, 3> data;
-        v.streamToUnalignedDouble(data.data());
+        v.storeToUnalignedDouble(data.data());
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
         EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
         EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
@@ -852,19 +852,19 @@ TEST(TestVector3, streamToUnAlignedDouble)
 
     {
         std::array<double, 3> data;
-        v.streamToUnalignedDouble(std::span<double, 3>(data));
+        v.storeToUnalignedDouble(std::span<double, 3>(data));
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
         EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
         EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
     }
 }
 
-TEST(TestVector3, streamToUnAlignedFloat)
+TEST(TestVector3, storeToUnAlignedFloat)
 {
     const Vector3d v(1.0, 2.0, 3.0);
     {
         std::array<float, 3> data;
-        v.streamToUnAlignedFloat(data.data());
+        v.storeToUnAlignedFloat(data.data());
         EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
         EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
         EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
@@ -872,19 +872,19 @@ TEST(TestVector3, streamToUnAlignedFloat)
 
     {
         std::array<float, 3> data;
-        v.streamToUnAlignedFloat(std::span<float, 3>(data));
+        v.storeToUnAlignedFloat(std::span<float, 3>(data));
         EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
         EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
         EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
     }
 }
 
-TEST(TestVector3, streamToAlignedDouble)
+TEST(TestVector3, storeToAlignedDouble)
 {
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 3> data;
         const Vector3d v(1.0, 2.0, 3.0);
-        v.streamToAlignedDouble(data.data());
+        v.storeToAlignedDouble(data.data());
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
         EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
         EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
@@ -893,7 +893,7 @@ TEST(TestVector3, streamToAlignedDouble)
     {
         alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 3> data;
         const Vector3d v(1.0, 2.0, 3.0);
-        v.streamToAlignedDouble(std::span<double, 3>(data));
+        v.storeToAlignedDouble(std::span<double, 3>(data));
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
         EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
         EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
@@ -905,7 +905,7 @@ TEST(TestVector3, streamToUnalignedFloat)
     {
         alignas(SSE_ALIGNEMENT) std::array<float, 3> data;
         const Vector3d v(1.0, 2.0, 3.0);
-        v.streamToAlignedFloat(data.data());
+        v.storeToAlignedFloat(data.data());
         EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
         EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
         EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
@@ -914,7 +914,7 @@ TEST(TestVector3, streamToUnalignedFloat)
     {
         alignas(SSE_ALIGNEMENT) std::array<float, 3> data;
         const Vector3d v(1.0, 2.0, 3.0);
-        v.streamToAlignedFloat(std::span<float, 3>(data));
+        v.storeToAlignedFloat(std::span<float, 3>(data));
         EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
         EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
         EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
