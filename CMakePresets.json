@@ -10,7 +10,11 @@
       "name": "base",
       "hidden": true,
       "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}"
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": {
+              "BUILD_BENCHMARK" : true,
+              "BUILD_UNIT_TEST": true 
+      }
     },
     {
       "name": "windows-msvc-x64-base",

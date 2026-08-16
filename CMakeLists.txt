@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
 project(MathLib VERSION 0.1.0 LANGUAGES CXX)
-option(BUILD_UNIT_TEST "Build unit tests" ON)
 
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" PROCESSOR)
 
