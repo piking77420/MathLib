@@ -140,6 +140,7 @@ jobs:
           -S .
           -B build
           -DBUILD_UNIT_TEST=ON
+          -DBUILD_BENCHMARK=ON
           ${{ matrix.configure_args }}
 
       - name: Build
