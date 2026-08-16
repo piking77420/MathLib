@@ -1,337 +1,619 @@
 {
-    "version": 3,
-    "cmakeMinimumRequired": {
-        "major": 4,
-        "minor": 2,
-        "patch": 0
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 4,
+    "minor": 2,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}"
     },
-    "configurePresets": [
-        {
-            "name": "base",
-            "hidden": true,
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}"
-        },
-        {
-            "name": "windows-msvc-x64-base",
-            "hidden": true,
-            "inherits": "base",
-            "generator": "Visual Studio 18 2026",
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
-            },
-            "architecture": {
-                "value": "x64",
-                "strategy": "set"
-            },
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe"
-            }
-        },
-        {
-            "name": "linux-clang-x64-base",
-            "hidden": true,
-            "inherits": "base",
-            "generator": "Ninja",
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
-            }
-        },
-        {
-            "name": "linux-clang-arm64-base",
-            "hidden": true,
-            "inherits": "base",
-            "generator": "Ninja",
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
-            }
-        },
-        {
-            "name": "linux-gcc-x64-base",
-            "hidden": true,
-            "inherits": "base",
-            "generator": "Ninja",
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "/usr/bin/gcc",
-                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
-            }
-        },
-        {
-            "name": "linux-gcc-arm64-base",
-            "hidden": true,
-            "inherits": "base",
-            "generator": "Ninja",
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "/usr/bin/gcc",
-                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
-            }
-        },
-        {
-            "name": "MSVC-x64-debug",
-            "displayName": "MSVC x64 Debug AVX2",
-            "description": "Debug build using MSVC x64 with AVX2 enabled",
-            "inherits": "windows-msvc-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "MSVC-x64-relwithdebinfo",
-            "displayName": "MSVC x64 RelWithDebInfo AVX2",
-            "description": "RelWithDebInfo build using MSVC x64 with AVX2 enabled",
-            "inherits": "windows-msvc-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "MSVC-x64-release",
-            "displayName": "MSVC x64 Release AVX2",
-            "description": "Release build using MSVC x64 with AVX2 enabled",
-            "inherits": "windows-msvc-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "Clang-linux-x64-debug",
-            "displayName": "Linux Clang x64 Debug AVX2",
-            "description": "Debug build using Linux Clang x64 with AVX2 enabled",
-            "inherits": "linux-clang-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "Clang-linux-x64-relwithdebinfo",
-            "displayName": "Linux Clang x64 RelWithDebInfo AVX2",
-            "description": "RelWithDebInfo build using Linux Clang x64 with AVX2 enabled",
-            "inherits": "linux-clang-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "Clang-linux-x64-release",
-            "displayName": "Linux Clang x64 Release AVX2",
-            "description": "Release build using Linux Clang x64 with AVX2 enabled",
-            "inherits": "linux-clang-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "Clang-linux-arm64-debug",
-            "displayName": "Linux Clang ARM64 Debug NEON",
-            "description": "Debug build using Linux Clang ARM64 with NEON enabled",
-            "inherits": "linux-clang-arm64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MATHLIB_SIMD_EXT": "NEON"
-            }
-        },
-        {
-            "name": "Clang-linux-arm64-relwithdebinfo",
-            "displayName": "Linux Clang ARM64 RelWithDebInfo NEON",
-            "description": "RelWithDebInfo build using Linux Clang ARM64 with NEON enabled",
-            "inherits": "linux-clang-arm64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "MATHLIB_SIMD_EXT": "NEON"
-            }
-        },
-        {
-            "name": "Clang-linux-arm64-release",
-            "displayName": "Linux Clang ARM64 Release NEON",
-            "description": "Release build using Linux Clang ARM64 with NEON enabled",
-            "inherits": "linux-clang-arm64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "MATHLIB_SIMD_EXT": "NEON"
-            }
-        },
-        {
-            "name": "GCC-linux-x64-debug",
-            "displayName": "Linux GCC x64 Debug AVX2",
-            "description": "Debug build using Linux GCC x64 with AVX2 enabled",
-            "inherits": "linux-gcc-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "GCC-linux-x64-relwithdebinfo",
-            "displayName": "Linux GCC x64 RelWithDebInfo AVX2",
-            "description": "RelWithDebInfo build using Linux GCC x64 with AVX2 enabled",
-            "inherits": "linux-gcc-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "GCC-linux-x64-release",
-            "displayName": "Linux GCC x64 Release AVX2",
-            "description": "Release build using Linux GCC x64 with AVX2 enabled",
-            "inherits": "linux-gcc-x64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "MATHLIB_SIMD_EXT": "AVX2"
-            }
-        },
-        {
-            "name": "GCC-linux-arm64-debug",
-            "displayName": "Linux GCC ARM64 Debug NEON",
-            "description": "Debug build using Linux GCC ARM64 with NEON enabled",
-            "inherits": "linux-gcc-arm64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MATHLIB_SIMD_EXT": "NEON"
-            }
-        },
-        {
-            "name": "GCC-linux-arm64-relwithdebinfo",
-            "displayName": "Linux GCC ARM64 RelWithDebInfo NEON",
-            "description": "RelWithDebInfo build using Linux GCC ARM64 with NEON enabled",
-            "inherits": "linux-gcc-arm64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "MATHLIB_SIMD_EXT": "NEON"
-            }
-        },
-        {
-            "name": "GCC-linux-arm64-release",
-            "displayName": "Linux GCC ARM64 Release NEON",
-            "description": "Release build using Linux GCC ARM64 with NEON enabled",
-            "inherits": "linux-gcc-arm64-base",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "MATHLIB_SIMD_EXT": "NEON"
-            }
-        }
-    ],
-    "buildPresets": [
-        {
-            "name": "MSVC-x64-debug",
-            "displayName": "Build MSVC x64 Debug AVX2",
-            "configurePreset": "MSVC-x64-debug",
-            "configuration": "Debug"
-        },
-        {
-            "name": "MSVC-x64-relwithdebinfo",
-            "displayName": "Build MSVC x64 RelWithDebInfo AVX2",
-            "configurePreset": "MSVC-x64-relwithdebinfo",
-            "configuration": "RelWithDebInfo"
-        },
-        {
-            "name": "MSVC-x64-release",
-            "displayName": "Build MSVC x64 Release AVX2",
-            "configurePreset": "MSVC-x64-release",
-            "configuration": "Release"
-        },
-        {
-            "name": "Clang-linux-x64-debug",
-            "displayName": "Build Linux Clang x64 Debug AVX2",
-            "configurePreset": "Clang-linux-x64-debug",
-            "configuration": "Debug"
-        },
-        {
-            "name": "Clang-linux-x64-relwithdebinfo",
-            "displayName": "Build Linux Clang x64 RelWithDebInfo AVX2",
-            "configurePreset": "Clang-linux-x64-relwithdebinfo",
-            "configuration": "RelWithDebInfo"
-        },
-        {
-            "name": "Clang-linux-x64-release",
-            "displayName": "Build Linux Clang x64 Release AVX2",
-            "configurePreset": "Clang-linux-x64-release",
-            "configuration": "Release"
-        },
-        {
-            "name": "Clang-linux-arm64-debug",
-            "displayName": "Build Linux Clang ARM64 Debug NEON",
-            "configurePreset": "Clang-linux-arm64-debug",
-            "configuration": "Debug"
-        },
-        {
-            "name": "Clang-linux-arm64-relwithdebinfo",
-            "displayName": "Build Linux Clang ARM64 RelWithDebInfo NEON",
-            "configurePreset": "Clang-linux-arm64-relwithdebinfo",
-            "configuration": "RelWithDebInfo"
-        },
-        {
-            "name": "Clang-linux-arm64-release",
-            "displayName": "Build Linux Clang ARM64 Release NEON",
-            "configurePreset": "Clang-linux-arm64-release",
-            "configuration": "Release"
-        },
-        {
-            "name": "GCC-linux-x64-debug",
-            "displayName": "Build Linux GCC x64 Debug AVX2",
-            "configurePreset": "GCC-linux-x64-debug",
-            "configuration": "Debug"
-        },
-        {
-            "name": "GCC-linux-x64-relwithdebinfo",
-            "displayName": "Build Linux GCC x64 RelWithDebInfo AVX2",
-            "configurePreset": "GCC-linux-x64-relwithdebinfo",
-            "configuration": "RelWithDebInfo"
-        },
-        {
-            "name": "GCC-linux-x64-release",
-            "displayName": "Build Linux GCC x64 Release AVX2",
-            "configurePreset": "GCC-linux-x64-release",
-            "configuration": "Release"
-        },
-        {
-            "name": "GCC-linux-arm64-debug",
-            "displayName": "Build Linux GCC ARM64 Debug NEON",
-            "configurePreset": "GCC-linux-arm64-debug",
-            "configuration": "Debug"
-        },
-        {
-            "name": "GCC-linux-arm64-relwithdebinfo",
-            "displayName": "Build Linux GCC ARM64 RelWithDebInfo NEON",
-            "configurePreset": "GCC-linux-arm64-relwithdebinfo",
-            "configuration": "RelWithDebInfo"
-        },
-        {
-            "name": "GCC-linux-arm64-release",
-            "displayName": "Build Linux GCC ARM64 Release NEON",
-            "configurePreset": "GCC-linux-arm64-release",
-            "configuration": "Release"
-        }
-    ]
+    {
+      "name": "windows-msvc-x64-base",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Visual Studio 18 2026",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "set"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      }
+    },
+    {
+      "name": "linux-clang-x64-base",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Ninja",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+      }
+    },
+    {
+      "name": "linux-clang-arm64-base",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Ninja",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+      }
+    },
+    {
+      "name": "linux-gcc-x64-base",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Ninja",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+      }
+    },
+    {
+      "name": "linux-gcc-arm64-base",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Ninja",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+      }
+    },
+    {
+      "name": "config-debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "config-relwithdebinfo",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "config-release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "simd-avx2",
+      "hidden": true,
+      "cacheVariables": {
+        "MATHLIB_SIMD_EXT": "AVX2"
+      }
+    },
+    {
+      "name": "simd-neon",
+      "hidden": true,
+      "cacheVariables": {
+        "MATHLIB_SIMD_EXT": "NEON"
+      }
+    },
+    {
+      "name": "simd-none",
+      "hidden": true,
+      "cacheVariables": {
+        "MATHLIB_SIMD_EXT": ""
+      }
+    },
+    {
+      "name": "MSVC-x64-debug-avx2",
+      "displayName": "MSVC x64 Debug AVX2",
+      "description": "Debug build using MSVC x64 with AVX2 enabled",
+      "inherits": [
+        "windows-msvc-x64-base",
+        "config-debug",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "MSVC-x64-debug",
+      "displayName": "MSVC x64 Debug",
+      "description": "Debug build using MSVC x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "windows-msvc-x64-base",
+        "config-debug",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "MSVC-x64-relwithdebinfo-avx2",
+      "displayName": "MSVC x64 RelWithDebInfo AVX2",
+      "description": "RelWithDebInfo build using MSVC x64 with AVX2 enabled",
+      "inherits": [
+        "windows-msvc-x64-base",
+        "config-relwithdebinfo",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "MSVC-x64-relwithdebinfo",
+      "displayName": "MSVC x64 RelWithDebInfo",
+      "description": "RelWithDebInfo build using MSVC x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "windows-msvc-x64-base",
+        "config-relwithdebinfo",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "MSVC-x64-release-avx2",
+      "displayName": "MSVC x64 Release AVX2",
+      "description": "Release build using MSVC x64 with AVX2 enabled",
+      "inherits": [
+        "windows-msvc-x64-base",
+        "config-release",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "MSVC-x64-release",
+      "displayName": "MSVC x64 Release",
+      "description": "Release build using MSVC x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "windows-msvc-x64-base",
+        "config-release",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "Clang-linux-x64-debug-avx2",
+      "displayName": "Linux Clang x64 Debug AVX2",
+      "description": "Debug build using Linux Clang x64 with AVX2 enabled",
+      "inherits": [
+        "linux-clang-x64-base",
+        "config-debug",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "Clang-linux-x64-debug",
+      "displayName": "Linux Clang x64 Debug",
+      "description": "Debug build using Linux Clang x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "linux-clang-x64-base",
+        "config-debug",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "Clang-linux-x64-relwithdebinfo-avx2",
+      "displayName": "Linux Clang x64 RelWithDebInfo AVX2",
+      "description": "RelWithDebInfo build using Linux Clang x64 with AVX2 enabled",
+      "inherits": [
+        "linux-clang-x64-base",
+        "config-relwithdebinfo",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "Clang-linux-x64-relwithdebinfo",
+      "displayName": "Linux Clang x64 RelWithDebInfo",
+      "description": "RelWithDebInfo build using Linux Clang x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "linux-clang-x64-base",
+        "config-relwithdebinfo",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "Clang-linux-x64-release-avx2",
+      "displayName": "Linux Clang x64 Release AVX2",
+      "description": "Release build using Linux Clang x64 with AVX2 enabled",
+      "inherits": [
+        "linux-clang-x64-base",
+        "config-release",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "Clang-linux-x64-release",
+      "displayName": "Linux Clang x64 Release",
+      "description": "Release build using Linux Clang x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "linux-clang-x64-base",
+        "config-release",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "Clang-linux-arm64-debug-neon",
+      "displayName": "Linux Clang ARM64 Debug NEON",
+      "description": "Debug build using Linux Clang ARM64 with NEON enabled",
+      "inherits": [
+        "linux-clang-arm64-base",
+        "config-debug",
+        "simd-neon"
+      ]
+    },
+    {
+      "name": "Clang-linux-arm64-debug",
+      "displayName": "Linux Clang ARM64 Debug",
+      "description": "Debug build using Linux Clang ARM64 without MATHLIB_SIMD_EXT=NEON",
+      "inherits": [
+        "linux-clang-arm64-base",
+        "config-debug",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "Clang-linux-arm64-relwithdebinfo-neon",
+      "displayName": "Linux Clang ARM64 RelWithDebInfo NEON",
+      "description": "RelWithDebInfo build using Linux Clang ARM64 with NEON enabled",
+      "inherits": [
+        "linux-clang-arm64-base",
+        "config-relwithdebinfo",
+        "simd-neon"
+      ]
+    },
+    {
+      "name": "Clang-linux-arm64-relwithdebinfo",
+      "displayName": "Linux Clang ARM64 RelWithDebInfo",
+      "description": "RelWithDebInfo build using Linux Clang ARM64 without MATHLIB_SIMD_EXT=NEON",
+      "inherits": [
+        "linux-clang-arm64-base",
+        "config-relwithdebinfo",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "Clang-linux-arm64-release-neon",
+      "displayName": "Linux Clang ARM64 Release NEON",
+      "description": "Release build using Linux Clang ARM64 with NEON enabled",
+      "inherits": [
+        "linux-clang-arm64-base",
+        "config-release",
+        "simd-neon"
+      ]
+    },
+    {
+      "name": "Clang-linux-arm64-release",
+      "displayName": "Linux Clang ARM64 Release",
+      "description": "Release build using Linux Clang ARM64 without MATHLIB_SIMD_EXT=NEON",
+      "inherits": [
+        "linux-clang-arm64-base",
+        "config-release",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "GCC-linux-x64-debug-avx2",
+      "displayName": "Linux GCC x64 Debug AVX2",
+      "description": "Debug build using Linux GCC x64 with AVX2 enabled",
+      "inherits": [
+        "linux-gcc-x64-base",
+        "config-debug",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "GCC-linux-x64-debug",
+      "displayName": "Linux GCC x64 Debug",
+      "description": "Debug build using Linux GCC x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "linux-gcc-x64-base",
+        "config-debug",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "GCC-linux-x64-relwithdebinfo-avx2",
+      "displayName": "Linux GCC x64 RelWithDebInfo AVX2",
+      "description": "RelWithDebInfo build using Linux GCC x64 with AVX2 enabled",
+      "inherits": [
+        "linux-gcc-x64-base",
+        "config-relwithdebinfo",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "GCC-linux-x64-relwithdebinfo",
+      "displayName": "Linux GCC x64 RelWithDebInfo",
+      "description": "RelWithDebInfo build using Linux GCC x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "linux-gcc-x64-base",
+        "config-relwithdebinfo",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "GCC-linux-x64-release-avx2",
+      "displayName": "Linux GCC x64 Release AVX2",
+      "description": "Release build using Linux GCC x64 with AVX2 enabled",
+      "inherits": [
+        "linux-gcc-x64-base",
+        "config-release",
+        "simd-avx2"
+      ]
+    },
+    {
+      "name": "GCC-linux-x64-release",
+      "displayName": "Linux GCC x64 Release",
+      "description": "Release build using Linux GCC x64 without MATHLIB_SIMD_EXT=AVX2",
+      "inherits": [
+        "linux-gcc-x64-base",
+        "config-release",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "GCC-linux-arm64-debug-neon",
+      "displayName": "Linux GCC ARM64 Debug NEON",
+      "description": "Debug build using Linux GCC ARM64 with NEON enabled",
+      "inherits": [
+        "linux-gcc-arm64-base",
+        "config-debug",
+        "simd-neon"
+      ]
+    },
+    {
+      "name": "GCC-linux-arm64-debug",
+      "displayName": "Linux GCC ARM64 Debug",
+      "description": "Debug build using Linux GCC ARM64 without MATHLIB_SIMD_EXT=NEON",
+      "inherits": [
+        "linux-gcc-arm64-base",
+        "config-debug",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "GCC-linux-arm64-relwithdebinfo-neon",
+      "displayName": "Linux GCC ARM64 RelWithDebInfo NEON",
+      "description": "RelWithDebInfo build using Linux GCC ARM64 with NEON enabled",
+      "inherits": [
+        "linux-gcc-arm64-base",
+        "config-relwithdebinfo",
+        "simd-neon"
+      ]
+    },
+    {
+      "name": "GCC-linux-arm64-relwithdebinfo",
+      "displayName": "Linux GCC ARM64 RelWithDebInfo",
+      "description": "RelWithDebInfo build using Linux GCC ARM64 without MATHLIB_SIMD_EXT=NEON",
+      "inherits": [
+        "linux-gcc-arm64-base",
+        "config-relwithdebinfo",
+        "simd-none"
+      ]
+    },
+    {
+      "name": "GCC-linux-arm64-release-neon",
+      "displayName": "Linux GCC ARM64 Release NEON",
+      "description": "Release build using Linux GCC ARM64 with NEON enabled",
+      "inherits": [
+        "linux-gcc-arm64-base",
+        "config-release",
+        "simd-neon"
+      ]
+    },
+    {
+      "name": "GCC-linux-arm64-release",
+      "displayName": "Linux GCC ARM64 Release",
+      "description": "Release build using Linux GCC ARM64 without MATHLIB_SIMD_EXT=NEON",
+      "inherits": [
+        "linux-gcc-arm64-base",
+        "config-release",
+        "simd-none"
+      ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "MSVC-x64-debug-avx2",
+      "displayName": "Build MSVC x64 Debug AVX2",
+      "configurePreset": "MSVC-x64-debug-avx2",
+      "configuration": "Debug"
+    },
+    {
+      "name": "MSVC-x64-debug",
+      "displayName": "Build MSVC x64 Debug",
+      "configurePreset": "MSVC-x64-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "MSVC-x64-relwithdebinfo-avx2",
+      "displayName": "Build MSVC x64 RelWithDebInfo AVX2",
+      "configurePreset": "MSVC-x64-relwithdebinfo-avx2",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "MSVC-x64-relwithdebinfo",
+      "displayName": "Build MSVC x64 RelWithDebInfo",
+      "configurePreset": "MSVC-x64-relwithdebinfo",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "MSVC-x64-release-avx2",
+      "displayName": "Build MSVC x64 Release AVX2",
+      "configurePreset": "MSVC-x64-release-avx2",
+      "configuration": "Release"
+    },
+    {
+      "name": "MSVC-x64-release",
+      "displayName": "Build MSVC x64 Release",
+      "configurePreset": "MSVC-x64-release",
+      "configuration": "Release"
+    },
+    {
+      "name": "Clang-linux-x64-debug-avx2",
+      "displayName": "Build Linux Clang x64 Debug AVX2",
+      "configurePreset": "Clang-linux-x64-debug-avx2",
+      "configuration": "Debug"
+    },
+    {
+      "name": "Clang-linux-x64-debug",
+      "displayName": "Build Linux Clang x64 Debug",
+      "configurePreset": "Clang-linux-x64-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "Clang-linux-x64-relwithdebinfo-avx2",
+      "displayName": "Build Linux Clang x64 RelWithDebInfo AVX2",
+      "configurePreset": "Clang-linux-x64-relwithdebinfo-avx2",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "Clang-linux-x64-relwithdebinfo",
+      "displayName": "Build Linux Clang x64 RelWithDebInfo",
+      "configurePreset": "Clang-linux-x64-relwithdebinfo",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "Clang-linux-x64-release-avx2",
+      "displayName": "Build Linux Clang x64 Release AVX2",
+      "configurePreset": "Clang-linux-x64-release-avx2",
+      "configuration": "Release"
+    },
+    {
+      "name": "Clang-linux-x64-release",
+      "displayName": "Build Linux Clang x64 Release",
+      "configurePreset": "Clang-linux-x64-release",
+      "configuration": "Release"
+    },
+    {
+      "name": "Clang-linux-arm64-debug-neon",
+      "displayName": "Build Linux Clang ARM64 Debug NEON",
+      "configurePreset": "Clang-linux-arm64-debug-neon",
+      "configuration": "Debug"
+    },
+    {
+      "name": "Clang-linux-arm64-debug",
+      "displayName": "Build Linux Clang ARM64 Debug",
+      "configurePreset": "Clang-linux-arm64-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "Clang-linux-arm64-relwithdebinfo-neon",
+      "displayName": "Build Linux Clang ARM64 RelWithDebInfo NEON",
+      "configurePreset": "Clang-linux-arm64-relwithdebinfo-neon",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "Clang-linux-arm64-relwithdebinfo",
+      "displayName": "Build Linux Clang ARM64 RelWithDebInfo",
+      "configurePreset": "Clang-linux-arm64-relwithdebinfo",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "Clang-linux-arm64-release-neon",
+      "displayName": "Build Linux Clang ARM64 Release NEON",
+      "configurePreset": "Clang-linux-arm64-release-neon",
+      "configuration": "Release"
+    },
+    {
+      "name": "Clang-linux-arm64-release",
+      "displayName": "Build Linux Clang ARM64 Release",
+      "configurePreset": "Clang-linux-arm64-release",
+      "configuration": "Release"
+    },
+    {
+      "name": "GCC-linux-x64-debug-avx2",
+      "displayName": "Build Linux GCC x64 Debug AVX2",
+      "configurePreset": "GCC-linux-x64-debug-avx2",
+      "configuration": "Debug"
+    },
+    {
+      "name": "GCC-linux-x64-debug",
+      "displayName": "Build Linux GCC x64 Debug",
+      "configurePreset": "GCC-linux-x64-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "GCC-linux-x64-relwithdebinfo-avx2",
+      "displayName": "Build Linux GCC x64 RelWithDebInfo AVX2",
+      "configurePreset": "GCC-linux-x64-relwithdebinfo-avx2",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "GCC-linux-x64-relwithdebinfo",
+      "displayName": "Build Linux GCC x64 RelWithDebInfo",
+      "configurePreset": "GCC-linux-x64-relwithdebinfo",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "GCC-linux-x64-release-avx2",
+      "displayName": "Build Linux GCC x64 Release AVX2",
+      "configurePreset": "GCC-linux-x64-release-avx2",
+      "configuration": "Release"
+    },
+    {
+      "name": "GCC-linux-x64-release",
+      "displayName": "Build Linux GCC x64 Release",
+      "configurePreset": "GCC-linux-x64-release",
+      "configuration": "Release"
+    },
+    {
+      "name": "GCC-linux-arm64-debug-neon",
+      "displayName": "Build Linux GCC ARM64 Debug NEON",
+      "configurePreset": "GCC-linux-arm64-debug-neon",
+      "configuration": "Debug"
+    },
+    {
+      "name": "GCC-linux-arm64-debug",
+      "displayName": "Build Linux GCC ARM64 Debug",
+      "configurePreset": "GCC-linux-arm64-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "GCC-linux-arm64-relwithdebinfo-neon",
+      "displayName": "Build Linux GCC ARM64 RelWithDebInfo NEON",
+      "configurePreset": "GCC-linux-arm64-relwithdebinfo-neon",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "GCC-linux-arm64-relwithdebinfo",
+      "displayName": "Build Linux GCC ARM64 RelWithDebInfo",
+      "configurePreset": "GCC-linux-arm64-relwithdebinfo",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "GCC-linux-arm64-release-neon",
+      "displayName": "Build Linux GCC ARM64 Release NEON",
+      "configurePreset": "GCC-linux-arm64-release-neon",
+      "configuration": "Release"
+    },
+    {
+      "name": "GCC-linux-arm64-release",
+      "displayName": "Build Linux GCC ARM64 Release",
+      "configurePreset": "GCC-linux-arm64-release",
+      "configuration": "Release"
+    }
+  ]
 }

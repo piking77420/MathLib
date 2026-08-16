@@ -316,7 +316,7 @@ namespace MathLib
             return Vector4(0.0, 0.0, 0.0, 1.0);
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(const std::span<double, 4>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 4>& _span) const
         {
             ASSERT_IS_FINITE(*this)
             _span[0] = m_x;
@@ -325,12 +325,12 @@ namespace MathLib
             _span[3] = m_w;
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnalignedDouble(double* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const _ptr) const
         {
-            streamToUnalignedDouble(std::span<double, 4>(_ptr, 4));
+            storeToUnalignedDouble(std::span<double, 4>(_ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnAlignedFloat(const std::span<float, 4>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 4>& _span) const
         {
             ASSERT_IS_FINITE(*this)
             _span[0] = static_cast<float>(m_x);
@@ -339,12 +339,12 @@ namespace MathLib
             _span[3] = static_cast<float>(m_w);
         }
 
-        MATH_LIB_FORCE_INLINE void streamToUnAlignedFloat(float* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const _ptr) const
         {
-            streamToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
+            storeToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedDouble(const std::span<double, 4>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 4>& _span) const
         {
             MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
             ASSERT_IS_FINITE(*this)
@@ -355,12 +355,12 @@ namespace MathLib
             _span[3] = m_w;
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedDouble(double* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const _ptr) const
         {
-            streamToAlignedDouble(std::span<double, 4>(_ptr, 4));
+            storeToAlignedDouble(std::span<double, 4>(_ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedFloat(const std::span<float, 4>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 4>& _span) const
         {
             MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
             ASSERT_IS_FINITE(*this)
@@ -371,9 +371,9 @@ namespace MathLib
             _span[3] = static_cast<float>(m_w);
         }
 
-        MATH_LIB_FORCE_INLINE void streamToAlignedFloat(float* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const _ptr) const
         {
-            streamToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
+            storeToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
         }
 
         MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 4>& _span)
@@ -439,7 +439,7 @@ namespace MathLib
         friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& _ostream, const Vector4& _vec)
         {
             std::array<double, 4> data;
-            _vec.streamToUnalignedDouble(data);
+            _vec.storeToUnalignedDouble(data);
             _ostream << "x: " << data[0] << ", y: " << data[1] << ", z: " << data[2] << ", w: " << data[3];
 
             return _ostream;
@@ -473,7 +473,7 @@ struct std::formatter<MathLib::Vector4d>
     {
         std::array<double, 4> data;
 
-        _v.streamToUnalignedDouble(data);
+        _v.storeToUnalignedDouble(data);
 
         return std::format_to(_ctx.out(), "x: {}, y: {}, z: {}, w: {}", data[0], data[1], data[2], data[3]);
     }
