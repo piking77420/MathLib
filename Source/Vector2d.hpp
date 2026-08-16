@@ -460,7 +460,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 2>& _span)
         {
 #if defined(SIMD_SSE2)
-            m_data = _mm_loadr_pd(_span.data());
+            m_data = _mm_loadu_pd(_span.data());
 #else
             m_x = _span[0];
             m_y = _span[1];
