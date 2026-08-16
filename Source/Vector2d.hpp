@@ -248,11 +248,28 @@ namespace MathLib
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& _a, const Vector2& _b)
         {
+            // TODO may add ext for dot procudt simd SSE4.1
             ASSERT_IS_FINITE(_a);
             ASSERT_IS_FINITE(_b);
+#if defined(SIMD_SSE2)
+            // make multiplication
+            // lane low := a.x * b.x
+            // lane high := a.y * b.y
+            const __m128d mul = _mm_mul_pd(_a, _b);
+            // create new __m128d from the hight lanes of those 2
+            // lane low := so a.y * b.y
+            // lane high := a.y * b.y
+            const __m128d high = _mm_unpackhi_pd(mul, mul);
+            // _mm_add_sd adds only the low lanes.
+            // addOp's low lane := (a.x * b.x) + (a.y * b.y),
+            // high lane := a.y * b.y
+            const __m128d addOp = _mm_add_sd(mul, high);
 
-            // TODO
+            // return lower lane so (a.x * b.x) + (a.y * b.y)
+            return _mm_cvtsd_f64(addOp);
+#else
             return (_a.getX() * _b.getX()) + (_a.getY() * _b.getY());
+#endif // defined(SIMD_SSE2)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
@@ -334,7 +351,7 @@ namespace MathLib
         {
             ASSERT_IS_FINITE(_a);
             ASSERT_IS_FINITE(_b);
-            // TODO
+
             return _b.getY() * _a.getX() - _b.getX() * _a.getY();
         }
 
