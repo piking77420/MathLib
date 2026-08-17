@@ -10,10 +10,11 @@ include(FetchContent)
 
 FetchContent_Declare(
     googletest
-    URL
-        https://github.com/google/googletest/archive/fa8438ae6b70c57010177de47a9f13d7041a6328.zip
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.17.0
+    GIT_SHALLOW TRUE
 )
+
 # Prevent GoogleTest from overriding the MSVC runtime configuration.
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 

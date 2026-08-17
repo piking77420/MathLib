@@ -834,7 +834,7 @@ TEST(TestVector2d, abs)
     }
 }
 
-TEST(TestVector2d, streamToUnAlignedDouble)
+TEST(TestVector2d, stroreToUnAlignedDouble)
 {
     {
         std::array<double, 2> data;
