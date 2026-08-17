@@ -248,7 +248,6 @@ namespace MathLib
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& _a, const Vector2& _b)
         {
-            // TODO may add ext for dot procudt simd SSE4.1
             ASSERT_IS_FINITE(_a);
             ASSERT_IS_FINITE(_b);
 #if defined(SIMD_SSE2) || defined(SIMD_SSE42)
@@ -446,7 +445,8 @@ namespace MathLib
         {
             ASSERT_IS_FINITE(*this);
 #if defined(SIMD_SSE2)
-
+            const __m128 values = _mm_cvtpd_ps(m_data);
+            std::memcpy(_span.data(), &values, sizeof(float) * 2);
 #else
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
@@ -481,11 +481,7 @@ namespace MathLib
             MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
 #if defined(SIMD_SSE2)
             const __m128 values = _mm_cvtpd_ps(m_data);
-
-            std::uint64_t packed;
-            _mm_storel_epi64(reinterpret_cast<__m128i*>(&packed), _mm_castps_si128(values));
-
-            std::memcpy(_span.data(), &packed, sizeof(packed));
+            std::memcpy(_span.data(), &values, sizeof(float) * 2);
 #else
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);

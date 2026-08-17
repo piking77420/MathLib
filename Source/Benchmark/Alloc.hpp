@@ -25,7 +25,7 @@ namespace Alloc
 #endif
     }
 
-    void freeAlignedMalloc(void* ptr);
+    void freeAlignedMalloc(void* _ptr);
 
 } // namespace Alloc
 

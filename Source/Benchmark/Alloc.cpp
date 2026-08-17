@@ -2,12 +2,12 @@
 
 namespace Alloc
 {
-    void freeAlignedMalloc(void* ptr)
+    void freeAlignedMalloc(void* _ptr)
     {
 #if defined(_MSC_VER)
-        _aligned_free(ptr);
+        _aligned_free(_ptr);
 #else
-        std::free(ptr);
+        std::free(_ptr);
 #endif // defined(_MSC_VER)
     }
 } // namespace Alloc
