@@ -144,7 +144,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator+=(const double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_add_pd(m_data, scalarPackedDouble);
 #else
             m_x += _scalar;
@@ -157,7 +157,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator-=(const double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_sub_pd(m_data, scalarPackedDouble);
 #else
             m_x -= _scalar;
@@ -170,7 +170,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator*=(double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_mul_pd(m_data, scalarPackedDouble);
 #else
             m_x *= _scalar;
@@ -183,7 +183,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator/=(double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_div_pd(m_data, scalarPackedDouble);
 #else
             m_x /= _scalar;
