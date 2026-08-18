@@ -22,6 +22,7 @@ FetchContent_MakeAvailable(benchmark)
 set(BENCHMARK_SOURCES
     Alloc.cpp
     Alloc.hpp
+    BenchmarkHeader.hpp
     Vector2d_Benchmark.cpp
 )
 

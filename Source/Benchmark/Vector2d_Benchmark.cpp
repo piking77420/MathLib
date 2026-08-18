@@ -1,7 +1,7 @@
 #include <array>
 #include <cstddef>
-#include <new>
 #include <benchmark/benchmark.h>
+#include <BenchmarkHeader.hpp>
 #include <Alloc.hpp>
 #include <Vector2d.hpp>
 
@@ -77,8 +77,8 @@ namespace
     void BM_Vector2dDot_Array_Aligned_NoFalseSharing(benchmark::State& _state)
     {
         constexpr size_t size = 1024;
-        Vector2d* arrayA = alignMalloc<Vector2d>(size, std::hardware_destructive_interference_size);
-        Vector2d* arrayB = alignMalloc<Vector2d>(size, std::hardware_destructive_interference_size);
+        Vector2d* arrayA = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
+        Vector2d* arrayB = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
 
         benchmark::DoNotOptimize(arrayA);
         benchmark::DoNotOptimize(arrayA);
@@ -102,9 +102,9 @@ namespace
     void BM_Vector2dDot_Array_Aligned_NoFalseSharing_ToArray(benchmark::State& _state)
     {
         constexpr size_t size = 1024;
-        Vector2d* arrayA = alignMalloc<Vector2d>(size, std::hardware_destructive_interference_size);
-        Vector2d* arrayB = alignMalloc<Vector2d>(size, std::hardware_destructive_interference_size);
-        double* arrayResult = alignMalloc<double>(size, std::hardware_destructive_interference_size);
+        Vector2d* arrayA = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
+        Vector2d* arrayB = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
+        double* arrayResult = alignMalloc<double>(size, hardware_destructive_interference_size);
 
         benchmark::DoNotOptimize(arrayA);
         benchmark::DoNotOptimize(arrayB);
