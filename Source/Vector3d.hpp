@@ -179,6 +179,19 @@ namespace MathLib
             return (_a.m_x * _b.m_x) + (_a.m_y * _b.m_y) + (_a.m_z * _b.m_z);
         }
 
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE Vector3 cross(const Vector3& _a, const Vector3& _b)
+        {
+            ASSERT_IS_FINITE(_a)
+            ASSERT_IS_FINITE(_b)
+
+            // TODO add test for correctness and winding order
+            const double x = _a.getY() * _b.getZ() - _a.getZ() * _b.getY();
+            const double y = _a.getZ() * _b.getX() - _a.getX() * _b.getZ();
+            const double z = _a.getX() * _b.getY() - _a.getY() * _b.getX();
+
+            return Vector3(x, y, z);
+        }
+
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
         {
             ASSERT_IS_FINITE(*this)
@@ -269,6 +282,11 @@ namespace MathLib
             ASSERT_IS_FINITE(_b)
             return Vector3(std::max(_a.getX(), _b.getX()), std::max(_a.getY(), _b.getY()),
                            std::max(_a.getZ(), _b.getZ()));
+        }
+
+        [[nodiscard]] Vector3 abs() const
+        {
+            return Vector3{std::abs(m_x), std::abs(m_y), std::abs(m_z)};
         }
 
         static Vector3 unitX()
