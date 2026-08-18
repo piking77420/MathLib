@@ -79,12 +79,15 @@
 
 #if defined(_MSC_VER)
 #define MATH_LIB_FORCE_INLINE __forceinline
+#define MATH_LIB_RESTRICT __restrict
 
 #elif defined(__clang__)
 #define MATH_LIB_FORCE_INLINE inline __attribute__((always_inline))
+#define MATH_LIB_RESTRICT __restrict
 
 #elif defined(__GNUC__)
 #define MATH_LIB_FORCE_INLINE inline __attribute__((always_inline))
+#define MATH_LIB_RESTRICT __restrict__
 
 #else
 #define MATH_LIB_FORCE_INLINE inline
