@@ -875,7 +875,7 @@ TEST(TestVector2d, storeToUnAlignedFloat)
 TEST(TestVector2d, storeToAlignedDouble)
 {
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 2> data;
+        alignas(AVX_ALIGNEMENT) std::array<double, 2> data;
         const Vector2d v(1.0, 2.0);
         v.storeToAlignedDouble(data.data());
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
@@ -883,7 +883,7 @@ TEST(TestVector2d, storeToAlignedDouble)
     }
 
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 2> data;
+        alignas(AVX_ALIGNEMENT) std::array<double, 2> data;
         const Vector2d v(1.0, 2.0);
         v.storeToAlignedDouble(std::span<double, 2>(data));
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
@@ -951,7 +951,7 @@ TEST(TestVector2d, fromUnAlignedFloat)
 TEST(TestVector2d, fromAlignedDouble)
 {
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0};
+        alignas(AVX_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0};
         Vector2d v;
         v.fromAlignedDouble(data.data());
         EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
@@ -960,7 +960,7 @@ TEST(TestVector2d, fromAlignedDouble)
     }
 
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 2> data{1.0, 2.0};
+        alignas(AVX_ALIGNEMENT) std::array<double, 2> data{1.0, 2.0};
         Vector2d v;
         v.fromAlignedDouble(std::span<double, 2>(data));
         EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
@@ -971,7 +971,7 @@ TEST(TestVector2d, fromAlignedDouble)
 TEST(TestVector2d, fromAlignedFloat)
 {
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 2> data{1.0, 2.0};
+        alignas(AVX_ALIGNEMENT) std::array<float, 2> data{1.0, 2.0};
         Vector2d v;
         v.fromAlignedFloat(data.data());
         EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
@@ -979,7 +979,7 @@ TEST(TestVector2d, fromAlignedFloat)
     }
 
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 2> data{1.0, 2.0};
+        alignas(AVX_ALIGNEMENT) std::array<float, 2> data{1.0, 2.0};
         Vector2d v;
         v.fromAlignedFloat(std::span<float, 2>(data));
         EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);

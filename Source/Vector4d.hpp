@@ -508,7 +508,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 4>& _span) const noexcept
         {
-            MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(_span.data()));
             ASSERT_IS_FINITE(*this);
 
 #if defined(SIMD_AVX)
@@ -588,7 +588,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 4>& _span) noexcept
         {
-            MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(_span.data()));
 
 #if defined(SIMD_AVX)
             m_data = _mm256_load_pd(_span.data());

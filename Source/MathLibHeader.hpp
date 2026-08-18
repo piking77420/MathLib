@@ -143,7 +143,7 @@ namespace MathLib
     }
 
     static constexpr size_t SSE_ALIGNEMENT = 16;
-    static constexpr size_t AVX_AVX2_ALIGNEMENT = 32;
+    static constexpr size_t AVX_ALIGNEMENT = 32;
 }
 
 // NOLINTEND(cppcoreguidelines-macro-usage)
