@@ -7,7 +7,8 @@ function(mathlib_enable_simd target level)
         if(level_upper STREQUAL "SSE2")
             # SSE2 is the baseline for MSVC x64.
             # For 32-bit x86, you may need /arch:SSE2.
-
+        elseif(level_upper STREQUAL "SSE42")
+            set(simd_option /arch:SSE4.2)
         elseif(level_upper STREQUAL "AVX")
             set(simd_option /arch:AVX)
 
@@ -37,8 +38,9 @@ function(mathlib_enable_simd target level)
         endif()
         if (CPU_X86_64)
             if(level_upper STREQUAL "SSE2")
-            set(simd_option -msse2)
-
+                set(simd_option -msse2)
+            elseif(level_upper STREQUAL "SSE42")
+                set(simd_option -msse4.2)
             elseif(level_upper STREQUAL "AVX")
                 set(simd_option -mavx)
 

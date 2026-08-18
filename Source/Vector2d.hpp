@@ -144,7 +144,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator+=(const double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_add_pd(m_data, scalarPackedDouble);
 #else
             m_x += _scalar;
@@ -157,7 +157,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator-=(const double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_sub_pd(m_data, scalarPackedDouble);
 #else
             m_x -= _scalar;
@@ -170,7 +170,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator*=(double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_mul_pd(m_data, scalarPackedDouble);
 #else
             m_x *= _scalar;
@@ -183,7 +183,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector2& operator/=(double _scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set_pd(_scalar, _scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
             m_data = _mm_div_pd(m_data, scalarPackedDouble);
 #else
             m_x /= _scalar;
@@ -248,10 +248,13 @@ namespace MathLib
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& _a, const Vector2& _b)
         {
-            // TODO may add ext for dot procudt simd SSE4.1
             ASSERT_IS_FINITE(_a);
             ASSERT_IS_FINITE(_b);
-#if defined(SIMD_SSE2)
+#if defined(SIMD_SSE2) || defined(SIMD_SSE42)
+#if defined(SIMD_SSE42)
+            static constexpr int mask = 0b00110001;
+            return _mm_cvtsd_f64(_mm_dp_pd(_a, _b, mask));
+#else
             // make multiplication
             // lane low := a.x * b.x
             // lane high := a.y * b.y
@@ -267,9 +270,11 @@ namespace MathLib
 
             // return lower lane so (a.x * b.x) + (a.y * b.y)
             return _mm_cvtsd_f64(addOp);
+#endif // defined(SIMD_SSE42)
+
 #else
             return (_a.getX() * _b.getX()) + (_a.getY() * _b.getY());
-#endif // defined(SIMD_SSE2)
+#endif // defined(SIMD_SSE2) || defined(SIMD_SSE42)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
@@ -440,7 +445,8 @@ namespace MathLib
         {
             ASSERT_IS_FINITE(*this);
 #if defined(SIMD_SSE2)
-
+            const __m128 values = _mm_cvtpd_ps(m_data);
+            std::memcpy(_span.data(), &values, sizeof(float) * 2);
 #else
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);
@@ -475,11 +481,7 @@ namespace MathLib
             MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
 #if defined(SIMD_SSE2)
             const __m128 values = _mm_cvtpd_ps(m_data);
-
-            std::uint64_t packed;
-            _mm_storel_epi64(reinterpret_cast<__m128i*>(&packed), _mm_castps_si128(values));
-
-            std::memcpy(_span.data(), &packed, sizeof(packed));
+            std::memcpy(_span.data(), &values, sizeof(float) * 2);
 #else
             _span[0] = static_cast<float>(m_x);
             _span[1] = static_cast<float>(m_y);

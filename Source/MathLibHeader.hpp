@@ -25,12 +25,16 @@
 
 #define SIMD_AVX2 1
 #define SIMD_AVX 1
+#define SIMD_SSE42 1
 #define SIMD_SSE2 1
 
 #elif defined(MATHLIB_SIMD_LEVEL_AVX)
 
 #define SIMD_AVX 1
+#define SIMD_SSE42 1
 #define SIMD_SSE2 1
+
+#elif defined(MATHLIB_SIMD_LEVEL_SSE42)
 
 #elif defined(MATHLIB_SIMD_LEVEL_SSE2)
 
@@ -128,6 +132,11 @@ namespace MathLib
         static_assert(std::has_single_bit(Alignment));
 
         return (reinterpret_cast<std::uintptr_t>(_ptr) & (Alignment - 1)) == 0;
+    }
+
+    constexpr size_t alignedSize(size_t _size, size_t _alignement) noexcept
+    {
+        return (_size + _alignement - 1) & ~(_alignement - 1);
     }
 
     static constexpr size_t SSE_ALIGNEMENT = 16;
