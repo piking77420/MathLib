@@ -222,7 +222,7 @@ namespace MathLib
 #if defined(SIMD_SSE2)
             const Vector2 absDiff = (*this - _other).abs();
             const Vector2 epsilon = Vector2(DoubleEpsilon);
-            const __m128d cmp = _mm_cmple_pd(absDiff, epsilon);
+            const __m128d cmp = _mm_cmple_pd(absDiff, epsilon); // less or equal
 
             return _mm_movemask_pd(cmp) == 0b11;
 #else
@@ -422,7 +422,11 @@ namespace MathLib
 
         static Vector2 zero()
         {
+#if defined(SIMD_SSE2)
+            return Vector2{_mm_setzero_pd()};
+#else
             return Vector2(0.0, 0.0);
+#endif // defined(SIMD_SSE2)
         }
 
         MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 2>& _span) const
