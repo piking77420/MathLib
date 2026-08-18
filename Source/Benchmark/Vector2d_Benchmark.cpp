@@ -12,6 +12,8 @@ using namespace Alloc;
 // NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTBEGIN(misc-const-correctness)
+// NOLINTBEGIN(clang-analyzer-deadcode.DeadStores)
+// NOLINTBEGIN(cppcoreguidelines-pro-bounds-constant-array-index)
 
 namespace
 {
@@ -125,6 +127,8 @@ namespace
     BENCHMARK(BM_Vector2dDot_Array_Aligned_NoFalseSharing_ToArray);
 }
 
+// NOLINTEND(cppcoreguidelines-pro-bounds-constant-array-index)
+// NOLINTEND(clang-analyzer-deadcode.DeadStores)
 // NOLINTEND(misc-const-correctness)
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)

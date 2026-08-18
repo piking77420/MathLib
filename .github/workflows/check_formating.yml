@@ -49,12 +49,14 @@ jobs:
           clang_tidy_version: "18"
           config_file: ".clang-tidy"
           build_dir: "build"
+          include: "*.cpp,*.cc,*.cxx"
           cmake_command: >-
             cmake
             -S .
             -B build
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
             -DBUILD_UNIT_TEST=ON
+            -DBUILD_BENCHMARK=ON
 
       - name: Upload clang-tidy results
         if: always()

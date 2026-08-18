@@ -42,6 +42,5 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
         MathLib
-        benchmark::benchmark
         benchmark::benchmark_main
 )

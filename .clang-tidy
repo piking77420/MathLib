@@ -70,6 +70,8 @@ Checks: >
     -cppcoreguidelines-pro-type-reinterpret-cast,
     -cppcoreguidelines-pro-type-member-init,
     -cppcoreguidelines-no-malloc,
-    -hicpp-no-malloc
+    -hicpp-no-malloc,
+    -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+    -cppcoreguidelines-pro-bounds-constant-array-index
 HeaderFileExtensions: [h, hpp, cppm]
 HeaderFilterRegex: .*
