@@ -1,6 +1,5 @@
 #ifndef MATH_LIB_BENDCHMARK_HEADER_H
 #define MATH_LIB_BENDCHMARK_HEADER_H
-#include <new>
 #include <cstddef>
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
@@ -8,6 +7,7 @@
 namespace MathLib
 {
 #if defined(__cpp_lib_hardware_interference_size)
+#include <new>
     inline constexpr size_t HardwareConstructiveInterferenceSize = std::hardware_constructive_interference_size;
     inline constexpr size_t HardwareDestructiveInterferenceSize = std::hardware_destructive_interference_size;
 #elif defined(__GCC_CONSTRUCTIVE_SIZE) && defined(__GCC_DESTRUCTIVE_SIZE)

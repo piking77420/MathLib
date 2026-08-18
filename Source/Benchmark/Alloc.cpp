@@ -1,4 +1,9 @@
 #include <Alloc.hpp>
+#include <cstdlib>
+
+// NOLINTBEGIN(cppcoreguidelines-no-malloc)
+// NOLINTBEGIN(hicpp-no-malloc)
+// NOLINTBEGIN(cppcoreguidelines-owning-memory)
 
 namespace Alloc
 {
@@ -11,3 +16,7 @@ namespace Alloc
 #endif // defined(_MSC_VER)
     }
 } // namespace Alloc
+
+// NOLINTEND(cppcoreguidelines-owning-memory)
+// NOLINTEND(hicpp-no-malloc)
+// NOLINTEND(cppcoreguidelines-no-malloc)
