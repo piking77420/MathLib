@@ -16,7 +16,7 @@ namespace Alloc
     [[nodiscard]] T* alignMalloc(std::size_t _count, std::size_t _alignment)
     {
         const std::size_t size = sizeof(T) * _count;
-
+        static_assert(std::is_trivially_constructible_v<T>);
 #if defined(_MSC_VER)
         return static_cast<T*>(_aligned_malloc(size, _alignment));
 #else
@@ -25,7 +25,7 @@ namespace Alloc
 #endif
     }
 
-    void freeAlignedMalloc(void* _ptr);
+    void freeAlignedMalloc(void* ptr);
 
 } // namespace Alloc
 

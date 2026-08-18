@@ -3,6 +3,7 @@
 #include <benchmark/benchmark.h>
 #include <BenchmarkHeader.hpp>
 #include <Alloc.hpp>
+#include <MathLibHeader.hpp>
 #include <Vector2d.hpp>
 
 using namespace MathLib;
@@ -23,6 +24,7 @@ namespace
         for (auto _ : _state)
         {
             double result = Vector2d::dot(a, b);
+            benchmark::DoNotOptimize(result);
         }
     }
     BENCHMARK(BM_Vector2dDot);
@@ -77,8 +79,8 @@ namespace
     void BM_Vector2dDot_Array_Aligned_NoFalseSharing(benchmark::State& _state)
     {
         constexpr size_t size = 1024;
-        Vector2d* arrayA = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
-        Vector2d* arrayB = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
+        Vector2d* arrayA = alignMalloc<Vector2d>(size, HardwareDestructiveInterferenceSize);
+        Vector2d* arrayB = alignMalloc<Vector2d>(size, HardwareDestructiveInterferenceSize);
 
         benchmark::DoNotOptimize(arrayA);
         benchmark::DoNotOptimize(arrayA);
@@ -102,10 +104,9 @@ namespace
     void BM_Vector2dDot_Array_Aligned_NoFalseSharing_ToArray(benchmark::State& _state)
     {
         constexpr size_t size = 1024;
-        Vector2d* arrayA = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
-        Vector2d* arrayB = alignMalloc<Vector2d>(size, hardware_destructive_interference_size);
-        double* arrayResult = alignMalloc<double>(size, hardware_destructive_interference_size);
-
+        Vector2d* arrayA = alignMalloc<Vector2d>(size, HardwareDestructiveInterferenceSize);
+        Vector2d* arrayB = alignMalloc<Vector2d>(size, HardwareDestructiveInterferenceSize);
+        double* arrayResult = alignMalloc<double>(size, HardwareDestructiveInterferenceSize);
         benchmark::DoNotOptimize(arrayA);
         benchmark::DoNotOptimize(arrayB);
         benchmark::DoNotOptimize(arrayResult);
@@ -122,13 +123,8 @@ namespace
         freeAlignedMalloc(arrayB);
     }
     BENCHMARK(BM_Vector2dDot_Array_Aligned_NoFalseSharing_ToArray);
-
-    void BM_Vector2dAdd(benchmark::State& _state)
-    {
-    }
-    BENCHMARK(BM_Vector2dAdd);
 }
 
 // NOLINTEND(misc-const-correctness)
-// NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
+// NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
