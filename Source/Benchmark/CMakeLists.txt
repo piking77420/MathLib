@@ -25,6 +25,7 @@ set(BENCHMARK_SOURCES
     Alloc.hpp
     BenchmarkHeader.hpp
     Vector2d_Benchmark.cpp
+    Vector4d_Benchmark.cpp
 )
 
 add_executable(

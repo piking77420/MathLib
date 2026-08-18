@@ -921,6 +921,63 @@ TEST(TestVector4dd, max)
     }
 }
 
+TEST(TestVector4d, abs)
+{
+    // Full Positive
+    {
+        const Vector4d result = Vector4d(1.0, 2.0, 3.0, 4.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+    }
+
+    // X negative
+    {
+        const Vector4d result = Vector4d(-1.0, 2.0, 3.0, 4.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+    }
+
+    // Y negative
+    {
+        const Vector4d result = Vector4d(1.0, 2.0, 3.0, 4.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+    }
+
+    // Z negative
+    {
+        const Vector4d result = Vector4d(1.0, 2.0, -3.0, 4.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+    }
+
+    // W negative
+    {
+        const Vector4d result = Vector4d(1.0, 2.0, 3.0, -4.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+    }
+
+    // X,Y,Z,W negative
+    {
+        const Vector4d result = Vector4d(-1.0, -2.0, -3.0, -4.0).abs();
+        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+    }
+}
+
 TEST(TestVector4d, streamToUnAlignedDouble)
 {
     {
