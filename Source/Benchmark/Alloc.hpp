@@ -17,13 +17,10 @@ namespace Alloc
         const std::size_t size = sizeof(T) * _count;
         static_assert(std::is_trivially_constructible_v<T>);
 #if defined(_MSC_VER)
-        return static_cast<T*>(
-            _aligned_malloc(size, _alignment)); // NOLINT(cppcoreguidelines-owning-memory, cppcoreguidelines-no-malloc)
+        return static_cast<T*>(_aligned_malloc(size, _alignment));
 #else
         // std::aligned_alloc requires size to be a multiple of alignment.
-        return static_cast<T*>(std::aligned_alloc(
-            _alignment, MathLib::alignedSize(
-                            size, _alignment))); // NOLINT(cppcoreguidelines-owning-memory, cppcoreguidelines-no-malloc)
+        return static_cast<T*>(std::aligned_alloc(_alignment, MathLib::alignedSize(size, _alignment)));
 #endif
     }
 
