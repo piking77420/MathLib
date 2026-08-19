@@ -334,7 +334,7 @@ TEST(TestVector4d, NegateOperator)
     }
 }
 
-TEST(TestVector4d, Dot)
+TEST(TestVector4d, dot)
 {
     {
         const Vector4d v1 = Vector4d::unitX();

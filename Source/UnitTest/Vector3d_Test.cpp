@@ -280,7 +280,7 @@ TEST(TestVector3, divScalarOperator)
     }
 }
 
-TEST(TestVector3, CmpOperator)
+TEST(TestVector3, cmpOperator)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
@@ -311,7 +311,7 @@ TEST(TestVector3, CmpOperator)
     }
 }
 
-TEST(TestVector3, NegateOperator)
+TEST(TestVector3, negateOperator)
 {
     // all positive
     {
@@ -344,7 +344,7 @@ TEST(TestVector3, NegateOperator)
     }
 }
 
-TEST(TestVector3, Dot)
+TEST(TestVector3, dot)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
@@ -420,9 +420,90 @@ TEST(TestVector3, Dot)
     }
 }
 
-TEST(TestVector3, Cross)
+TEST(TestVector3, cross)
 {
-    // TODO
+    // Cross self
+    {
+        const Vector3d x = Vector3d::unitX();
+        const Vector3d result = Vector3d::cross(x, x);
+        EXPECT_DOUBLE_EQ(result.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 0.0);
+        EXPECT_TRUE(isValidHighLane(result));
+    }
+
+    // Check cross product magnitude
+    {
+        const Vector3d a(3.0, 0.0, 0.0);
+        const Vector3d b(0.0, 4.0, 0.0);
+
+        const Vector3d result = Vector3d::cross(a, b);
+
+        // a cross b = (0, 0, 12)
+        EXPECT_DOUBLE_EQ(result.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 12.0);
+
+        EXPECT_DOUBLE_EQ(result.length(), a.length() * b.length());
+        EXPECT_TRUE(isValidHighLane(result));
+    }
+
+    // x cross y = z , y cross x = -z
+    {
+        const Vector3d x = Vector3d::unitX();
+        const Vector3d y = Vector3d::unitY();
+
+        const Vector3d z = Vector3d::cross(x, y);
+        const Vector3d minusZ = Vector3d::cross(y, x);
+
+        EXPECT_DOUBLE_EQ(z.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(z.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(z.getZ(), 1.0);
+        EXPECT_TRUE(isValidHighLane(z));
+
+        EXPECT_DOUBLE_EQ(minusZ.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(minusZ.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(minusZ.getZ(), -1.0);
+        EXPECT_TRUE(isValidHighLane(minusZ));
+    }
+
+    // x cross z = -y, z cross x = y
+    {
+        const Vector3d x = Vector3d::unitX();
+        const Vector3d z = Vector3d::unitZ();
+
+        const Vector3d minusY = Vector3d::cross(x, z);
+        const Vector3d y = Vector3d::cross(z, x);
+
+        EXPECT_DOUBLE_EQ(minusY.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(minusY.getY(), -1.0);
+        EXPECT_DOUBLE_EQ(minusY.getZ(), 0.0);
+        EXPECT_TRUE(isValidHighLane(minusY));
+
+        EXPECT_DOUBLE_EQ(y.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(y.getY(), 1.0);
+        EXPECT_DOUBLE_EQ(y.getZ(), 0.0);
+        EXPECT_TRUE(isValidHighLane(y));
+    }
+
+    // y cross z = x, z cross y = -x
+    {
+        const Vector3d y = Vector3d::unitY();
+        const Vector3d z = Vector3d::unitZ();
+
+        const Vector3d x = Vector3d::cross(y, z);
+        const Vector3d minusX = Vector3d::cross(z, y);
+
+        EXPECT_DOUBLE_EQ(x.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(x.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(x.getZ(), 0.0);
+        EXPECT_TRUE(isValidHighLane(x));
+
+        EXPECT_DOUBLE_EQ(minusX.getX(), -1.0);
+        EXPECT_DOUBLE_EQ(minusX.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(minusX.getZ(), 0.0);
+        EXPECT_TRUE(isValidHighLane(minusX));
+    }
 }
 
 TEST(TestVector3, lengthSquare)

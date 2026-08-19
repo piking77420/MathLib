@@ -346,13 +346,27 @@ namespace MathLib
         {
             ASSERT_IS_FINITE(a);
             ASSERT_IS_FINITE(b);
-
             // TODO add test for correctness and winding order
+
+#if defined(SIMD_AVX)
+            // [y, z, x, w]
+            const __m256d aYZX = _mm256_permute4x64_pd(a.m_data, _MM_SHUFFLE(3, 0, 2, 1));
+
+            const __m256d bYZX = _mm256_permute4x64_pd(b.m_data, _MM_SHUFFLE(3, 0, 2, 1));
+
+            // [z, x, y, w]
+            const __m256d aZXY = _mm256_permute4x64_pd(a.m_data, _MM_SHUFFLE(3, 1, 0, 2));
+
+            const __m256d bZXY = _mm256_permute4x64_pd(b.m_data, _MM_SHUFFLE(3, 1, 0, 2));
+
+            return Vector3(_mm256_sub_pd(_mm256_mul_pd(aYZX, bZXY), _mm256_mul_pd(aZXY, bYZX)));
+#else
             const double x = a.getY() * b.getZ() - a.getZ() * b.getY();
             const double y = a.getZ() * b.getX() - a.getX() * b.getZ();
             const double z = a.getX() * b.getY() - a.getY() * b.getX();
 
             return Vector3(x, y, z);
+#endif
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
