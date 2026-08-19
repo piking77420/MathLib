@@ -3,7 +3,6 @@ WarningsAsErrors: >
 CheckOptions:
     # Parameters: _value
   readability-identifier-naming.ParameterCase: camelBack
-  readability-identifier-naming.ParameterPrefix: _
 
   # Private members: m_value
   readability-identifier-naming.PrivateMemberCase: camelBack
