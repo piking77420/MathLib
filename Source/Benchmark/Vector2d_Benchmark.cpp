@@ -18,12 +18,12 @@ using namespace Alloc;
 namespace
 {
 
-    void BM_Vector2dDot(benchmark::State& _state)
+    void BM_Vector2dDot(benchmark::State& state)
     {
         Vector2d a(10.0, 20.0);
         Vector2d b(30.0, 40.0);
 
-        for (auto _ : _state)
+        for (auto _ : state)
         {
             double result = Vector2d::dot(a, b);
             benchmark::DoNotOptimize(result);
@@ -31,7 +31,7 @@ namespace
     }
     BENCHMARK(BM_Vector2dDot);
 
-    void BM_Vector2dDot_Array(benchmark::State& _state)
+    void BM_Vector2dDot_Array(benchmark::State& state)
     {
         std::array<Vector2d, 1024> a;
         std::array<Vector2d, 1024> b;
@@ -39,7 +39,7 @@ namespace
         benchmark::DoNotOptimize(a);
         benchmark::DoNotOptimize(b);
 
-        for (auto _ : _state)
+        for (auto _ : state)
         {
             double result = 0.0;
 
@@ -53,7 +53,7 @@ namespace
     }
     BENCHMARK(BM_Vector2dDot_Array);
 
-    void BM_Vector2dDot_Array_Aligned(benchmark::State& _state)
+    void BM_Vector2dDot_Array_Aligned(benchmark::State& state)
     {
         constexpr size_t size = 1024;
         Vector2d* arrayA = alignMalloc<Vector2d>(size, SSE_ALIGNEMENT);
@@ -61,7 +61,7 @@ namespace
         benchmark::DoNotOptimize(arrayA);
         benchmark::DoNotOptimize(arrayA);
 
-        for (auto _ : _state)
+        for (auto _ : state)
         {
             double result = 0.0;
 
@@ -78,7 +78,7 @@ namespace
     }
     BENCHMARK(BM_Vector2dDot_Array_Aligned);
 
-    void BM_Vector2dDot_Array_Aligned_NoFalseSharing(benchmark::State& _state)
+    void BM_Vector2dDot_Array_Aligned_NoFalseSharing(benchmark::State& state)
     {
         constexpr size_t size = 1024;
         Vector2d* arrayA = alignMalloc<Vector2d>(size, HardwareDestructiveInterferenceSize);
@@ -87,7 +87,7 @@ namespace
         benchmark::DoNotOptimize(arrayA);
         benchmark::DoNotOptimize(arrayA);
 
-        for (auto _ : _state)
+        for (auto _ : state)
         {
             double result = 0.0;
             for (std::size_t i = 0; i < size; ++i)
@@ -103,7 +103,7 @@ namespace
     }
     BENCHMARK(BM_Vector2dDot_Array_Aligned_NoFalseSharing);
 
-    void BM_Vector2dDot_Array_Aligned_NoFalseSharing_ToArray(benchmark::State& _state)
+    void BM_Vector2dDot_Array_Aligned_NoFalseSharing_ToArray(benchmark::State& state)
     {
         constexpr size_t size = 1024;
         Vector2d* arrayA = alignMalloc<Vector2d>(size, HardwareDestructiveInterferenceSize);
@@ -113,7 +113,7 @@ namespace
         benchmark::DoNotOptimize(arrayB);
         benchmark::DoNotOptimize(arrayResult);
 
-        for (auto _ : _state)
+        for (auto _ : state)
         {
             for (std::size_t i = 0; i < size; ++i)
             {

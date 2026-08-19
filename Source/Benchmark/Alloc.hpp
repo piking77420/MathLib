@@ -12,19 +12,19 @@
 namespace Alloc
 {
     template<typename T>
-    [[nodiscard]] T* alignMalloc(std::size_t _count, std::size_t _alignment)
+    [[nodiscard]] T* alignMalloc(std::size_t count, std::size_t alignment)
     {
-        const std::size_t size = sizeof(T) * _count;
+        const std::size_t size = sizeof(T) * count;
         static_assert(std::is_trivially_constructible_v<T>);
 #if defined(_MSC_VER)
-        return static_cast<T*>(_aligned_malloc(size, _alignment));
+        return static_cast<T*>(_aligned_malloc(size, alignment));
 #else
         // std::aligned_alloc requires size to be a multiple of alignment.
-        return static_cast<T*>(std::aligned_alloc(_alignment, MathLib::alignedSize(size, _alignment)));
+        return static_cast<T*>(std::aligned_alloc(alignment, MathLib::alignedSize(size, alignment)));
 #endif
     }
 
-    void freeAlignedMalloc(void* _ptr);
+    void freeAlignedMalloc(void* ptr);
 
 } // namespace Alloc
 

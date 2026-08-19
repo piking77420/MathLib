@@ -109,37 +109,37 @@ namespace MathLib
     constexpr double SquareDoubleEpsilon = DoubleEpsilon * DoubleEpsilon;
     constexpr float SquareFloatEpsilon = FloatEpsilon * FloatEpsilon;
 
-    [[nodiscard]] constexpr bool fuzzyZero(double _value, double _tolerance = DoubleEpsilon)
+    [[nodiscard]] constexpr bool fuzzyZero(double value, double tolerance = DoubleEpsilon)
     {
-        return std::abs(_value) < _tolerance;
+        return std::abs(value) < tolerance;
     }
 
-    [[nodiscard]] constexpr bool fuzzyZero(float _value, float _tolerance = FloatEpsilon)
+    [[nodiscard]] constexpr bool fuzzyZero(float value, float tolerance = FloatEpsilon)
     {
-        return std::abs(_value) < _tolerance;
+        return std::abs(value) < tolerance;
     }
 
-    [[nodiscard]] constexpr bool fuzzyEqual(double _a, double _b, double _tolerance = DoubleEpsilon)
+    [[nodiscard]] constexpr bool fuzzyEqual(double a, double b, double tolerance = DoubleEpsilon)
     {
-        return std::abs(_a - _b) <= _tolerance * std::max({1.0, std::abs(_a), std::abs(_b)});
+        return std::abs(a - b) <= tolerance * std::max({1.0, std::abs(a), std::abs(b)});
     }
 
-    [[nodiscard]] constexpr bool fuzzyEqual(float _a, float _b, float _tolerance = FloatEpsilon)
+    [[nodiscard]] constexpr bool fuzzyEqual(float a, float b, float tolerance = FloatEpsilon)
     {
-        return std::abs(_a - _b) <= _tolerance * std::max({1.0f, std::abs(_a), std::abs(_b)});
+        return std::abs(a - b) <= tolerance * std::max({1.0f, std::abs(a), std::abs(b)});
     }
 
     template<std::size_t Alignment>
-    [[nodiscard]] constexpr bool isAligned(const void* const _ptr) noexcept
+    [[nodiscard]] constexpr bool isAligned(const void* const ptr) noexcept
     {
         static_assert(std::has_single_bit(Alignment));
 
-        return (reinterpret_cast<std::uintptr_t>(_ptr) & (Alignment - 1)) == 0;
+        return (reinterpret_cast<std::uintptr_t>(ptr) & (Alignment - 1)) == 0;
     }
 
-    constexpr size_t alignedSize(size_t _size, size_t _alignement) noexcept
+    constexpr size_t alignedSize(size_t size, size_t alignement) noexcept
     {
-        return (_size + _alignement - 1) & ~(_alignement - 1);
+        return (size + alignement - 1) & ~(alignement - 1);
     }
 
     static constexpr size_t SSE_ALIGNEMENT = 16;

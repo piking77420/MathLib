@@ -13,9 +13,9 @@ namespace MathLib
 
         ~Vector2() = default;
 
-        MATH_LIB_FORCE_INLINE explicit Vector2(T _x, T _y)
-            : m_x(_x)
-            , m_y(_y)
+        MATH_LIB_FORCE_INLINE explicit Vector2(T x, T y)
+            : m_x(x)
+            , m_y(y)
         {
         }
 
@@ -29,14 +29,14 @@ namespace MathLib
             return m_y;
         }
 
-        MATH_LIB_FORCE_INLINE void setX(double _x) noexcept
+        MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
-            m_x = _x;
+            m_x = x;
         }
 
-        MATH_LIB_FORCE_INLINE void setY(double _y) noexcept
+        MATH_LIB_FORCE_INLINE void setY(double y) noexcept
         {
-            m_y = _y;
+            m_y = y;
         }
 
     private:

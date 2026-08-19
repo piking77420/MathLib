@@ -27,7 +27,7 @@ namespace MathLib
         std::uint32_t edx{};
     };
 
-    [[nodiscard]] static inline CpuidRegisters cpuid(std::uint32_t _leaf, std::uint32_t _subleaf = 0) noexcept
+    [[nodiscard]] static inline CpuidRegisters cpuid(std::uint32_t leaf, std::uint32_t subleaf = 0) noexcept
     {
         CpuidRegisters result{};
 
@@ -35,7 +35,7 @@ namespace MathLib
 
         int registers[4];
 
-        __cpuidex(registers, static_cast<int>(_leaf), static_cast<int>(_subleaf));
+        __cpuidex(registers, static_cast<int>(leaf), static_cast<int>(subleaf));
 
         result.eax = static_cast<std::uint32_t>(registers[0]);
         result.ebx = static_cast<std::uint32_t>(registers[1]);
@@ -44,7 +44,7 @@ namespace MathLib
 
 #elif defined(__GNUC__) || defined(__clang__)
 
-        __cpuid_count(_leaf, _subleaf, result.eax, result.ebx, result.ecx, result.edx);
+        __cpuid_count(leaf, subleaf, result.eax, result.ebx, result.ecx, result.edx);
 
 #endif
 
@@ -71,18 +71,18 @@ namespace MathLib
 #endif
     }
 
-    [[nodiscard]] static inline std::uint64_t xgetbv(const std::uint32_t _index) noexcept
+    [[nodiscard]] static inline std::uint64_t xgetbv(const std::uint32_t index) noexcept
     {
 #if defined(_MSC_VER)
 
-        return _xgetbv(_index);
+        return _xgetbv(index);
 
 #elif defined(__GNUC__) || defined(__clang__)
 
         std::uint32_t low{};
         std::uint32_t high{};
 
-        __asm__ volatile("xgetbv" : "=a"(low), "=d"(high) : "c"(_index));
+        __asm__ volatile("xgetbv" : "=a"(low), "=d"(high) : "c"(index));
 
         return static_cast<std::uint64_t>(low) | (static_cast<std::uint64_t>(high) << 32);
 
@@ -93,9 +93,9 @@ namespace MathLib
 #endif
     }
 
-    [[nodiscard]] static constexpr bool hasBit(const std::uint32_t _value, const std::uint32_t _bit) noexcept
+    [[nodiscard]] static constexpr bool hasBit(const std::uint32_t value, const std::uint32_t bit) noexcept
     {
-        return (_value & (std::uint32_t{1} << _bit)) != 0;
+        return (value & (std::uint32_t{1} << bit)) != 0;
     }
 #endif // CPU_X86_64
 

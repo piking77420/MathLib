@@ -24,32 +24,32 @@ namespace MathLib
         ~Vector4() = default;
 
 #if defined(SIMD_AVX)
-        MATH_LIB_FORCE_INLINE Vector4(__m256d _data) noexcept
-            : m_data(_data)
+        MATH_LIB_FORCE_INLINE Vector4(__m256d data) noexcept
+            : m_data(data)
         {
         }
 #endif // defined(SIMD_AVX)
 
-        MATH_LIB_FORCE_INLINE explicit Vector4(double _x, double _y, double _z, double _w)
+        MATH_LIB_FORCE_INLINE explicit Vector4(double x, double y, double z, double w)
 #if defined(SIMD_AVX)
-            : m_data(_mm256_set_pd(_w, _z, _y, _x))
+            : m_data(_mm256_set_pd(w, z, y, x))
 #else
-            : m_x(_x)
-            , m_y(_y)
-            , m_z(_z)
-            , m_w(_w)
+            : m_x(x)
+            , m_y(y)
+            , m_z(z)
+            , m_w(w)
 #endif // defined(SIMD_AVX)
 
                   {ASSERT_IS_FINITE(*this)}
 
-            MATH_LIB_FORCE_INLINE explicit Vector4(double _x)
+            MATH_LIB_FORCE_INLINE explicit Vector4(double x)
 #if defined(SIMD_AVX)
-            : m_data(_mm256_set1_pd(_x))
+            : m_data(_mm256_set1_pd(x))
 #else
-            : m_x(_x)
-            , m_y(_x)
-            , m_z(_x)
-            , m_w(_x)
+            : m_x(x)
+            , m_y(x)
+            , m_z(x)
+            , m_w(x)
 #endif // defined(SIMD_AVX)
 
         {
@@ -102,182 +102,182 @@ namespace MathLib
 #endif
         }
 
-        MATH_LIB_FORCE_INLINE void setX(double _x) noexcept
+        MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(_x), 0b0001);
+            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(x), 0b0001);
 #else
-            m_x = _x;
+            m_x = x;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void setY(double _y) noexcept
+        MATH_LIB_FORCE_INLINE void setY(double y) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(_y), 0b0010);
+            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(y), 0b0010);
 #else
-            m_y = _y;
+            m_y = y;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void setZ(double _z) noexcept
+        MATH_LIB_FORCE_INLINE void setZ(double z) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(_z), 0b0100);
+            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(z), 0b0100);
 #else
-            m_z = _z;
+            m_z = z;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void setW(double _w) noexcept
+        MATH_LIB_FORCE_INLINE void setW(double w) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(_w), 0b1000);
+            m_data = _mm256_blend_pd(m_data, _mm256_set1_pd(w), 0b1000);
 #else
-            m_w = _w;
+            m_w = w;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator+=(const Vector4& _other) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator+=(const Vector4& other) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_add_pd(*this, _other);
+            m_data = _mm256_add_pd(*this, other);
 #else
-            m_x += _other.m_x;
-            m_y += _other.m_y;
-            m_z += _other.m_z;
-            m_w += _other.m_w;
+            m_x += other.m_x;
+            m_y += other.m_y;
+            m_z += other.m_z;
+            m_w += other.m_w;
 #endif // defined(SIMD_AVX)
 
             ASSERT_IS_FINITE(*this) return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator-=(const Vector4& _other) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator-=(const Vector4& other) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_sub_pd(*this, _other);
+            m_data = _mm256_sub_pd(*this, other);
 #else
-            m_x -= _other.m_x;
-            m_y -= _other.m_y;
-            m_z -= _other.m_z;
-            m_w -= _other.m_w;
+            m_x -= other.m_x;
+            m_y -= other.m_y;
+            m_z -= other.m_z;
+            m_w -= other.m_w;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 _lhs, const Vector4& _rhs) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 lhs, const Vector4& _rhs) noexcept
         {
-            _lhs += _rhs;
-            return _lhs;
+            lhs += _rhs;
+            return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 _lhs, const Vector4& _rhs) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 lhs, const Vector4& _rhs) noexcept
         {
-            _lhs -= _rhs;
-            return _lhs;
+            lhs -= _rhs;
+            return lhs;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator+=(const double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator+=(const double scalar) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_add_pd(*this, _mm256_set1_pd(_scalar));
+            m_data = _mm256_add_pd(*this, _mm256_set1_pd(scalar));
 #else
-            m_x += _scalar;
-            m_y += _scalar;
-            m_z += _scalar;
-            m_w += _scalar;
+            m_x += scalar;
+            m_y += scalar;
+            m_z += scalar;
+            m_w += scalar;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator-=(const double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator-=(const double scalar) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_sub_pd(*this, _mm256_set1_pd(_scalar));
+            m_data = _mm256_sub_pd(*this, _mm256_set1_pd(scalar));
 #else
-            m_x -= _scalar;
-            m_y -= _scalar;
-            m_z -= _scalar;
-            m_w -= _scalar;
+            m_x -= scalar;
+            m_y -= scalar;
+            m_z -= scalar;
+            m_w -= scalar;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator*=(double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator*=(double scalar) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_mul_pd(*this, _mm256_set1_pd(_scalar));
+            m_data = _mm256_mul_pd(*this, _mm256_set1_pd(scalar));
 #else
-            m_x *= _scalar;
-            m_y *= _scalar;
-            m_z *= _scalar;
-            m_w *= _scalar;
+            m_x *= scalar;
+            m_y *= scalar;
+            m_z *= scalar;
+            m_w *= scalar;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator/=(double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator/=(double scalar) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_div_pd(*this, _mm256_set1_pd(_scalar));
+            m_data = _mm256_div_pd(*this, _mm256_set1_pd(scalar));
 #else
-            m_x /= _scalar;
-            m_y /= _scalar;
-            m_z /= _scalar;
-            m_w /= _scalar;
+            m_x /= scalar;
+            m_y /= scalar;
+            m_z /= scalar;
+            m_w /= scalar;
 #endif // defined(SIMD_AVX)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 lhs, const double scalar) noexcept
         {
-            _lhs += _scalar;
-            return _lhs;
+            lhs += scalar;
+            return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 lhs, const double scalar) noexcept
         {
-            _lhs -= _scalar;
-            return _lhs;
+            lhs -= scalar;
+            return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator*(Vector4 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator*(Vector4 lhs, const double scalar) noexcept
         {
-            _lhs *= _scalar;
-            return _lhs;
+            lhs *= scalar;
+            return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator/(Vector4 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator/(Vector4 lhs, const double scalar) noexcept
         {
-            _lhs /= _scalar;
-            return _lhs;
+            lhs /= scalar;
+            return lhs;
         }
 
-        [[nodiscard]] bool operator==(const Vector4& _other) const
+        [[nodiscard]] bool operator==(const Vector4& other) const
         {
 #if defined(SIMD_AVX)
-            const Vector4 absDiff = (*this - _other).abs();
+            const Vector4 absDiff = (*this - other).abs();
             const Vector4 epsilon = Vector4(DoubleEpsilon);
             const __m256d cmp = _mm256_cmp_pd(absDiff.m_data, epsilon.m_data, _CMP_LE_OQ);
             return _mm256_movemask_pd(cmp) == 0b1111;
 #else
-            return fuzzyZero(m_x - _other.m_x) && fuzzyZero(m_y - _other.m_y) && fuzzyZero(m_z - _other.m_z) &&
-                   fuzzyZero(m_w - _other.m_w);
+            return fuzzyZero(m_x - other.m_x) && fuzzyZero(m_y - other.m_y) && fuzzyZero(m_z - other.m_z) &&
+                   fuzzyZero(m_w - other.m_w);
 #endif
         }
 
-        [[nodiscard]] bool operator!=(const Vector4& _other) const
+        [[nodiscard]] bool operator!=(const Vector4& other) const
         {
-            return !(*this == _other);
+            return !(*this == other);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator-() const noexcept
@@ -291,13 +291,13 @@ namespace MathLib
 #endif // defined(SIMD_AVX)
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& _a, const Vector4& _b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& a, const Vector4& b)
         {
-            ASSERT_IS_FINITE(_a)
-            ASSERT_IS_FINITE(_b)
+            ASSERT_IS_FINITE(a)
+            ASSERT_IS_FINITE(b)
 #if defined(SIMD_AVX)
             // [ax*bx, ay*by, az*bz, aw*bw]
-            const __m256d mul = _mm256_mul_pd(_a, _b);
+            const __m256d mul = _mm256_mul_pd(a, b);
 
             // [ax*bx, ay*by]
             const __m128d low = _mm256_castpd256_pd128(mul);
@@ -313,7 +313,7 @@ namespace MathLib
             // (ax*bx + az*bz) + (ay*by + aw*bw)
             return _mm_cvtsd_f64(_mm_add_sd(sum, highSum));
 #else
-            return (_a.m_x * _b.m_x) + (_a.m_y * _b.m_y) + (_a.m_z * _b.m_z) + (_a.m_w * _b.m_w);
+            return (a.m_x * b.m_x) + (a.m_y * b.m_y) + (a.m_z * b.m_z) + (a.m_w * b.m_w);
 #endif // defined(SIMD_AVX)
         }
 
@@ -327,16 +327,16 @@ namespace MathLib
             return std::sqrt(lengthSquare());
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distanceSquare(const Vector4& _a, const Vector4& _b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distanceSquare(const Vector4& a, const Vector4& b)
         {
-            ASSERT_IS_FINITE(_a)
-            ASSERT_IS_FINITE(_b)
-            return (_b - _a).lengthSquare();
+            ASSERT_IS_FINITE(a)
+            ASSERT_IS_FINITE(b)
+            return (b - a).lengthSquare();
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distance(const Vector4& _a, const Vector4& _b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distance(const Vector4& a, const Vector4& b)
         {
-            return std::sqrt(distanceSquare(_a, _b));
+            return std::sqrt(distanceSquare(a, b));
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 getNormalize() const
@@ -396,27 +396,27 @@ namespace MathLib
             return fuzzyEqual(getW(), 1.0);
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 min(const Vector4& _a, const Vector4& _b) noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 min(const Vector4& a, const Vector4& b) noexcept
         {
-            ASSERT_IS_FINITE(_a)
-            ASSERT_IS_FINITE(_b)
+            ASSERT_IS_FINITE(a)
+            ASSERT_IS_FINITE(b)
 #if defined(SIMD_AVX)
-            return _mm256_min_pd(_a, _b);
+            return _mm256_min_pd(a, b);
 #else
-            return Vector4(std::min(_a.getX(), _b.getX()), std::min(_a.getY(), _b.getY()),
-                           std::min(_a.getZ(), _b.getZ()), std::min(_a.getW(), _b.getW()));
+            return Vector4(std::min(a.getX(), b.getX()), std::min(a.getY(), b.getY()), std::min(a.getZ(), b.getZ()),
+                           std::min(a.getW(), b.getW()));
 #endif // defined(SIMD_AVX)
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 max(const Vector4& _a, const Vector4& _b) noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 max(const Vector4& a, const Vector4& b) noexcept
         {
-            ASSERT_IS_FINITE(_a)
-            ASSERT_IS_FINITE(_b)
+            ASSERT_IS_FINITE(a)
+            ASSERT_IS_FINITE(b)
 #if defined(SIMD_AVX)
-            return _mm256_max_pd(_a, _b);
+            return _mm256_max_pd(a, b);
 #else
-            return Vector4(std::max(_a.getX(), _b.getX()), std::max(_a.getY(), _b.getY()),
-                           std::max(_a.getZ(), _b.getZ()), std::max(_a.getW(), _b.getW()));
+            return Vector4(std::max(a.getX(), b.getX()), std::max(a.getY(), b.getY()), std::max(a.getZ(), b.getZ()),
+                           std::max(a.getW(), b.getW()));
 #endif // defined(SIMD_AVX)
         }
 
@@ -466,175 +466,175 @@ namespace MathLib
 #endif // defined(SIMD_AVX)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 4>& _span) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 4>& span) const noexcept
         {
             ASSERT_IS_FINITE(*this);
 
 #if defined(SIMD_AVX)
-            _mm256_storeu_pd(_span.data(), m_data);
+            _mm256_storeu_pd(span.data(), m_data);
 #else
-            _span[0] = m_x;
-            _span[1] = m_y;
-            _span[2] = m_z;
-            _span[3] = m_w;
+            span[0] = m_x;
+            span[1] = m_y;
+            span[2] = m_z;
+            span[3] = m_w;
 #endif // defined(SIMD_AVX)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const _ptr) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const ptr) const noexcept
         {
-            storeToUnalignedDouble(std::span<double, 4>(_ptr, 4));
+            storeToUnalignedDouble(std::span<double, 4>(ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 4>& _span) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 4>& span) const noexcept
         {
             ASSERT_IS_FINITE(*this);
 
 #if defined(SIMD_AVX)
             // Convert 4 doubles -> 4 floats.
             const __m128 values = _mm256_cvtpd_ps(m_data);
-            _mm_storeu_ps(_span.data(), values);
+            _mm_storeu_ps(span.data(), values);
 #else
-            _span[0] = static_cast<float>(m_x);
-            _span[1] = static_cast<float>(m_y);
-            _span[2] = static_cast<float>(m_z);
-            _span[3] = static_cast<float>(m_w);
+            span[0] = static_cast<float>(m_x);
+            span[1] = static_cast<float>(m_y);
+            span[2] = static_cast<float>(m_z);
+            span[3] = static_cast<float>(m_w);
 #endif // defined(SIMD_AVX)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const _ptr) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const ptr) const noexcept
         {
-            storeToUnAlignedFloat(std::span<float, 4>(_ptr, 4));
+            storeToUnAlignedFloat(std::span<float, 4>(ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 4>& _span) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 4>& span) const noexcept
         {
-            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(span.data()));
             ASSERT_IS_FINITE(*this);
 
 #if defined(SIMD_AVX)
-            _mm256_store_pd(_span.data(), m_data);
+            _mm256_store_pd(span.data(), m_data);
 #else
-            _span[0] = m_x;
-            _span[1] = m_y;
-            _span[2] = m_z;
-            _span[3] = m_w;
+            span[0] = m_x;
+            span[1] = m_y;
+            span[2] = m_z;
+            span[3] = m_w;
 #endif // defined(SIMD_AVX)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const _ptr) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const ptr) const noexcept
         {
-            storeToAlignedDouble(std::span<double, 4>(_ptr, 4));
+            storeToAlignedDouble(std::span<double, 4>(ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 4>& _span) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 4>& span) const noexcept
         {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
             ASSERT_IS_FINITE(*this);
 
 #if defined(SIMD_AVX)
             const __m128 values = _mm256_cvtpd_ps(m_data);
-            _mm_store_ps(_span.data(), values);
+            _mm_store_ps(span.data(), values);
 #else
-            _span[0] = static_cast<float>(m_x);
-            _span[1] = static_cast<float>(m_y);
-            _span[2] = static_cast<float>(m_z);
-            _span[3] = static_cast<float>(m_w);
+            span[0] = static_cast<float>(m_x);
+            span[1] = static_cast<float>(m_y);
+            span[2] = static_cast<float>(m_z);
+            span[3] = static_cast<float>(m_w);
 #endif // defined(SIMD_AVX)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const _ptr) const noexcept
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const ptr) const noexcept
         {
-            storeToAlignedFloat(std::span<float, 4>(_ptr, 4));
+            storeToAlignedFloat(std::span<float, 4>(ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 4>& _span) noexcept
+        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 4>& span) noexcept
         {
 #if defined(SIMD_AVX)
-            m_data = _mm256_loadu_pd(_span.data());
+            m_data = _mm256_loadu_pd(span.data());
 #else
-            m_x = _span[0];
-            m_y = _span[1];
-            m_z = _span[2];
-            m_w = _span[3];
+            m_x = span[0];
+            m_y = span[1];
+            m_z = span[2];
+            m_w = span[3];
 #endif // defined(SIMD_AVX)
 
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const double* const _ptr) noexcept
+        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const double* const ptr) noexcept
         {
-            fromUnalignedDouble(std::span<const double, 4>(_ptr, 4));
+            fromUnalignedDouble(std::span<const double, 4>(ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const std::span<const float, 4>& _span) noexcept
+        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const std::span<const float, 4>& span) noexcept
         {
 #if defined(SIMD_AVX)
             // Load 4 floats then convert them to 4 doubles.
-            m_data = _mm256_cvtps_pd(_mm_loadu_ps(_span.data()));
+            m_data = _mm256_cvtps_pd(_mm_loadu_ps(span.data()));
 #else
-            m_x = static_cast<double>(_span[0]);
-            m_y = static_cast<double>(_span[1]);
-            m_z = static_cast<double>(_span[2]);
-            m_w = static_cast<double>(_span[3]);
+            m_x = static_cast<double>(span[0]);
+            m_y = static_cast<double>(span[1]);
+            m_z = static_cast<double>(span[2]);
+            m_w = static_cast<double>(span[3]);
 #endif // defined(SIMD_AVX)
 
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const float* const _ptr) noexcept
+        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const float* const ptr) noexcept
         {
-            fromUnAlignedFloat(std::span<const float, 4>(_ptr, 4));
+            fromUnAlignedFloat(std::span<const float, 4>(ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 4>& _span) noexcept
+        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 4>& span) noexcept
         {
-            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(span.data()));
 
 #if defined(SIMD_AVX)
-            m_data = _mm256_load_pd(_span.data());
+            m_data = _mm256_load_pd(span.data());
 #else
-            m_x = _span[0];
-            m_y = _span[1];
-            m_z = _span[2];
-            m_w = _span[3];
+            m_x = span[0];
+            m_y = span[1];
+            m_z = span[2];
+            m_w = span[3];
 #endif // defined(SIMD_AVX)
 
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const _ptr) noexcept
+        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const ptr) noexcept
         {
-            fromAlignedDouble(std::span<const double, 4>(_ptr, 4));
+            fromAlignedDouble(std::span<const double, 4>(ptr, 4));
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 4>& _span) noexcept
+        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 4>& span) noexcept
         {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
 
 #if defined(SIMD_AVX)
-            m_data = _mm256_cvtps_pd(_mm_load_ps(_span.data()));
+            m_data = _mm256_cvtps_pd(_mm_load_ps(span.data()));
 #else
-            m_x = static_cast<double>(_span[0]);
-            m_y = static_cast<double>(_span[1]);
-            m_z = static_cast<double>(_span[2]);
-            m_w = static_cast<double>(_span[3]);
+            m_x = static_cast<double>(span[0]);
+            m_y = static_cast<double>(span[1]);
+            m_z = static_cast<double>(span[2]);
+            m_w = static_cast<double>(span[3]);
 #endif // defined(SIMD_AVX)
 
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const _ptr) noexcept
+        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const ptr) noexcept
         {
-            fromAlignedFloat(std::span<const float, 4>(_ptr, 4));
+            fromAlignedFloat(std::span<const float, 4>(ptr, 4));
         }
 
-        friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& _ostream, const Vector4& _vec)
+        friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& ostream, const Vector4& vec)
         {
             std::array<double, 4> data;
-            _vec.storeToUnalignedDouble(data);
-            _ostream << "x: " << data[0] << ", y: " << data[1] << ", z: " << data[2] << ", w: " << data[3];
+            vec.storeToUnalignedDouble(data);
+            ostream << "x: " << data[0] << ", y: " << data[1] << ", z: " << data[2] << ", w: " << data[3];
 
-            return _ostream;
+            return ostream;
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE bool isFinite() const
@@ -671,18 +671,18 @@ namespace MathLib
 template<>
 struct std::formatter<MathLib::Vector4d>
 {
-    constexpr static std::format_parse_context::const_iterator parse(std::format_parse_context& _ctx)
+    constexpr static std::format_parse_context::const_iterator parse(std::format_parse_context& ctx)
     {
-        return _ctx.begin();
+        return ctx.begin();
     }
 
-    static std::format_context::iterator format(const MathLib::Vector4d& _v, std::format_context& _ctx)
+    static std::format_context::iterator format(const MathLib::Vector4d& v, std::format_context& ctx)
     {
         std::array<double, 4> data;
 
-        _v.storeToUnalignedDouble(data);
+        v.storeToUnalignedDouble(data);
 
-        return std::format_to(_ctx.out(), "x: {}, y: {}, z: {}, w: {}", data[0], data[1], data[2], data[3]);
+        return std::format_to(ctx.out(), "x: {}, y: {}, z: {}, w: {}", data[0], data[1], data[2], data[3]);
     }
 };
 
