@@ -24,31 +24,31 @@ namespace MathLib
         ~Vector2() = default;
 
 #if defined(SIMD_SSE2)
-        explicit MATH_LIB_FORCE_INLINE Vector2(__m128d _data) noexcept
-            : m_data(_data)
+        explicit MATH_LIB_FORCE_INLINE Vector2(__m128d data) noexcept
+            : m_data(data)
         {
         }
 #endif // defined(SIMD_SSE2)
 
-        MATH_LIB_FORCE_INLINE explicit Vector2(double _x, double _y)
+        MATH_LIB_FORCE_INLINE explicit Vector2(double x, double y)
 #if defined(SIMD_SSE2)
             // reverse order because the highest lane is first
             // or you can use _mm_setr_pd to reverse the order
-            : m_data(_mm_set_pd(_y, _x))
+            : m_data(_mm_set_pd(y, x))
 #else
-            : m_x(_x)
-            , m_y(_y)
+            : m_x(x)
+            , m_y(y)
 #endif // defined(SIMD_SSE2)
         {
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE explicit Vector2(double _v)
+        MATH_LIB_FORCE_INLINE explicit Vector2(double v)
 #if defined(SIMD_SSE2)
-            : m_data(_mm_set1_pd(_v))
+            : m_data(_mm_set1_pd(v))
 #else
-            : m_x(_v)
-            , m_y(_v)
+            : m_x(v)
+            , m_y(v)
 #endif // defined(SIMD_SSE2)
         {
             ASSERT_IS_FINITE(*this);
@@ -82,157 +82,157 @@ namespace MathLib
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void setX(double _x) noexcept
+        MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
 #if defined(SIMD_SSE2)
             // create and new packed double with lowest lane x
-            m_data = _mm_move_sd(m_data, _mm_set_sd(_x));
+            m_data = _mm_move_sd(m_data, _mm_set_sd(x));
 #else
-            m_x = _x;
+            m_x = x;
 #endif // defined(SIMD_SSE2)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void setY(double _y) noexcept
+        MATH_LIB_FORCE_INLINE void setY(double y) noexcept
         {
 #if defined(SIMD_SSE2)
             // create and new packed double with lowest lane x
             // merge those to lowest lane to one create a next one
-            m_data = _mm_unpacklo_pd(m_data, _mm_set_sd(_y));
+            m_data = _mm_unpacklo_pd(m_data, _mm_set_sd(y));
 #else
-            m_y = _y;
+            m_y = y;
 #endif // defined(SIMD_SSE2)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE Vector2& operator+=(const Vector2& _other) noexcept
+        MATH_LIB_FORCE_INLINE Vector2& operator+=(const Vector2& other) noexcept
         {
 #if defined(SIMD_SSE2)
-            m_data = _mm_add_pd(*this, _other);
+            m_data = _mm_add_pd(*this, other);
 #else
-            m_x += _other.m_x;
-            m_y += _other.m_y;
-#endif // defined(SIMD_SSE2)
-            ASSERT_IS_FINITE(*this);
-            return *this;
-        }
-
-        MATH_LIB_FORCE_INLINE Vector2& operator-=(const Vector2& _other) noexcept
-        {
-#if defined(SIMD_SSE2)
-            m_data = _mm_sub_pd(*this, _other);
-#else
-            m_x -= _other.m_x;
-            m_y -= _other.m_y;
+            m_x += other.m_x;
+            m_y += other.m_y;
 #endif // defined(SIMD_SSE2)
             ASSERT_IS_FINITE(*this);
             return *this;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator+(Vector2 _lhs, const Vector2& _rhs) noexcept
-        {
-            _lhs += _rhs;
-            return _lhs;
-        }
-
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator-(Vector2 _lhs, const Vector2& _rhs) noexcept
-        {
-            _lhs -= _rhs;
-            return _lhs;
-        }
-
-        MATH_LIB_FORCE_INLINE Vector2& operator+=(const double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector2& operator-=(const Vector2& other) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
+            m_data = _mm_sub_pd(*this, other);
+#else
+            m_x -= other.m_x;
+            m_y -= other.m_y;
+#endif // defined(SIMD_SSE2)
+            ASSERT_IS_FINITE(*this);
+            return *this;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator+(Vector2 lhs, const Vector2& _rhs) noexcept
+        {
+            lhs += _rhs;
+            return lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator-(Vector2 lhs, const Vector2& _rhs) noexcept
+        {
+            lhs -= _rhs;
+            return lhs;
+        }
+
+        MATH_LIB_FORCE_INLINE Vector2& operator+=(const double scalar) noexcept
+        {
+#if defined(SIMD_SSE2)
+            const __m128d scalarPackedDouble = _mm_set1_pd(scalar);
             m_data = _mm_add_pd(m_data, scalarPackedDouble);
 #else
-            m_x += _scalar;
-            m_y += _scalar;
+            m_x += scalar;
+            m_y += scalar;
 #endif
             ASSERT_IS_FINITE(*this);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector2& operator-=(const double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector2& operator-=(const double scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(scalar);
             m_data = _mm_sub_pd(m_data, scalarPackedDouble);
 #else
-            m_x -= _scalar;
-            m_y -= _scalar;
+            m_x -= scalar;
+            m_y -= scalar;
 #endif
             ASSERT_IS_FINITE(*this);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector2& operator*=(double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector2& operator*=(double scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(scalar);
             m_data = _mm_mul_pd(m_data, scalarPackedDouble);
 #else
-            m_x *= _scalar;
-            m_y *= _scalar;
+            m_x *= scalar;
+            m_y *= scalar;
 #endif
             ASSERT_IS_FINITE(*this);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector2& operator/=(double _scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector2& operator/=(double scalar) noexcept
         {
 #if defined(SIMD_SSE2)
-            const __m128d scalarPackedDouble = _mm_set1_pd(_scalar);
+            const __m128d scalarPackedDouble = _mm_set1_pd(scalar);
             m_data = _mm_div_pd(m_data, scalarPackedDouble);
 #else
-            m_x /= _scalar;
-            m_y /= _scalar;
+            m_x /= scalar;
+            m_y /= scalar;
 #endif
             ASSERT_IS_FINITE(*this);
             return *this;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator+(Vector2 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator+(Vector2 lhs, const double scalar) noexcept
         {
-            _lhs += _scalar;
-            return _lhs;
+            lhs += scalar;
+            return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator-(Vector2 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator-(Vector2 lhs, const double scalar) noexcept
         {
-            _lhs -= _scalar;
-            return _lhs;
+            lhs -= scalar;
+            return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator*(Vector2 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator*(Vector2 lhs, const double scalar) noexcept
         {
-            _lhs *= _scalar;
-            return _lhs;
+            lhs *= scalar;
+            return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator/(Vector2 _lhs, const double _scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator/(Vector2 lhs, const double scalar) noexcept
         {
-            _lhs /= _scalar;
-            return _lhs;
+            lhs /= scalar;
+            return lhs;
         }
 
-        [[nodiscard]] bool operator==(const Vector2& _other) const
+        [[nodiscard]] bool operator==(const Vector2& other) const
         {
 #if defined(SIMD_SSE2)
-            const Vector2 absDiff = (*this - _other).abs();
+            const Vector2 absDiff = (*this - other).abs();
             const Vector2 epsilon = Vector2(DoubleEpsilon);
             const __m128d cmp = _mm_cmple_pd(absDiff, epsilon); // less or equal
 
             return _mm_movemask_pd(cmp) == 0b11;
 #else
-            return fuzzyZero(m_x - _other.m_x) && fuzzyZero(m_y - _other.m_y);
+            return fuzzyZero(m_x - other.m_x) && fuzzyZero(m_y - other.m_y);
 #endif // defined(SIMD_SSE2)
         }
 
-        [[nodiscard]] bool operator!=(const Vector2& _other) const
+        [[nodiscard]] bool operator!=(const Vector2& other) const
         {
-            return !(*this == _other);
+            return !(*this == other);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector2 operator-() const noexcept
@@ -246,19 +246,19 @@ namespace MathLib
 #endif // defined(SIMD_SSE2)
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& _a, const Vector2& _b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& a, const Vector2& b)
         {
-            ASSERT_IS_FINITE(_a);
-            ASSERT_IS_FINITE(_b);
+            ASSERT_IS_FINITE(a);
+            ASSERT_IS_FINITE(b);
 #if defined(SIMD_SSE2) || defined(SIMD_SSE42)
 #if defined(SIMD_SSE42)
             static constexpr int mask = 0b00110001;
-            return _mm_cvtsd_f64(_mm_dp_pd(_a, _b, mask));
+            return _mm_cvtsd_f64(_mm_dp_pd(a, b, mask));
 #else
             // make multiplication
             // lane low := a.x * b.x
             // lane high := a.y * b.y
-            const __m128d mul = _mm_mul_pd(_a, _b);
+            const __m128d mul = _mm_mul_pd(a, b);
             // create new __m128d from the hight lanes of those 2
             // lane low := so a.y * b.y
             // lane high := a.y * b.y
@@ -273,7 +273,7 @@ namespace MathLib
 #endif // defined(SIMD_SSE42)
 
 #else
-            return (_a.getX() * _b.getX()) + (_a.getY() * _b.getY());
+            return (a.getX() * b.getX()) + (a.getY() * b.getY());
 #endif // defined(SIMD_SSE2) || defined(SIMD_SSE42)
         }
 
@@ -288,16 +288,16 @@ namespace MathLib
             return std::sqrt(lengthSquare());
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distanceSquare(const Vector2& _a, const Vector2& _b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distanceSquare(const Vector2& a, const Vector2& b)
         {
-            ASSERT_IS_FINITE(_a);
-            ASSERT_IS_FINITE(_b);
-            return (_b - _a).lengthSquare();
+            ASSERT_IS_FINITE(a);
+            ASSERT_IS_FINITE(b);
+            return (b - a).lengthSquare();
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distance(const Vector2& _a, const Vector2& _b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distance(const Vector2& a, const Vector2& b)
         {
-            return std::sqrt(distanceSquare(_a, _b));
+            return std::sqrt(distanceSquare(a, b));
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector2 getNormalize() const
@@ -352,45 +352,45 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static double cross(const Vector2& _a, const Vector2& _b)
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static double cross(const Vector2& a, const Vector2& b)
         {
-            ASSERT_IS_FINITE(_a);
-            ASSERT_IS_FINITE(_b);
+            ASSERT_IS_FINITE(a);
+            ASSERT_IS_FINITE(b);
 #if defined(SIMD_SSE2)
             // swap b's lanes
             // from x y
             // to y x
-            const __m128d bSwapped = _mm_shuffle_pd(_b, _b, 0b01);
+            const __m128d bSwapped = _mm_shuffle_pd(b, b, 0b01);
 
-            const __m128d mul = _mm_mul_pd(_a, bSwapped);
+            const __m128d mul = _mm_mul_pd(a, bSwapped);
             const __m128d high = _mm_unpackhi_pd(mul, mul);
             const __m128d result = _mm_sub_sd(mul, high);
 
             return _mm_cvtsd_f64(result);
 #else
-            return _b.getY() * _a.getX() - _b.getX() * _a.getY();
+            return b.getY() * a.getX() - b.getX() * a.getY();
 #endif // defined(SIMD_SSE2)
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector2 min(const Vector2& _a, const Vector2& _b) noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector2 min(const Vector2& a, const Vector2& b) noexcept
         {
-            ASSERT_IS_FINITE(_a);
-            ASSERT_IS_FINITE(_b);
+            ASSERT_IS_FINITE(a);
+            ASSERT_IS_FINITE(b);
 #if defined(SIMD_SSE2)
-            return Vector2{_mm_min_pd(_a, _b)};
+            return Vector2{_mm_min_pd(a, b)};
 #else
-            return Vector2(std::min(_a.getX(), _b.getX()), std::min(_a.getY(), _b.getY()));
+            return Vector2(std::min(a.getX(), b.getX()), std::min(a.getY(), b.getY()));
 #endif // defined(SIMD_SSE2)
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector2 max(const Vector2& _a, const Vector2& _b) noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector2 max(const Vector2& a, const Vector2& b) noexcept
         {
-            ASSERT_IS_FINITE(_a);
-            ASSERT_IS_FINITE(_b);
+            ASSERT_IS_FINITE(a);
+            ASSERT_IS_FINITE(b);
 #if defined(SIMD_SSE2)
-            return Vector2{_mm_max_pd(_a, _b)};
+            return Vector2{_mm_max_pd(a, b)};
 #else
-            return Vector2(std::max(_a.getX(), _b.getX()), std::max(_a.getY(), _b.getY()));
+            return Vector2(std::max(a.getX(), b.getX()), std::max(a.getY(), b.getY()));
 #endif // defined(SIMD_SSE2)
         }
 
@@ -429,153 +429,153 @@ namespace MathLib
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 2>& span) const
         {
             ASSERT_IS_FINITE(*this);
 #if defined(SIMD_SSE2)
-            _mm_storeu_pd(_span.data(), m_data);
+            _mm_storeu_pd(span.data(), m_data);
 #else
-            _span[0] = m_x;
-            _span[1] = m_y;
+            span[0] = m_x;
+            span[1] = m_y;
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const ptr) const
         {
-            storeToUnalignedDouble(std::span<double, 2>(_ptr, 2));
+            storeToUnalignedDouble(std::span<double, 2>(ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 2>& span) const
         {
             ASSERT_IS_FINITE(*this);
 #if defined(SIMD_SSE2)
             const __m128 values = _mm_cvtpd_ps(m_data);
-            std::memcpy(_span.data(), &values, sizeof(float) * 2);
+            std::memcpy(span.data(), &values, sizeof(float) * 2);
 #else
-            _span[0] = static_cast<float>(m_x);
-            _span[1] = static_cast<float>(m_y);
+            span[0] = static_cast<float>(m_x);
+            span[1] = static_cast<float>(m_y);
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const ptr) const
         {
-            storeToUnAlignedFloat(std::span<float, 2>(_ptr, 2));
+            storeToUnAlignedFloat(std::span<float, 2>(ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 2>& span) const
         {
             ASSERT_IS_FINITE(*this);
-            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(span.data()));
 #if defined(SIMD_SSE2)
-            _mm_store_pd(_span.data(), m_data);
+            _mm_store_pd(span.data(), m_data);
 #else
-            _span[0] = m_x;
-            _span[1] = m_y;
+            span[0] = m_x;
+            span[1] = m_y;
 #endif // defined(SIMD_SSE2)
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const ptr) const
         {
-            storeToAlignedDouble(std::span<double, 2>(_ptr, 2));
+            storeToAlignedDouble(std::span<double, 2>(ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 2>& _span) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 2>& span) const
         {
             ASSERT_IS_FINITE(*this);
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
 #if defined(SIMD_SSE2)
             const __m128 values = _mm_cvtpd_ps(m_data);
-            std::memcpy(_span.data(), &values, sizeof(float) * 2);
+            std::memcpy(span.data(), &values, sizeof(float) * 2);
 #else
-            _span[0] = static_cast<float>(m_x);
-            _span[1] = static_cast<float>(m_y);
+            span[0] = static_cast<float>(m_x);
+            span[1] = static_cast<float>(m_y);
 #endif
         }
 
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const _ptr) const
+        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const ptr) const
         {
-            storeToUnAlignedFloat(std::span<float, 2>(_ptr, 2));
+            storeToUnAlignedFloat(std::span<float, 2>(ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 2>& _span)
+        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 2>& span)
         {
 #if defined(SIMD_SSE2)
-            m_data = _mm_loadu_pd(_span.data());
+            m_data = _mm_loadu_pd(span.data());
 #else
-            m_x = _span[0];
-            m_y = _span[1];
+            m_x = span[0];
+            m_y = span[1];
 #endif // #if defined(SIMD_SSE2)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const double* const _ptr)
+        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const double* const ptr)
         {
-            fromUnalignedDouble(std::span<const double, 2>(_ptr, 2));
+            fromUnalignedDouble(std::span<const double, 2>(ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const std::span<const float, 2>& _span)
+        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const std::span<const float, 2>& span)
         {
 #if defined(SIMD_SSE2)
             // Create 4 packed 32-bit floats: [x, y, 0, 0]
-            const __m128 values = _mm_setr_ps(_span[0], _span[1], 0.0f, 0.0f);
+            const __m128 values = _mm_setr_ps(span[0], span[1], 0.0f, 0.0f);
             // Convert the lower 2 packed 32-bit floats to 2 packed 64-bit doubles.
             m_data = _mm_cvtps_pd(values);
 #else
-            m_x = static_cast<double>(_span[0]);
-            m_y = static_cast<double>(_span[1]);
+            m_x = static_cast<double>(span[0]);
+            m_y = static_cast<double>(span[1]);
 #endif // defined(SIMD_SSE2)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const float* const _ptr)
+        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const float* const ptr)
         {
-            fromUnAlignedFloat(std::span<const float, 2>(_ptr, 2));
+            fromUnAlignedFloat(std::span<const float, 2>(ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 2>& _span)
+        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 2>& span)
         {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
 #if defined(SIMD_SSE2)
-            m_data = _mm_cvtps_pd(_mm_setr_ps(_span[0], _span[1], 0.0f, 0.0f));
+            m_data = _mm_cvtps_pd(_mm_setr_ps(span[0], span[1], 0.0f, 0.0f));
 #else
-            m_x = _span[0];
-            m_y = _span[1];
+            m_x = span[0];
+            m_y = span[1];
 #endif // defined(SIMD_SSE2)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const _ptr)
+        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const ptr)
         {
-            fromAlignedDouble(std::span<const double, 2>(_ptr, 2));
+            fromAlignedDouble(std::span<const double, 2>(ptr, 2));
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 2>& _span)
+        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 2>& span)
         {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
 #if defined(SIMD_SSE2)
             // Create 4 packed 32-bit floats: [x, y, 0, 0] but can use load instruction since the data is align
-            const __m128 values = _mm_load_ps(_span.data());
+            const __m128 values = _mm_load_ps(span.data());
             // Convert the lower 2 packed 32-bit floats to 2 packed 64-bit doubles.
             m_data = _mm_cvtps_pd(values);
 #else
-            m_x = static_cast<double>(_span[0]);
-            m_y = static_cast<double>(_span[1]);
+            m_x = static_cast<double>(span[0]);
+            m_y = static_cast<double>(span[1]);
 #endif // defined(SIMD_SSE2)
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const _ptr)
+        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const ptr)
         {
-            fromAlignedFloat(std::span<const float, 2>(_ptr, 2));
+            fromAlignedFloat(std::span<const float, 2>(ptr, 2));
         }
 
-        friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& _ostream, const Vector2& _vec)
+        friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& ostream, const Vector2& vec)
         {
             std::array<double, 2> data;
-            _vec.storeToUnalignedDouble(data);
-            _ostream << "x: " << data[0] << ", y: " << data[1];
+            vec.storeToUnalignedDouble(data);
+            ostream << "x: " << data[0] << ", y: " << data[1];
 
-            return _ostream;
+            return ostream;
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE bool isFinite() const
@@ -610,18 +610,18 @@ namespace MathLib
 template<>
 struct std::formatter<MathLib::Vector2d>
 {
-    constexpr static std::format_parse_context::const_iterator parse(std::format_parse_context& _ctx)
+    constexpr static std::format_parse_context::const_iterator parse(std::format_parse_context& ctx)
     {
-        return _ctx.begin();
+        return ctx.begin();
     }
 
-    static std::format_context::iterator format(const MathLib::Vector2d& _v, std::format_context& _ctx)
+    static std::format_context::iterator format(const MathLib::Vector2d& v, std::format_context& ctx)
     {
         std::array<double, 2> data;
 
-        _v.storeToUnalignedDouble(data);
+        v.storeToUnalignedDouble(data);
 
-        return std::format_to(_ctx.out(), "x: {}, y: {}", data[0], data[1]);
+        return std::format_to(ctx.out(), "x: {}, y: {}", data[0], data[1]);
     }
 };
 

@@ -13,11 +13,11 @@ namespace MathLib
 
         ~Vector4() = default;
 
-        MATH_LIB_FORCE_INLINE explicit Vector4(T _x, T _y, T _z, T _w)
-            : m_x(_x)
-            , m_y(_y)
-            , m_z(_z)
-            , m_w(_w)
+        MATH_LIB_FORCE_INLINE explicit Vector4(T x, T y, T z, T w)
+            : m_x(x)
+            , m_y(y)
+            , m_z(z)
+            , m_w(w)
         {
         }
 
@@ -41,24 +41,24 @@ namespace MathLib
             return m_w;
         }
 
-        MATH_LIB_FORCE_INLINE void setX(double _x) noexcept
+        MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
-            m_x = _x;
+            m_x = x;
         }
 
-        MATH_LIB_FORCE_INLINE void setY(double _y) noexcept
+        MATH_LIB_FORCE_INLINE void setY(double y) noexcept
         {
-            m_y = _y;
+            m_y = y;
         }
 
-        MATH_LIB_FORCE_INLINE void setZ(double _z) noexcept
+        MATH_LIB_FORCE_INLINE void setZ(double z) noexcept
         {
-            m_z = _z;
+            m_z = z;
         }
 
-        MATH_LIB_FORCE_INLINE void setW(double _w) noexcept
+        MATH_LIB_FORCE_INLINE void setW(double w) noexcept
         {
-            m_w = _w;
+            m_w = w;
         }
 
     private:
