@@ -1027,7 +1027,7 @@ TEST(TestVector4d, storeToUnAlignedFloat)
 TEST(TestVector4d, storeToAlignedDouble)
 {
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data;
+        alignas(AVX_ALIGNEMENT) std::array<double, 4> data;
         const Vector4d v(1.0, 2.0, 3.0, 4.0);
         v.storeToAlignedDouble(data.data());
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
@@ -1037,7 +1037,7 @@ TEST(TestVector4d, storeToAlignedDouble)
     }
 
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data;
+        alignas(AVX_ALIGNEMENT) std::array<double, 4> data;
         const Vector4d v(1.0, 2.0, 3.0, 4.0);
         v.storeToAlignedDouble(std::span<double, 4>(data));
         EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
@@ -1119,7 +1119,7 @@ TEST(TestVector4d, fromUnAlignedFloat)
 TEST(TestVector4d, fromAlignedDouble)
 {
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
+        alignas(AVX_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
         Vector4d v;
         v.fromAlignedDouble(data.data());
         EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
@@ -1129,7 +1129,7 @@ TEST(TestVector4d, fromAlignedDouble)
     }
 
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
+        alignas(AVX_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
         Vector4d v;
         v.fromAlignedDouble(std::span<double, 4>(data));
         EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
@@ -1142,7 +1142,7 @@ TEST(TestVector4d, fromAlignedDouble)
 TEST(TestVector4d, fromAlignedFloat)
 {
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
+        alignas(AVX_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
         Vector4d v;
         v.fromAlignedFloat(data.data());
         EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
@@ -1152,7 +1152,7 @@ TEST(TestVector4d, fromAlignedFloat)
     }
 
     {
-        alignas(AVX_AVX2_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
+        alignas(AVX_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
         Vector4d v;
         v.fromAlignedFloat(std::span<float, 4>(data));
         EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);

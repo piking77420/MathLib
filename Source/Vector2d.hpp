@@ -465,7 +465,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 2>& _span) const
         {
             ASSERT_IS_FINITE(*this);
-            MATHLIB_ASSERT(isAligned<AVX_AVX2_ALIGNEMENT>(_span.data()));
+            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(_span.data()));
 #if defined(SIMD_SSE2)
             _mm_store_pd(_span.data(), m_data);
 #else
