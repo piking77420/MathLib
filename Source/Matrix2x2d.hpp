@@ -86,12 +86,16 @@ namespace MathLib
 
         Matrix2x2& transpose() noexcept
         {
-#if defined(SIMD_AVX)
+#if defined(SIMD_SSE2) || defined(SIMD_AVX)
+            const __m128d row1 = _mm_unpacklo_pd(m_data[0], m_data[1]);
+            const __m128d row2 = _mm_unpackhi_pd(m_data[0], m_data[1]);
+            m_data[0] = Vector2d(row1);
+            m_data[1] = Vector2d(row2);
 #else
             const double trmp = m_data[0].getY();
             m_data[0].setY(m_data[1].getX());
             m_data[1].setX(trmp);
-#endif // SIMD_AVX
+#endif // SIMD_SSE2
 
             return *this;
         }
@@ -104,7 +108,21 @@ namespace MathLib
 
         double determinant() const noexcept
         {
-#if defined(SIMD_AVX)
+#if defined(SIMD_SSE2) || defined(SIMD_SSE42)
+            // create an [d , c] lane
+            const __m128d swapped = _mm_shuffle_pd(m_data[1], m_data[1], 0b01);
+            // mul [a * d, b * c]
+            const __m128d mul = _mm_mul_pd(m_data[0], swapped);
+#if defined(SIMD_SSE42)
+            return _mm_cvtsd_f64(_mm_hsub_pd(mul, mul));
+#else
+            // [b*c, a*d]
+            const __m128d mulSwapped = _mm_shuffle_pd(mul, mul, 0b01);
+
+            const __m128d determinant = _mm_sub_sd(mul, mulSwapped);
+
+            return _mm_cvtsd_f64(determinant);
+#endif // defined(SIMD_SSE42)
 #else
             const double a = m_data[0].getX();
             const double b = m_data[0].getY();
@@ -112,7 +130,7 @@ namespace MathLib
             const double d = m_data[1].getY();
 
             return a * d - b * c;
-#endif // SIMD_AVX
+#endif // defined(SIMD_SSE2) || defined(SIMD_SSE42)
         }
 
         Matrix2x2& inverse() noexcept
@@ -120,16 +138,20 @@ namespace MathLib
             const double d = determinant();
             if (fuzzyZero(d))
                 return *this;
-#if defined(SIMD_AVX)
-#else
+            const double invD = 1.0 / d;
+#if defined(SIMD_SSE2)
+            const Vector2d highLanes = Vector2d(_mm_unpackhi_pd(m_data[1], m_data[0])) * Vector2d(invD, -invD);
+            const Vector2d lowLanes = Vector2d(_mm_unpacklo_pd(m_data[1], m_data[0])) * Vector2d(-invD, invD);
 
-            const double invDetermiant = 1.0 / d;
+            m_data[0] = highLanes;
+            m_data[1] = lowLanes;
+#else
             // clang-format off
             const Matrix2x2 adj = Matrix2x2(m_data[1].getY(), -m_data[0].getY(),
-                                            -m_data[1].getX(), m_data[0].getX()) * invDetermiant;
+                                            -m_data[1].getX(), m_data[0].getX()) * invD;
             // clang-format on
             *this = adj;
-#endif // SIMD_AVX
+#endif // SIMD_SSE2
 
             return *this;
         }
