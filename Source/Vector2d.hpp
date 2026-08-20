@@ -246,7 +246,7 @@ namespace MathLib
 #endif // defined(SIMD_SSE2)
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& a, const Vector2& b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& a, const Vector2& b) noexcept
         {
             ASSERT_IS_FINITE(a);
             ASSERT_IS_FINITE(b);

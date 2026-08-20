@@ -9,6 +9,8 @@ set(MATHLIB_SOURCES
     CpuInstructionSet.cpp
     CpuInstructionSet.hpp
     MathLibHeader.hpp
+    Matrix2x2d.cpp
+    Matrix2x2d.hpp
     Vector2.cpp
     Vector2.hpp
     Vector2d.cpp
