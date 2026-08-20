@@ -24,6 +24,7 @@ enable_testing()
 
 set(TEST_SOURCES
     Utils_Test.cpp
+    Matrix2x2_Test.cpp
     SimdExtension_Test.cpp
     Vector2d_Test.cpp
     Vector3d_Test.cpp

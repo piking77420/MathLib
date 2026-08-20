@@ -129,6 +129,30 @@ namespace MathLib
             return *this;
         }
 
+        MATH_LIB_FORCE_INLINE Vector2& operator*=(const Vector2& other) noexcept
+        {
+#if defined(SIMD_SSE2)
+            m_data = _mm_mul_pd(*this, other);
+#else
+            m_x *= other.m_x;
+            m_y *= other.m_y;
+#endif // defined(SIMD_SSE2)
+            ASSERT_IS_FINITE(*this);
+            return *this;
+        }
+
+        MATH_LIB_FORCE_INLINE Vector2& operator/=(const Vector2& other) noexcept
+        {
+#if defined(SIMD_SSE2)
+            m_data = _mm_div_pd(*this, other);
+#else
+            m_x /= other.m_x;
+            m_y /= other.m_y;
+#endif // defined(SIMD_SSE2)
+            ASSERT_IS_FINITE(*this);
+            return *this;
+        }
+
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator+(Vector2 lhs, const Vector2& _rhs) noexcept
         {
             lhs += _rhs;
@@ -138,6 +162,18 @@ namespace MathLib
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator-(Vector2 lhs, const Vector2& _rhs) noexcept
         {
             lhs -= _rhs;
+            return lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator*(Vector2 lhs, const Vector2& _rhs) noexcept
+        {
+            lhs *= _rhs;
+            return lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector2 operator/(Vector2 lhs, const Vector2& _rhs) noexcept
+        {
+            lhs /= _rhs;
             return lhs;
         }
 
@@ -246,7 +282,7 @@ namespace MathLib
 #endif // defined(SIMD_SSE2)
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& a, const Vector2& b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector2& a, const Vector2& b) noexcept
         {
             ASSERT_IS_FINITE(a);
             ASSERT_IS_FINITE(b);

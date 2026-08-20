@@ -98,6 +98,60 @@ TEST(TestVector3, subVectorOperator)
     }
 }
 
+TEST(TestVector3, mulVectorOperator)
+{
+    {
+        Vector3d v(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        v *= v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+        EXPECT_TRUE(isValidHighLane(v));
+    }
+
+    {
+        const Vector3d v1(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        const Vector3d v = v1 * v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+        EXPECT_TRUE(isValidHighLane(v));
+    }
+}
+
+TEST(TestVector3, divVectorOperator)
+{
+    {
+        Vector3d v(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        v /= v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.20);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_TRUE(isValidHighLane(v));
+    }
+
+    {
+        const Vector3d v1(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        const Vector3d v = v1 / v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.20);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_TRUE(isValidHighLane(v));
+    }
+}
+
 TEST(TestVector3, addScalarOperator)
 {
     {
