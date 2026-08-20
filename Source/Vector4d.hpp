@@ -170,6 +170,34 @@ namespace MathLib
             return *this;
         }
 
+        MATH_LIB_FORCE_INLINE Vector4& operator*=(const Vector4& other) noexcept
+        {
+#if defined(SIMD_AVX)
+            m_data = _mm256_mul_pd(*this, other);
+#else
+            m_x *= other.m_x;
+            m_y *= other.m_y;
+            m_z *= other.m_z;
+            m_w *= other.m_w;
+#endif // defined(SIMD_AVX)
+            ASSERT_IS_FINITE(*this)
+            return *this;
+        }
+
+        MATH_LIB_FORCE_INLINE Vector4& operator/=(const Vector4& other) noexcept
+        {
+#if defined(SIMD_AVX)
+            m_data = _mm256_div_pd(*this, other);
+#else
+            m_x /= other.m_x;
+            m_y /= other.m_y;
+            m_z /= other.m_z;
+            m_w /= other.m_w;
+#endif // defined(SIMD_AVX)
+            ASSERT_IS_FINITE(*this)
+            return *this;
+        }
+
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 lhs, const Vector4& _rhs) noexcept
         {
             lhs += _rhs;
@@ -179,6 +207,18 @@ namespace MathLib
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 lhs, const Vector4& _rhs) noexcept
         {
             lhs -= _rhs;
+            return lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator*(Vector4 lhs, const Vector4& _rhs) noexcept
+        {
+            lhs *= _rhs;
+            return lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator/(Vector4 lhs, const Vector4& _rhs) noexcept
+        {
+            lhs /= _rhs;
             return lhs;
         }
 

@@ -157,6 +157,34 @@ namespace MathLib
             return *this;
         }
 
+        MATH_LIB_FORCE_INLINE Vector3& operator*=(const Vector3& other) noexcept
+        {
+#if defined(SIMD_AVX)
+            m_data = _mm256_mul_pd(*this, other);
+#else
+            m_x *= other.m_x;
+            m_y *= other.m_y;
+            m_z *= other.m_z;
+#endif // defined(SIMD_AVX)
+            ASSERT_IS_FINITE(*this)
+            return *this;
+        }
+
+        MATH_LIB_FORCE_INLINE Vector3& operator/=(const Vector3& other) noexcept
+        {
+#if defined(SIMD_AVX)
+            const __m256d divisor = _mm256_blend_pd(other, _mm256_set1_pd(1.0), 0b1000);
+            m_data = _mm256_div_pd(m_data, divisor);
+            m_data = _mm256_blend_pd(m_data, _mm256_setzero_pd(), 0b1000);
+#else
+            m_x /= other.m_x;
+            m_y /= other.m_y;
+            m_z /= other.m_z;
+#endif // defined(SIMD_AVX)
+            ASSERT_IS_FINITE(*this)
+            return *this;
+        }
+
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector3 operator+(Vector3 lhs, const Vector3& _rhs) noexcept
         {
             lhs += _rhs;
@@ -166,6 +194,18 @@ namespace MathLib
         [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector3 operator-(Vector3 lhs, const Vector3& _rhs) noexcept
         {
             lhs -= _rhs;
+            return lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector3 operator*(Vector3 lhs, const Vector3& _rhs) noexcept
+        {
+            lhs *= _rhs;
+            return lhs;
+        }
+
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector3 operator/(Vector3 lhs, const Vector3& _rhs) noexcept
+        {
+            lhs /= _rhs;
             return lhs;
         }
 

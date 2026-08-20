@@ -63,7 +63,7 @@ TEST(TestVector2d, addVectorOperator)
     }
 }
 
-TEST(TestVector2d, subOperator)
+TEST(TestVector2d, subVectorOperator)
 {
     {
         Vector2d v(1.0, 2.0);
@@ -81,6 +81,48 @@ TEST(TestVector2d, subOperator)
 
         EXPECT_DOUBLE_EQ(v.getX(), -7.0);
         EXPECT_DOUBLE_EQ(v.getY(), -8.0);
+    }
+}
+
+TEST(TestVector2d, mulVectorOperator)
+{
+    {
+        Vector2d v(1.0, 2.0);
+        v *= Vector2d(8.0, 10.0);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v2(8.0, 10.0);
+
+        const Vector2d v = v1 * v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+    }
+}
+
+TEST(TestVector2d, divVectorOperator)
+{
+    {
+        Vector2d v(1.0, 2.0);
+        v /= Vector2d(8.0, 10.0);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.125);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v2(8.0, 10.0);
+
+        const Vector2d v = v1 / v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.125);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
     }
 }
 
