@@ -32,7 +32,7 @@ namespace MathLib
         {
         }
 
-        static Matrix2x2 identity()
+        [[nodiscard]] static Matrix2x2 identity() noexcept
         {
             // clang-format off
             return Matrix2x2(1.0, 0.0,
@@ -292,6 +292,6 @@ namespace MathLib
     };
 
     using Matrix2x2d = Matrix2x2<double>;
-}
+} // namespace MathLib
 
 #endif // MATH_LIB_MATRIX2X2D_H
