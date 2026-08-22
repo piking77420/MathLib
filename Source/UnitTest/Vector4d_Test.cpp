@@ -1249,4 +1249,44 @@ TEST(TestVector4, IsFinite)
 #endif
 }
 
+TEST(TestVector4, permutationVector4)
+{
+    const Vector4d v(1.0, 2.0, 3.0, 4.0);
+
+    auto test = [&](const Vector4d& vec, double expectedX, double expectedY, double expectedZ, double expectedW)
+    {
+        EXPECT_NEAR(vec.getX(), expectedX, FloatEpsilon);
+        EXPECT_NEAR(vec.getY(), expectedY, FloatEpsilon);
+        EXPECT_NEAR(vec.getZ(), expectedZ, FloatEpsilon);
+        EXPECT_NEAR(vec.getW(), expectedW, FloatEpsilon);
+    };
+
+    test(v.xywz(), v.getX(), v.getY(), v.getW(), v.getZ());
+    test(v.xzyw(), v.getX(), v.getZ(), v.getY(), v.getW());
+    test(v.xzwy(), v.getX(), v.getZ(), v.getW(), v.getY());
+    test(v.xwyz(), v.getX(), v.getW(), v.getY(), v.getZ());
+    test(v.xwzy(), v.getX(), v.getW(), v.getZ(), v.getY());
+
+    test(v.yxzw(), v.getY(), v.getX(), v.getZ(), v.getW());
+    test(v.yxwz(), v.getY(), v.getX(), v.getW(), v.getZ());
+    test(v.yzxw(), v.getY(), v.getZ(), v.getX(), v.getW());
+    test(v.yzwx(), v.getY(), v.getZ(), v.getW(), v.getX());
+    test(v.ywxz(), v.getY(), v.getW(), v.getX(), v.getZ());
+    test(v.ywzx(), v.getY(), v.getW(), v.getZ(), v.getX());
+
+    test(v.zxyw(), v.getZ(), v.getX(), v.getY(), v.getW());
+    test(v.zxwy(), v.getZ(), v.getX(), v.getW(), v.getY());
+    test(v.zyxw(), v.getZ(), v.getY(), v.getX(), v.getW());
+    test(v.zywx(), v.getZ(), v.getY(), v.getW(), v.getX());
+    test(v.zwxy(), v.getZ(), v.getW(), v.getX(), v.getY());
+    test(v.zwyx(), v.getZ(), v.getW(), v.getY(), v.getX());
+
+    test(v.wxyz(), v.getW(), v.getX(), v.getY(), v.getZ());
+    test(v.wxzy(), v.getW(), v.getX(), v.getZ(), v.getY());
+    test(v.wyxz(), v.getW(), v.getY(), v.getX(), v.getZ());
+    test(v.wyzx(), v.getW(), v.getY(), v.getZ(), v.getX());
+    test(v.wzxy(), v.getW(), v.getZ(), v.getX(), v.getY());
+    test(v.wzyx(), v.getW(), v.getZ(), v.getY(), v.getX());
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
