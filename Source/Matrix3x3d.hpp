@@ -88,63 +88,97 @@ namespace MathLib
             return m_data[2].getZ();
         }
 
-        Matrix3x3& setM11(double getM11) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM11(double getM11) noexcept
         {
             m_data[0].setX(getM11);
             return *this;
         }
 
-        Matrix3x3& setM12(double getM12) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM12(double getM12) noexcept
         {
             m_data[0].setY(getM12);
             return *this;
         }
 
-        Matrix3x3& setM13(double getM13) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM13(double getM13) noexcept
         {
             m_data[0].setZ(getM13);
             return *this;
         }
 
-        Matrix3x3& setM21(double getM21) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM21(double getM21) noexcept
         {
             m_data[1].setX(getM21);
             return *this;
         }
 
-        Matrix3x3& setM22(double getM22) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM22(double getM22) noexcept
         {
             m_data[1].setY(getM22);
             return *this;
         }
 
-        Matrix3x3& setM23(double getM23) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM23(double getM23) noexcept
         {
             m_data[1].setZ(getM23);
             return *this;
         }
 
-        Matrix3x3& setM31(double getM31) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM31(double getM31) noexcept
         {
             m_data[2].setX(getM31);
             return *this;
         }
 
-        Matrix3x3& setM32(double getM32) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM32(double getM32) noexcept
         {
             m_data[2].setY(getM32);
             return *this;
         }
 
-        Matrix3x3& setM33(double getM33) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& setM33(double getM33) noexcept
         {
             m_data[2].setZ(getM33);
             return *this;
         }
 
-        Matrix3x3& transpose() noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& transpose() noexcept
         {
-#if defined(SIMD_SSE2) || defined(SIMD_AVX)
+#if defined(SIMD_AVX)
+            // [a, b | c, X]     // [a, e | i, X] 0
+            // [e, f | g, X]  -> // [b, f | j, X] 1
+            // [i, j | k, X]     // [c, g | k, X] 2
+
+            const __m256d zero = _mm256_setzero_pd();
+
+            // [a, e | c, g]
+            const __m256d t0 = _mm256_unpacklo_pd(m_data[0], m_data[1]);
+
+            // [b, f | X, X]
+            const __m256d t1 = _mm256_unpackhi_pd(m_data[0], m_data[1]);
+
+            // [i, 0 | k, 0]
+            const __m256d t2 = _mm256_unpacklo_pd(m_data[2], zero);
+
+            // [j, 0 | X, 0]
+            const __m256d t3 = _mm256_unpackhi_pd(m_data[2], zero);
+
+            // [a, e | i, 0]
+            // in selector layout first 00() in the first byte select source for result LOW 128
+            // in selector layout first 00() in the second byte select source for result HIGH 128
+            // 00 -> a.low
+            // 01 -> a.high
+            // 10 -> b.low
+            // 11 -> b.high
+            constexpr int selector1 = 0b0010'0000;
+            m_data[0] = _mm256_permute2f128_pd(t0, t2, selector1);
+
+            // [b, f | j, 0]
+            m_data[1] = _mm256_permute2f128_pd(t1, t3, selector1);
+
+            // [c, g | k, 0]
+            constexpr int selector2 = 0b0011'0001;
+            m_data[2] = _mm256_permute2f128_pd(t0, t2, selector2);
 
 #else
             double* ptr = reinterpret_cast<double*>(&m_data[0]);
@@ -168,13 +202,16 @@ namespace MathLib
             return *this;
         }
 
-        Matrix3x3 getTranspose() const noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3 getTranspose() const noexcept
         {
             Matrix3x3 m = (*this);
             return m.transpose();
         }
 
-        double determinant() const noexcept;
+        MATH_LIB_FORCE_INLINE double determinant() const noexcept
+        {
+            return Vector3d::dot(m_data[0], Vector3d::cross(m_data[1], m_data[2]));
+        }
 
         Matrix3x3& inverse() noexcept;
 
