@@ -11,7 +11,7 @@ namespace MathLib
         // [g, h, i]
 
 #if defined(SIMD_SSE2)
-
+        return 0.0;
 #else
         // clang-format off
         const double efhi = Matrix2x2d(getM22(), getM23(), 

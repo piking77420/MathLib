@@ -30,13 +30,15 @@ namespace MathLib
 
         }
         // clang-format on
-
-        MATH_LIB_FORCE_INLINE explicit Matrix4x4(const Vector4d& row1, const Vector4d& row2, const Vector4d& row3,
+        // clang-format off
+        MATH_LIB_FORCE_INLINE explicit Matrix4x4(const Vector4d& row1, 
+                                                 const Vector4d& row2, 
+                                                 const Vector4d& row3,
                                                  const Vector4d& row4)
             : m_data{row1, row2, row3, row4}
         {
         }
-
+        // clang-format on
         [[nodiscard]] static Matrix4x4 identity() noexcept
         {
             // clang-format off
@@ -225,7 +227,7 @@ namespace MathLib
 
         Matrix4x4& transpose() noexcept
         {
-#if defined(SIMD_SSE2) || defined(SIMD_AVX)
+#if defined(SIMD_AVX)
 
 #else
             double* ptr = reinterpret_cast<double*>(&m_data[0]);
@@ -267,42 +269,9 @@ namespace MathLib
             return m.transpose();
         }
 
-        double determinant() const noexcept
-        {
-#if defined(SIMD_SSE2) || defined(SIMD_SSE42)
-            // create an [d , c] lane
-            const __m128d swapped = _mm_shuffle_pd(m_data[1], m_data[1], 0b01);
-            // mul [a * d, b * c]
-            const __m128d mul = _mm_mul_pd(m_data[0], swapped);
-#if defined(SIMD_SSE42)
-            return _mm_cvtsd_f64(_mm_hsub_pd(mul, mul));
-#else
-            // [b*c, a*d]
-            const __m128d mulSwapped = _mm_shuffle_pd(mul, mul, 0b01);
+        double determinant() const noexcept;
 
-            const __m128d determinant = _mm_sub_sd(mul, mulSwapped);
-
-            return _mm_cvtsd_f64(determinant);
-#endif // defined(SIMD_SSE42)
-#else
-            const double a = m_data[0].getX();
-            const double b = m_data[0].getY();
-            const double c = m_data[1].getX();
-            const double d = m_data[1].getY();
-
-            return a * d - b * c;
-#endif // defined(SIMD_SSE2) || defined(SIMD_SSE42)
-        }
-
-        Matrix4x4& inverse() noexcept
-        {
-            const double d = determinant();
-            if (fuzzyZero(d))
-                return *this;
-            const double invD = 1.0 / d;
-
-            return *this;
-        }
+        Matrix4x4& inverse() noexcept;
 
         Matrix4x4 getInverse() const noexcept
         {
@@ -419,6 +388,36 @@ namespace MathLib
             // an row * row multiplication
             rhs.transpose();
 
+            const double m11 = Vector4d::dot(m_data[0], rhs.m_data[0]);
+            const double m12 = Vector4d::dot(m_data[0], rhs.m_data[1]);
+            const double m13 = Vector4d::dot(m_data[0], rhs.m_data[2]);
+            const double m14 = Vector4d::dot(m_data[0], rhs.m_data[3]);
+            const Vector4d row1 = Vector4d(m11, m12, m13, m14);
+
+            const double m21 = Vector4d::dot(m_data[1], rhs.m_data[0]);
+            const double m22 = Vector4d::dot(m_data[1], rhs.m_data[1]);
+            const double m23 = Vector4d::dot(m_data[1], rhs.m_data[2]);
+            const double m24 = Vector4d::dot(m_data[1], rhs.m_data[3]);
+            const Vector4d row2 = Vector4d(m21, m22, m23, m24);
+
+            const double m31 = Vector4d::dot(m_data[2], rhs.m_data[0]);
+            const double m32 = Vector4d::dot(m_data[2], rhs.m_data[1]);
+            const double m33 = Vector4d::dot(m_data[2], rhs.m_data[2]);
+            const double m34 = Vector4d::dot(m_data[2], rhs.m_data[3]);
+            const Vector4d row3 = Vector4d(m31, m32, m33, m34);
+
+            const double m41 = Vector4d::dot(m_data[3], rhs.m_data[0]);
+            const double m42 = Vector4d::dot(m_data[3], rhs.m_data[1]);
+            const double m43 = Vector4d::dot(m_data[3], rhs.m_data[2]);
+            const double m44 = Vector4d::dot(m_data[3], rhs.m_data[3]);
+            const Vector4d row4 = Vector4d(m41, m42, m43, m44);
+
+            // clang-format off
+            *this = Matrix4x4(row1,
+                              row2,
+                              row3,
+                              row4);
+            // clang-format on
             return *this;
         }
 
