@@ -11,6 +11,10 @@ set(MATHLIB_SOURCES
     MathLibHeader.hpp
     Matrix2x2d.cpp
     Matrix2x2d.hpp
+    Matrix3x3d.cpp
+    Matrix3x3d.hpp
+    Matrix4x4d.cpp
+    Matrix4x4d.hpp
     Vector2.cpp
     Vector2.hpp
     Vector2d.cpp

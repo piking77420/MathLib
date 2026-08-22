@@ -92,16 +92,6 @@ namespace MathLib
 #endif
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getW() const noexcept
-        {
-#if defined(SIMD_AVX)
-            const __m128d zw = _mm256_extractf128_pd(m_data, 1);
-            return _mm_cvtsd_f64(_mm_unpackhi_pd(zw, zw));
-#else
-            return m_w;
-#endif
-        }
-
         MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
 #if defined(SIMD_AVX)

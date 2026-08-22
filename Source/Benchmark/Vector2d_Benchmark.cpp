@@ -123,6 +123,7 @@ namespace
 
         freeAlignedMalloc(arrayA);
         freeAlignedMalloc(arrayB);
+        freeAlignedMalloc(arrayResult);
     }
     BENCHMARK(BM_Vector2dDot_Array_Aligned_NoFalseSharing_ToArray);
 }

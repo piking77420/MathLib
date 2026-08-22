@@ -15,6 +15,18 @@ namespace MathLib
     template<typename T>
     class Vector4;
 
+    template<typename T>
+    class Vector3;
+
+    template<>
+    class Vector3<double>;
+
+    template<typename T>
+    class Vector2;
+
+    template<>
+    class Vector2<double>;
+
     template<>
     class Vector4<double>
     {
@@ -692,6 +704,295 @@ namespace MathLib
             return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z) && std::isfinite(m_w);
 #endif // defined(SIMD_AVX)
         }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 xywz() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(2, 3, 1, 0))); // zwyx
+#elif defined(SIMD_AVX)
+            // [x, y, z, w] -> [x, y, w, z]
+            return Vector4<double>(_mm256_permute_pd(m_data, 0b0110));
+#else
+            return Vector4(m_x, m_y, m_w, m_z);
+#endif // defined(SIMD_AVX)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 xzyw() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 1, 2, 0))); // wyzx
+#elif defined(SIMD_AVX)
+            // because thee swapping element are outside lane boundary we can't use regular _mm256_permute_pd
+            //
+            // [x, y, z, w] -> [z, w, x, y]
+            const __m256d swapped128 = _mm256_permute2f128_pd(m_data, m_data, 0x01);
+            // [z, w, x, y] -> [w, z, y, x]
+            const __m256d reversed = _mm256_permute_pd(swapped128, 0b0101);
+            // Take lanes 1 and 2 from reversed:
+            // [x, y, z, w]
+            // [w, z, y, x]
+            //      ^  ^
+            // => [x, z, y, w]
+            return Vector4<double>(_mm256_blend_pd(m_data, reversed, 0b0110));
+#else
+            return Vector4(m_x, m_z, m_y, m_w);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 xzwy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(1, 3, 2, 0))); // ywzx
+
+#elif defined(SIMD_AVX)
+
+#else
+            return Vector4(m_x, m_z, m_w, m_y);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 xwyz() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(2, 1, 3, 0))); // zywx
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_x, m_w, m_y, m_z);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 xwzy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(1, 2, 3, 0))); // yzwx
+#elif defined(SIMD_AVX)
+
+#else
+            return Vector4(m_x, m_w, m_z, m_y);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 yxzw() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 2, 0, 1))); // wzxy
+#elif defined(SIMD_AVX)
+
+#else
+            return Vector4(m_y, m_x, m_z, m_w);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 yxwz() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(2, 3, 0, 1))); // zwxy
+#elif defined(SIMD_AVX)
+
+#else
+            return Vector4(m_y, m_x, m_w, m_z);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 yzxw() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 0, 2, 1))); // wxzy
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_y, m_z, m_x, m_w);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 yzwx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(0, 3, 2, 1))); // xwzy
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_y, m_z, m_w, m_x);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 ywxz() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(2, 0, 3, 1))); // zxwy
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_y, m_w, m_x, m_z);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 ywzx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(0, 2, 3, 1))); // xzwy
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_y, m_w, m_z, m_x);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 zxyw() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 1, 0, 2))); // wyxz
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_z, m_x, m_y, m_w);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 zxwy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(1, 3, 0, 2))); // ywxz
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_z, m_x, m_w, m_y);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 zyxw() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 0, 1, 2))); // wxyz
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_z, m_y, m_x, m_w);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 zywx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(0, 3, 1, 2))); // xwyz
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_z, m_y, m_w, m_x);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 zwxy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(1, 0, 3, 2))); // yxwz
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_z, m_w, m_x, m_y);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 zwyx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(0, 1, 3, 2))); // xywz
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_z, m_w, m_y, m_x);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 wxyz() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(2, 1, 0, 3))); // zyxw
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_w, m_x, m_y, m_z);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 wxzy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(1, 2, 0, 3))); // yzxw
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_w, m_x, m_z, m_y);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 wyxz() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(2, 0, 1, 3))); // zxyw
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_w, m_y, m_x, m_z);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 wyzx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(0, 2, 1, 3))); // xzyw
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_w, m_y, m_z, m_x);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 wzxy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(1, 0, 2, 3))); // yxzw
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_w, m_z, m_x, m_y);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 wzyx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector4<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(0, 1, 2, 3))); // xyzw
+#elif defined(SIMD_AVX)
+#else
+            return Vector4(m_w, m_z, m_y, m_x);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] Vector3<double> xyz() const noexcept;
+
+        [[nodiscard]] Vector3<double> xzy() const noexcept;
+
+        [[nodiscard]] Vector3<double> yxz() const noexcept;
+
+        [[nodiscard]] Vector3<double> yzx() const noexcept;
+
+        [[nodiscard]] Vector3<double> zxy() const noexcept;
+
+        [[nodiscard]] Vector3<double> zyx() const noexcept;
+
+        [[nodiscard]] Vector2<double> xy() const noexcept;
+
+        [[nodiscard]] Vector2<double> xz() const noexcept;
+
+        [[nodiscard]] Vector2<double> xw() const noexcept;
+
+        [[nodiscard]] Vector2<double> yx() const noexcept;
+
+        [[nodiscard]] Vector2<double> yz() const noexcept;
+
+        [[nodiscard]] Vector2<double> yw() const noexcept;
+
+        [[nodiscard]] Vector2<double> zx() const noexcept;
+
+        [[nodiscard]] Vector2<double> zy() const noexcept;
+
+        [[nodiscard]] Vector2<double> zw() const noexcept;
+
+        [[nodiscard]] Vector2<double> wx() const noexcept;
+
+        [[nodiscard]] Vector2<double> wy() const noexcept;
+
+        [[nodiscard]] Vector2<double> wz() const noexcept;
+
+        explicit operator Vector3<double>() const noexcept;
+
+        explicit operator Vector2<double>() const noexcept;
 
     private:
 #if defined(SIMD_AVX)
