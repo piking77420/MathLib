@@ -17,6 +17,12 @@ namespace MathLib
     template<typename T>
     class Vector3;
 
+    template<typename T>
+    class Vector2;
+
+    template<>
+    class Vector2<double>;
+
     template<>
     class Vector3<double>
     {
@@ -339,15 +345,16 @@ namespace MathLib
             // TODO add test for correctness and winding order
 
 #if defined(SIMD_AVX)
+            // TODO enhence with AVX2
             // [y, z, x, w]
-            const __m256d aYZX = _mm256_permute4x64_pd(a.m_data, _MM_SHUFFLE(3, 0, 2, 1));
+            const Vector3 aYZX = a.yzx();
 
-            const __m256d bYZX = _mm256_permute4x64_pd(b.m_data, _MM_SHUFFLE(3, 0, 2, 1));
+            const __m256d bYZX = b.yzx();
 
             // [z, x, y, w]
-            const __m256d aZXY = _mm256_permute4x64_pd(a.m_data, _MM_SHUFFLE(3, 1, 0, 2));
+            const __m256d aZXY = a.zxy();
 
-            const __m256d bZXY = _mm256_permute4x64_pd(b.m_data, _MM_SHUFFLE(3, 1, 0, 2));
+            const __m256d bZXY = b.zxy();
 
             return Vector3(_mm256_sub_pd(_mm256_mul_pd(aYZX, bZXY), _mm256_mul_pd(aZXY, bYZX)));
 #else
@@ -644,6 +651,90 @@ namespace MathLib
             return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z);
 #endif // defined(SIMD_AVX)
         }
+
+        [[nodiscard]] Vector3<double> xzy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            return Vector3<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 1, 2, 0)));
+#elif defined(SIMD_AVX)
+            // because thee swapping element are outside lane boundary we can't use regular _mm256_permute_pd
+            //
+            // [x, y, z, w] -> [z, w, x, y]
+            const __m256d swapped128 = _mm256_permute2f128_pd(m_data, m_data, 0x01);
+            // [z, w, x, y] -> [w, z, y, x]
+            const __m256d reversed = _mm256_permute_pd(swapped128, 0b0101);
+            // Take lanes 1 and 2 from reversed:
+            // [x, y, z, w]
+            // [w, z, y, x]
+            //      ^  ^
+            // => [x, z, y, w]
+            return Vector3<double>(_mm256_blend_pd(m_data, reversed, 0b0110));
+#else
+            return Vector3(m_x, m_z, m_y);
+#endif // defined(SIMD_AVX2)
+        }
+
+        [[nodiscard]] Vector3<double> yxz() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            // [x, y, z, ?] -> [y, x, z, ?]
+            return Vector3<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 2, 0, 1)));
+#elif defined(SIMD_AVX)
+            // TODO AVX1
+#else
+            return Vector3(m_y, m_x, m_z);
+#endif
+        }
+
+        [[nodiscard]] Vector3<double> yzx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            // [x, y, z, ?] -> [y, z, x, ?]
+            return Vector3<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 0, 2, 1)));
+#elif defined(SIMD_AVX)
+            // TODO AVX1
+#else
+            return Vector3(m_y, m_z, m_x);
+#endif
+        }
+
+        [[nodiscard]] Vector3<double> zxy() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            // [x, y, z, ?] -> [z, x, y, ?]
+            return Vector3<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 1, 0, 2)));
+#elif defined(SIMD_AVX)
+            // TODO AVX1
+#else
+            return Vector3(m_z, m_x, m_y);
+#endif
+        }
+
+        [[nodiscard]] Vector3<double> zyx() const noexcept
+        {
+#if defined(SIMD_AVX2)
+            // [x, y, z, ?] -> [z, y, x, ?]
+            return Vector3<double>(_mm256_permute4x64_pd(m_data, _MM_SHUFFLE(3, 0, 1, 2)));
+#elif defined(SIMD_AVX)
+            // TODO AVX1
+#else
+            return Vector3(m_z, m_y, m_x);
+#endif
+        }
+
+        [[nodiscard]] Vector2<double> xy() const noexcept;
+
+        [[nodiscard]] Vector2<double> xz() const noexcept;
+
+        [[nodiscard]] Vector2<double> yx() const noexcept;
+
+        [[nodiscard]] Vector2<double> yz() const noexcept;
+
+        [[nodiscard]] Vector2<double> zx() const noexcept;
+
+        [[nodiscard]] Vector2<double> zy() const noexcept;
+
+        explicit operator Vector2<double>() const noexcept;
 
     private:
 #if defined(SIMD_AVX)
