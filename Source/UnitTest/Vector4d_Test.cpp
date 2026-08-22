@@ -6,6 +6,8 @@
 
 #include <MathLibHeader.hpp>
 #include <Vector4d.hpp>
+#include <Vector3d.hpp>
+#include <Vector2d.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -1216,7 +1218,7 @@ TEST(TestVector4d, fromAlignedFloat)
     }
 }
 
-TEST(TestVector4, IsFinite)
+TEST(TestVector4d, IsFinite)
 {
     {
         const Vector4d v = Vector4d(1.0, 2.0, 3.0, 4.0);
@@ -1249,7 +1251,7 @@ TEST(TestVector4, IsFinite)
 #endif
 }
 
-TEST(TestVector4, permutationVector4)
+TEST(TestVector4d, permutationVector4)
 {
     const Vector4d v(1.0, 2.0, 3.0, 4.0);
 
@@ -1289,4 +1291,50 @@ TEST(TestVector4, permutationVector4)
     test(v.wzyx(), v.getW(), v.getZ(), v.getY(), v.getX());
 }
 
+TEST(TestVector4d, permutationVector3)
+{
+    const Vector4d v(1.0, 2.0, 3.0, 4.0);
+
+    auto test = [&](const Vector3d& vec, double expectedX, double expectedY, double expectedZ)
+    {
+        EXPECT_NEAR(vec.getX(), expectedX, FloatEpsilon);
+        EXPECT_NEAR(vec.getY(), expectedY, FloatEpsilon);
+        EXPECT_NEAR(vec.getZ(), expectedZ, FloatEpsilon);
+    };
+
+    test(v.xyz(), v.getX(), v.getY(), v.getZ());
+    test(v.xzy(), v.getX(), v.getZ(), v.getY());
+
+    test(v.yxz(), v.getY(), v.getX(), v.getZ());
+    test(v.yzx(), v.getY(), v.getZ(), v.getX());
+
+    test(v.zxy(), v.getZ(), v.getX(), v.getY());
+    test(v.zyx(), v.getZ(), v.getY(), v.getX());
+}
+
+TEST(TestVector4d, permutationVector2d)
+{
+    const Vector4d v(1.0, 2.0, 3.0, 4.0);
+
+    auto test = [&](const Vector2d& vec, double expectedX, double expectedY)
+    {
+        EXPECT_NEAR(vec.getX(), expectedX, FloatEpsilon);
+        EXPECT_NEAR(vec.getY(), expectedY, FloatEpsilon);
+    };
+
+    test(v.xz(), v.getX(), v.getZ());
+    test(v.xw(), v.getX(), v.getW());
+
+    test(v.yx(), v.getY(), v.getX());
+    test(v.yz(), v.getY(), v.getZ());
+    test(v.yw(), v.getY(), v.getW());
+
+    test(v.zx(), v.getZ(), v.getX());
+    test(v.zy(), v.getZ(), v.getY());
+    test(v.zw(), v.getZ(), v.getW());
+
+    test(v.wx(), v.getW(), v.getX());
+    test(v.wy(), v.getW(), v.getY());
+    test(v.wz(), v.getW(), v.getZ());
+}
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

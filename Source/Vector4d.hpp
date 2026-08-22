@@ -15,6 +15,18 @@ namespace MathLib
     template<typename T>
     class Vector4;
 
+    template<typename T>
+    class Vector3;
+
+    template<>
+    class Vector3<double>;
+
+    template<typename T>
+    class Vector2;
+
+    template<>
+    class Vector2<double>;
+
     template<>
     class Vector4<double>
     {
@@ -942,11 +954,45 @@ namespace MathLib
 #endif // defined(SIMD_AVX2)
         }
 
+        [[nodiscard]] Vector3<double> xyz() const noexcept;
 
+        [[nodiscard]] Vector3<double> xzy() const noexcept;
 
+        [[nodiscard]] Vector3<double> yxz() const noexcept;
 
+        [[nodiscard]] Vector3<double> yzx() const noexcept;
 
+        [[nodiscard]] Vector3<double> zxy() const noexcept;
 
+        [[nodiscard]] Vector3<double> zyx() const noexcept;
+
+        [[nodiscard]] Vector2<double> xy() const noexcept;
+
+        [[nodiscard]] Vector2<double> xz() const noexcept;
+
+        [[nodiscard]] Vector2<double> xw() const noexcept;
+
+        [[nodiscard]] Vector2<double> yx() const noexcept;
+
+        [[nodiscard]] Vector2<double> yz() const noexcept;
+
+        [[nodiscard]] Vector2<double> yw() const noexcept;
+
+        [[nodiscard]] Vector2<double> zx() const noexcept;
+
+        [[nodiscard]] Vector2<double> zy() const noexcept;
+
+        [[nodiscard]] Vector2<double> zw() const noexcept;
+
+        [[nodiscard]] Vector2<double> wx() const noexcept;
+
+        [[nodiscard]] Vector2<double> wy() const noexcept;
+
+        [[nodiscard]] Vector2<double> wz() const noexcept;
+
+        explicit operator Vector3<double>() const noexcept;
+
+        explicit operator Vector2<double>() const noexcept;
 
     private:
 #if defined(SIMD_AVX)
