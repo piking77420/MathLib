@@ -24,6 +24,9 @@ set(BENCHMARK_SOURCES
     Alloc.cpp
     Alloc.hpp
     BenchmarkHeader.hpp
+    Matrix_Benchmark.cpp
+    RandomNumber.hpp
+    RandomNumber.cpp
     Vector2d_Benchmark.cpp
     Vector4d_Benchmark.cpp
 )
