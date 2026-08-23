@@ -373,6 +373,7 @@ TEST(TestMatrix3x3d, getInverse)
         EXPECT_DOUBLE_EQ(m.getM33(), 9.0);
     }
 }
+
 TEST(TestMatrix3x3d, addScalarOperator)
 {
     {
