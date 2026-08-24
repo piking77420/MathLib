@@ -14,6 +14,8 @@ namespace MathLib
     class Matrix2x2<double>
     {
     public:
+        using _VectorType = Vector2d;
+
         explicit Matrix2x2() = default;
 
         ~Matrix2x2() = default;
