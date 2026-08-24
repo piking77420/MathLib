@@ -14,6 +14,8 @@ namespace MathLib
     class Matrix3x3<double>
     {
     public:
+        using _VectorType = Vector3d;
+
         explicit Matrix3x3() = default;
 
         ~Matrix3x3() = default;

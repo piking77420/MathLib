@@ -14,6 +14,8 @@ namespace MathLib
     class Matrix4x4<double>
     {
     public:
+        using _VectorType = Vector4d;
+
         explicit Matrix4x4() = default;
 
         ~Matrix4x4() = default;

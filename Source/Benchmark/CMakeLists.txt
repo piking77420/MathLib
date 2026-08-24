@@ -21,6 +21,7 @@ set(BENCHMARK_ENABLE_EXCEPTIONS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(benchmark)
 
 set(BENCHMARK_SOURCES
+    main.cpp
     Alloc.cpp
     Alloc.hpp
     BenchmarkHeader.hpp
@@ -46,5 +47,5 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
         MathLib
-        benchmark::benchmark_main
+        benchmark::benchmark
 )
