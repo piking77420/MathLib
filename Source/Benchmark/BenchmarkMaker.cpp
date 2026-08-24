@@ -1,4 +1,4 @@
-#include <RandomNumber.hpp>
+#include <BenchmarkMaker.hpp>
 
 namespace MathLib::Benchmark
 {

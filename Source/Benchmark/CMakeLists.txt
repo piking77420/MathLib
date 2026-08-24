@@ -21,15 +21,13 @@ set(BENCHMARK_ENABLE_EXCEPTIONS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(benchmark)
 
 set(BENCHMARK_SOURCES
-    main.cpp
-    Alloc.cpp
-    Alloc.hpp
     BenchmarkHeader.hpp
+    BenchmarkMaker.cpp
+    BenchmarkMaker.hpp
+    HardwareAlignedVector.hpp
+    main.cpp
     Matrix_Benchmark.cpp
-    RandomNumber.hpp
-    RandomNumber.cpp
-    Vector2d_Benchmark.cpp
-    Vector4d_Benchmark.cpp
+    Vector_Benchmark.cpp
 )
 
 add_executable(

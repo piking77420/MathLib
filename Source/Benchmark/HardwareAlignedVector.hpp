@@ -3,31 +3,11 @@
 
 #include <cstdlib>
 #include <memory>
-
-#if defined(_MSC_VER)
-#include <malloc.h>
-#endif
-
 #include <BenchmarkHeader.hpp>
 #include <MathLibHeader.hpp>
 
-namespace Alloc
+namespace MathLib::Benchmark
 {
-    template<typename T>
-    [[nodiscard]] T* alignMalloc(std::size_t count, std::size_t alignment)
-    {
-        const std::size_t size = sizeof(T) * count;
-        static_assert(std::is_trivially_constructible_v<T>);
-#if defined(_MSC_VER)
-        return static_cast<T*>(_aligned_malloc(size, alignment));
-#else
-        // std::aligned_alloc requires size to be a multiple of alignment.
-        return static_cast<T*>(std::aligned_alloc(alignment, MathLib::alignedSize(size, alignment)));
-#endif
-    }
-
-    void freeAlignedMalloc(void* ptr);
-
     template<typename T, size_t OffsetPerElement>
     class Iterator
     {
@@ -349,6 +329,6 @@ namespace Alloc
         std::size_t m_capacity = 0;
     };
 
-} // namespace Alloc
+} // namespace MathLib::Benchmark
 
 #endif // MATH_LIB_ALLOC_H

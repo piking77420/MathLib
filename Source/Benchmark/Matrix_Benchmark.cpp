@@ -1,9 +1,10 @@
-#include <array>
+#ifndef MATH_LIB_MATRIX_BENCHMARK_H
+#define MATH_LIB_MATRIX_BENCHMARK_H
+
 #include <cstddef>
 #include <benchmark/benchmark.h>
-#include <Alloc.hpp>
 #include <BenchmarkHeader.hpp>
-#include <RandomNumber.hpp>
+#include <BenchmarkMaker.hpp>
 #include <MathLibHeader.hpp>
 #include <Matrix2x2d.hpp>
 #include <Matrix3x3d.hpp>
@@ -13,7 +14,6 @@
 #include <Vector4d.hpp>
 
 using namespace MathLib;
-using namespace Alloc;
 using namespace MathLib::Benchmark;
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
@@ -22,221 +22,87 @@ using namespace MathLib::Benchmark;
 // NOLINTBEGIN(clang-analyzer-deadcode.DeadStores)
 // NOLINTBEGIN(cppcoreguidelines-pro-bounds-constant-array-index)
 
-template<typename T>
-concept Matrix = std::is_same_v<T, Matrix2x2d> || std::is_same_v<T, Matrix3x3d> || std::is_same_v<T, Matrix4x4d>;
-
-template<typename T>
-concept VectorMath = std::is_same_v<T, Vector2d> || std::is_same_v<T, Vector3d> || std::is_same_v<T, Vector4d>;
-
-template<typename T>
-concept MathType = Matrix<T> || VectorMath<T>;
-
-template<MathType T>
-struct MakeRandom
-{
-    T operator()([[maybe_unused]] MathLib::Benchmark::RandomNumber& randomNumber) const
-    {
-        return T();
-    }
-};
-
-static constexpr double Min = -10.0;
-static constexpr double Max = 10.0;
-
-template<>
-struct MakeRandom<Matrix2x2d>
-{
-    static Matrix2x2d operator()(MathLib::Benchmark::RandomNumber& randomNumber)
-    {
-        return Matrix2x2d(randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max));
-    }
-};
-
-template<>
-struct MakeRandom<Matrix3x3d>
-{
-    static Matrix3x3d operator()(MathLib::Benchmark::RandomNumber& randomNumber)
-    {
-
-        return Matrix3x3d(randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max));
-    }
-};
-
-template<>
-struct MakeRandom<Matrix4x4d>
-{
-    static Matrix4x4d operator()(MathLib::Benchmark::RandomNumber& randomNumber)
-    {
-        return Matrix4x4d(randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                          randomNumber.real(Min, Max));
-    }
-};
-
-template<>
-struct MakeRandom<Vector2d>
-{
-    static Vector2d operator()(MathLib::Benchmark::RandomNumber& randomNumber)
-    {
-        return Vector2d(randomNumber.real(Min, Max), randomNumber.real(Min, Max));
-    }
-};
-
-template<>
-struct MakeRandom<Vector3d>
-{
-    static Vector3d operator()(MathLib::Benchmark::RandomNumber& randomNumber)
-    {
-        return Vector3d(randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max));
-    }
-};
-
-template<>
-struct MakeRandom<Vector4d>
-{
-    static Vector4d operator()(MathLib::Benchmark::RandomNumber& randomNumber)
-    {
-        return Vector4d(randomNumber.real(Min, Max), randomNumber.real(Min, Max), randomNumber.real(Min, Max),
-                        randomNumber.real(Min, Max));
-    }
-};
-
-static constexpr size_t elemementCount = 1024ull;
-
-template<MathType T, bool hardwareAlign = false>
-static auto makeRandom() -> std::conditional_t<hardwareAlign, HardwareAlignedVector<T>, std::vector<T>>
-{
-    MathLib::Benchmark::RandomNumber randomNumber(0u);
-
-    std::conditional_t<hardwareAlign, HardwareAlignedVector<T>, std::vector<T>> types;
-    types.reserve(elemementCount);
-
-    while (types.size() < elemementCount)
-    {
-        T m = MakeRandom<T>::operator()(randomNumber);
-
-        if constexpr (Matrix<T>)
-        {
-            while (std::abs(m.determinant()) < DoubleEpsilon)
-            {
-                m = MakeRandom<T>::operator()(randomNumber);
-            }
-        }
-
-        types.push_back(m);
-    }
-
-    return types;
-}
-
 namespace MathLib::Benchmark
 {
     template<Matrix T, bool hardwareAlign>
-    void BM_Determinant(benchmark::State& state)
+    void determinant(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
-
         std::size_t i = 0;
-
         for (auto _ : state)
         {
             const T& m = matrices[i++ % matrices.size()];
-
-            const auto determinant = m.determinant();
-
-            benchmark::DoNotOptimize(determinant);
+            const auto result = m.determinant();
+            benchmark::DoNotOptimize(result);
         }
     }
 
     template<Matrix T, bool hardwareAlign>
-    void BM_Transpose(benchmark::State& state)
+    void transpose(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
-
         std::size_t i = 0;
-
         for (auto _ : state)
         {
             const T& m = matrices[i++ % matrices.size()];
-
-            const T transpose = m.getTranspose();
-
+            const auto transpose = m.getTranspose();
             benchmark::DoNotOptimize(transpose);
         }
     }
 
     template<Matrix T, bool hardwareAlign>
-    void BM_Inverse(benchmark::State& state)
+    void inverse(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
-
         std::size_t i = 0;
-
         for (auto _ : state)
         {
             const T& m = matrices[i++ % matrices.size()];
-
-            const T inverse = m.getInverse();
+            const auto inverse = m.getInverse();
 
             benchmark::DoNotOptimize(inverse);
         }
     }
 
     template<Matrix T, bool hardwareAlign>
-    void BM_MultiplyVector(benchmark::State& state)
+    void multiplyVector(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
         static const auto vectors = makeRandom<typename T::_VectorType, hardwareAlign>();
-
         std::size_t i = 0;
-
         for (auto _ : state)
         {
             const T& m = matrices[i++ % matrices.size()];
-            const typename T::_VectorType& v = vectors[i++ % vectors.size()];
-
-            const typename T::_VectorType vec = m * v;
-
-            benchmark::DoNotOptimize(vec);
-            i++;
+            const auto& v = vectors[i % vectors.size()];
+            auto result = m * v;
+            benchmark::DoNotOptimize(result);
         }
     }
     static constexpr size_t iterationCount = 1'000'000ull;
 
-#define MAKE_BENCHMARK_MATRIX(matrixType, hardwareAlign)                                                               \
-    BENCHMARK_TEMPLATE(BM_Determinant, matrixType, hardwareAlign)->Iterations(iterationCount);                         \
-    BENCHMARK_TEMPLATE(BM_Transpose, matrixType, hardwareAlign)->Iterations(iterationCount);                           \
-    BENCHMARK_TEMPLATE(BM_Inverse, matrixType, hardwareAlign)->Iterations(iterationCount);                             \
-    BENCHMARK_TEMPLATE(BM_MultiplyVector, matrixType, hardwareAlign)->Iterations(iterationCount);                      \
-                                                                                                                       \
-    BENCHMARK_TEMPLATE(BM_Determinant, matrixType, hardwareAlign)->Iterations(iterationCount);                         \
-    BENCHMARK_TEMPLATE(BM_Transpose, matrixType, hardwareAlign)->Iterations(iterationCount);                           \
-    BENCHMARK_TEMPLATE(BM_Inverse, matrixType, hardwareAlign)->Iterations(iterationCount);                             \
-    BENCHMARK_TEMPLATE(BM_MultiplyVector, matrixType, hardwareAlign)->Iterations(iterationCount);
+#define MAKE_BENCHMARK_MATRIX(MatrixType, HardwareAlign)                                                               \
+    BENCHMARK_TEMPLATE(determinant, MatrixType, HardwareAlign);                                                        \
+    BENCHMARK_TEMPLATE(transpose, MatrixType, HardwareAlign);                                                          \
+    BENCHMARK_TEMPLATE(inverse, MatrixType, HardwareAlign);                                                            \
+    BENCHMARK_TEMPLATE(multiplyVector, MatrixType, HardwareAlign);
 
     namespace Matrix2x2dBenchmark
     {
-        MAKE_BENCHMARK_MATRIX(Matrix2x2d, false);
-        MAKE_BENCHMARK_MATRIX(Matrix2x2d, true);
+        MAKE_BENCHMARK_MATRIX(Matrix2x2d, falseSharing);
+        MAKE_BENCHMARK_MATRIX(Matrix2x2d, avoidFalseSharing);
     } // namespace Matrix2x2dBenchmark
 
     namespace Matrix3x3Benchmark
     {
-        MAKE_BENCHMARK_MATRIX(Matrix3x3d, false);
-        MAKE_BENCHMARK_MATRIX(Matrix3x3d, true);
+        MAKE_BENCHMARK_MATRIX(Matrix3x3d, falseSharing);
+        MAKE_BENCHMARK_MATRIX(Matrix3x3d, avoidFalseSharing);
 
     } // namespace Matrix3x3Benchmark
 
     namespace Matrix4x4Benchmark
     {
-        MAKE_BENCHMARK_MATRIX(Matrix4x4d, false);
-        MAKE_BENCHMARK_MATRIX(Matrix4x4d, true);
+        MAKE_BENCHMARK_MATRIX(Matrix4x4d, falseSharing);
+        MAKE_BENCHMARK_MATRIX(Matrix4x4d, avoidFalseSharing);
 
     } // namespace Matrix4x4Benchmark
 }
@@ -246,3 +112,5 @@ namespace MathLib::Benchmark
 // NOLINTEND(misc-const-correctness)
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
+
+#endif // MATH_LIB_MATRIX_BENCHMARK_H
