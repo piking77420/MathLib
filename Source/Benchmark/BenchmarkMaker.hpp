@@ -25,8 +25,10 @@ namespace MathLib::Benchmark
 
         ~RandomNumber() = default;
 
-        double real(double min = std::numeric_limits<double>::lowest(),
-                    double max = std::numeric_limits<double>::max());
+        double real(double min = std::numeric_limits<double>::lowest(), double max = std::numeric_limits<double>::max())
+        {
+            return std::uniform_real_distribution<double>(min, max)(m_rng);
+        }
 
     private:
         std::mt19937 m_rng;

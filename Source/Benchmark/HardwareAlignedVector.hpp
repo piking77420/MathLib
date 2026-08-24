@@ -18,7 +18,7 @@ namespace MathLib::Benchmark
         using pointer = T*;
         using difference_type = std::ptrdiff_t;
 
-        Iterator(std::uint8_t* ptr)
+        Iterator(std::byte* ptr)
             : m_ptr(ptr)
         {
         }
@@ -56,7 +56,7 @@ namespace MathLib::Benchmark
         using pointer = const T*;
         using difference_type = std::ptrdiff_t;
 
-        explicit ConstIterator(const std::uint8_t* ptr) noexcept
+        explicit ConstIterator(const std::byte* ptr) noexcept
             : m_ptr(ptr)
         {
         }
@@ -276,7 +276,10 @@ namespace MathLib::Benchmark
             if (capacity == 0)
                 return nullptr;
 
-            return static_cast<std::byte*>(::operator new(capacity * OffsetPerElement, std::align_val_t{Alignment}));
+            // clang-format off
+            return static_cast<std::byte*>(operator new(capacity * OffsetPerElement,
+                                                        static_cast<std::align_val_t>(Alignment)));
+            // clang-format on
         }
 
         static void deallocate(std::byte* ptr) noexcept
@@ -284,7 +287,7 @@ namespace MathLib::Benchmark
             if (ptr == nullptr)
                 return;
 
-            ::operator delete(ptr, std::align_val_t{Alignment});
+            operator delete(ptr, static_cast<std::align_val_t>(Alignment));
         }
 
         [[nodiscard]] T* elementPtr(std::size_t index) noexcept

@@ -1,9 +1,9 @@
 #include <benchmark/benchmark.h>
+#include <cstddef>
 #include <iostream>
-
-
-
-
+#include <vector>
+#include <string>
+#include <string_view>
 
 class CustomReporter : public benchmark::ConsoleReporter
 {
@@ -21,9 +21,9 @@ public:
             {
                 const size_t firstTemplateCloseBracket = name.find_first_of('>', firstTemplateOpenBracket);
 
-                std::string_view groupV(name.data() + firstTemplateOpenBracket,
-                                        name.data() + firstTemplateCloseBracket);
-                std::string templateType = std::string(groupV);
+                const std::string_view groupV(name.data() + firstTemplateOpenBracket,
+                                              name.data() + firstTemplateCloseBracket);
+                const std::string templateType = std::string(groupV);
                 if (m_previousTemplate != templateType)
                 {
                     GetOutputStream() << '\n';
@@ -49,6 +49,7 @@ public:
         benchmark::ConsoleReporter::ReportRuns(reports);
     }
 
+private:
     std::string m_previousTemplate;
 };
 

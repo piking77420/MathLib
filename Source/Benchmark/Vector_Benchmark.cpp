@@ -13,6 +13,7 @@
 using namespace MathLib;
 using namespace MathLib::Benchmark;
 
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
 // NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTBEGIN(misc-const-correctness)
@@ -238,5 +239,6 @@ namespace MathLib::Benchmark
 // NOLINTEND(misc-const-correctness)
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
 // NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
+// NOLINTEND(cppcoreguidelines-macro-usage)
 
 #endif // MATH_LIB_VECTOR_BENCHMARK_H

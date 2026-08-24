@@ -22,7 +22,6 @@ FetchContent_MakeAvailable(benchmark)
 
 set(BENCHMARK_SOURCES
     BenchmarkHeader.hpp
-    BenchmarkMaker.cpp
     BenchmarkMaker.hpp
     HardwareAlignedVector.hpp
     main.cpp
