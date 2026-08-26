@@ -48,7 +48,7 @@ namespace MathLib::Benchmark
     }
 
     template<Matrix T, bool hardwareAlign>
-    void transpose(benchmark::State& state)
+    void transposeInPlace(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
         size_t i = 0;
@@ -58,9 +58,9 @@ namespace MathLib::Benchmark
         {
             for (size_t j = 0; j < batchSize; ++j)
             {
-                const T& m = matrices[i];
-                auto transpose = m.getTranspose();
-                benchmark::DoNotOptimize(transpose);
+                T result = matrices[i];
+                result.transpose();
+                benchmark::DoNotOptimize(result);
                 ++i;
                 if (i == matrices.size())
                     i = 0;
@@ -122,7 +122,7 @@ namespace MathLib::Benchmark
         ->MinTime(1.0)                                                                                                 \
         ->Repetitions(10)                                                                                              \
         ->ReportAggregatesOnly(true);                                                                                  \
-    BENCHMARK_TEMPLATE(transpose, MatrixType, HardwareAlign)                                                           \
+    BENCHMARK_TEMPLATE(transposeInPlace, MatrixType, HardwareAlign)                                                    \
         ->MinTime(1.0)                                                                                                 \
         ->Repetitions(10)                                                                                              \
         ->ReportAggregatesOnly(true);                                                                                  \

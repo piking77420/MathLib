@@ -146,60 +146,19 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Matrix3x3& transpose() noexcept
         {
-#if defined(SIMD_AVX)
-            // [a, b | c, X]     // [a, e | i, X] 0
-            // [e, f | g, X]  -> // [b, f | j, X] 1
-            // [i, j | k, X]     // [c, g | k, X] 2
-
-            const __m256d zero = _mm256_setzero_pd();
-
-            // [a, e | c, g]
-            const __m256d t0 = _mm256_unpacklo_pd(m_data[0], m_data[1]);
-
-            // [b, f | X, X]
-            const __m256d t1 = _mm256_unpackhi_pd(m_data[0], m_data[1]);
-
-            // [i, 0 | k, 0]
-            const __m256d t2 = _mm256_unpacklo_pd(m_data[2], zero);
-
-            // [j, 0 | X, 0]
-            const __m256d t3 = _mm256_unpackhi_pd(m_data[2], zero);
-
-            // [a, e | i, 0]
-            // in selector layout first 00() in the first byte select source for result LOW 128
-            // in selector layout first 00() in the second byte select source for result HIGH 128
-            // 00 -> a.low
-            // 01 -> a.high
-            // 10 -> b.low
-            // 11 -> b.high
-            constexpr int selector1 = 0b0010'0000;
-            m_data[0] = _mm256_permute2f128_pd(t0, t2, selector1);
-
-            // [b, f | j, 0]
-            m_data[1] = _mm256_permute2f128_pd(t1, t3, selector1);
-
-            // [c, g | k, 0]
-            constexpr int selector2 = 0b0011'0001;
-            m_data[2] = _mm256_permute2f128_pd(t0, t2, selector2);
-
-#else
             double* ptr = reinterpret_cast<double*>(&m_data[0]);
-
-            // carefull vector3 are using 4 elements
             static constexpr std::size_t m12offset = 1;
             static constexpr std::size_t m13offset = 2;
 
-            static constexpr std::size_t m21offset = 4;
-            static constexpr std::size_t m23offset = 6;
+            static constexpr std::size_t m21offset = 3;
+            static constexpr std::size_t m23offset = 5;
 
-            static constexpr std::size_t m31offset = 8;
-            static constexpr std::size_t m32offset = 9;
+            static constexpr std::size_t m31offset = 6;
+            static constexpr std::size_t m32offset = 7;
 
             std::swap(ptr[m12offset], ptr[m21offset]);
             std::swap(ptr[m13offset], ptr[m31offset]);
             std::swap(ptr[m23offset], ptr[m32offset]);
-
-#endif // SIMD_SSE2
 
             return *this;
         }
