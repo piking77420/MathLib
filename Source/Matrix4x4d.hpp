@@ -131,103 +131,103 @@ namespace MathLib
             return m_data[3].getW();
         }
 
-        Matrix4x4& setM11(double getM11) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM11(double getM11) noexcept
         {
             m_data[0].setX(getM11);
             return *this;
         }
 
-        Matrix4x4& setM12(double getM12) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM12(double getM12) noexcept
         {
             m_data[0].setY(getM12);
             return *this;
         }
 
-        Matrix4x4& setM13(double getM13) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM13(double getM13) noexcept
         {
             m_data[0].setZ(getM13);
             return *this;
         }
 
-        Matrix4x4& setM14(double getM14) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM14(double getM14) noexcept
         {
             m_data[0].setW(getM14);
             return *this;
         }
 
-        Matrix4x4& setM21(double getM21) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM21(double getM21) noexcept
         {
             m_data[1].setX(getM21);
             return *this;
         }
 
-        Matrix4x4& setM22(double getM22) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM22(double getM22) noexcept
         {
             m_data[1].setY(getM22);
             return *this;
         }
 
-        Matrix4x4& setM23(double getM23) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM23(double getM23) noexcept
         {
             m_data[1].setZ(getM23);
             return *this;
         }
 
-        Matrix4x4& setM24(double getM24) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM24(double getM24) noexcept
         {
             m_data[1].setW(getM24);
             return *this;
         }
 
-        Matrix4x4& setM31(double getM31) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM31(double getM31) noexcept
         {
             m_data[2].setX(getM31);
             return *this;
         }
 
-        Matrix4x4& setM32(double getM32) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM32(double getM32) noexcept
         {
             m_data[2].setY(getM32);
             return *this;
         }
 
-        Matrix4x4& setM33(double getM33) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM33(double getM33) noexcept
         {
             m_data[2].setZ(getM33);
             return *this;
         }
 
-        Matrix4x4& setM34(double getM34) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM34(double getM34) noexcept
         {
             m_data[2].setW(getM34);
             return *this;
         }
 
-        Matrix4x4& setM41(double getM41) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM41(double getM41) noexcept
         {
             m_data[3].setX(getM41);
             return *this;
         }
 
-        Matrix4x4& setM42(double getM42) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM42(double getM42) noexcept
         {
             m_data[3].setY(getM42);
             return *this;
         }
 
-        Matrix4x4& setM43(double getM43) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM43(double getM43) noexcept
         {
             m_data[3].setZ(getM43);
             return *this;
         }
 
-        Matrix4x4& setM44(double getM44) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM44(double getM44) noexcept
         {
             m_data[3].setW(getM44);
             return *this;
         }
 
-        Matrix4x4& transpose() noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& transpose() noexcept
         {
 #if defined(SIMD_AVX)
             // [a e c g]
@@ -282,18 +282,21 @@ namespace MathLib
 
             std::swap(ptr[m34offset], ptr[m43offset]);
 
-#endif // SIMD_SSE2
+#endif // SIMD_AVX
 
             return *this;
         }
 
-        Matrix4x4 getTranspose() const noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4 getTranspose() const noexcept
         {
             Matrix4x4 m = (*this);
             return m.transpose();
         }
 
-        double determinant() const noexcept;
+        MATH_LIB_FORCE_INLINE double determinant() const noexcept
+        {
+            return Vector4d::dot(m_data[0], Vector4d::cross(m_data[1], m_data[2], m_data[3]));
+        }
 
         Matrix4x4& inverse() noexcept;
 

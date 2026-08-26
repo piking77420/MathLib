@@ -342,8 +342,6 @@ namespace MathLib
         {
             ASSERT_IS_FINITE(a);
             ASSERT_IS_FINITE(b);
-            // TODO add test for correctness and winding order
-
 #if defined(SIMD_AVX)
             // TODO enhence with AVX2
             // [y, z, x, w]
@@ -364,6 +362,11 @@ namespace MathLib
 
             return Vector3(x, y, z);
 #endif
+        }
+
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE double mix(const Vector3& a, const Vector3& b, const Vector3& c)
+        {
+            return Vector3::dot(a, Vector3::cross(b, c));
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const

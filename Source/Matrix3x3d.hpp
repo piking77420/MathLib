@@ -215,15 +215,28 @@ namespace MathLib
             return Vector3d::dot(m_data[0], Vector3d::cross(m_data[1], m_data[2]));
         }
 
-        Matrix3x3& inverse() noexcept;
+        MATH_LIB_FORCE_INLINE Matrix3x3& inverse() noexcept
+        {
+            const Vector3d cofactor0 = Vector3d::cross(m_data[1], m_data[2]);
+            const double determinant = Vector3d::dot(m_data[0], cofactor0);
 
-        Matrix3x3 getInverse() const noexcept
+            if (fuzzyZero(determinant))
+                return *this;
+
+            const double invDeterminant = (1.0 / determinant);
+            const Vector3d cofactor1 = Vector3d::cross(m_data[2], m_data[0]);
+            const Vector3d cofactor2 = Vector3d::cross(m_data[0], m_data[1]);
+            *this = Matrix3x3(cofactor0, cofactor1, cofactor2).transpose() * invDeterminant;
+            return *this;
+        }
+
+        MATH_LIB_FORCE_INLINE Matrix3x3 getInverse() const noexcept
         {
             Matrix3x3 m = *this;
             return m.inverse();
         }
 
-        Matrix3x3& operator+=(const double value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& operator+=(const double value) noexcept
         {
             m_data[0] += value;
             m_data[1] += value;
@@ -231,14 +244,14 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix3x3 operator+(double scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix3x3 operator+(double scalar) const
         {
             Matrix3x3 result = *this;
             result += scalar;
             return result;
         }
 
-        Matrix3x3& operator-=(const double value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& operator-=(const double value) noexcept
         {
             m_data[0] -= value;
             m_data[1] -= value;
@@ -246,14 +259,14 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix3x3 operator-(double scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix3x3 operator-(double scalar) const
         {
             Matrix3x3 result = *this;
             result -= scalar;
             return result;
         }
 
-        Matrix3x3& operator*=(const double value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& operator*=(const double value) noexcept
         {
             m_data[0] *= value;
             m_data[1] *= value;
@@ -261,14 +274,14 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix3x3 operator*(double scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix3x3 operator*(double scalar) const
         {
             Matrix3x3 result = *this;
             result *= scalar;
             return result;
         }
 
-        Matrix3x3& operator/=(const double value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& operator/=(const double value) noexcept
         {
             m_data[0] /= value;
             m_data[1] /= value;
@@ -276,14 +289,14 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix3x3 operator/(double scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix3x3 operator/(double scalar) const
         {
             Matrix3x3 result = *this;
             result /= scalar;
             return result;
         }
 
-        Matrix3x3& operator+=(const Matrix3x3& rhs) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& operator+=(const Matrix3x3& rhs) noexcept
         {
             m_data[0] += rhs.m_data[0];
             m_data[1] += rhs.m_data[1];
@@ -291,14 +304,14 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix3x3 operator+(const Matrix3x3& rhs) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix3x3 operator+(const Matrix3x3& rhs) const
         {
             Matrix3x3 result = *this;
             result += rhs;
             return result;
         }
 
-        Matrix3x3& operator-=(const Matrix3x3& rhs) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& operator-=(const Matrix3x3& rhs) noexcept
         {
             m_data[0] -= rhs.m_data[0];
             m_data[1] -= rhs.m_data[1];
@@ -306,20 +319,20 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix3x3 operator-(const Matrix3x3& rhs) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix3x3 operator-(const Matrix3x3& rhs) const
         {
             Matrix3x3 result = *this;
             result -= rhs;
             return result;
         }
 
-        [[nodiscard]] Vector3d operator*(const Vector3d& rhs) const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector3d operator*(const Vector3d& rhs) const noexcept
         {
             return Vector3d(Vector3d::dot(m_data[0], rhs), Vector3d::dot(m_data[1], rhs),
                             Vector3d::dot(m_data[2], rhs));
         }
 
-        Matrix3x3& operator*=(Matrix3x3 rhs) noexcept
+        MATH_LIB_FORCE_INLINE Matrix3x3& operator*=(Matrix3x3 rhs) noexcept
         {
             // because the matrix is row layout and we want to only do an dot product
             // we transopse the other matrix to make the base row * coloms multiplication
@@ -343,19 +356,19 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix3x3 operator*(const Matrix3x3& rhs) const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix3x3 operator*(const Matrix3x3& rhs) const noexcept
         {
             Matrix3x3 m = *this;
             m *= rhs;
             return m;
         }
 
-        bool operator==(const Matrix3x3& rhs) const noexcept
+        MATH_LIB_FORCE_INLINE bool operator==(const Matrix3x3& rhs) const noexcept
         {
             return m_data[0] == rhs.m_data[0] && m_data[1] == rhs.m_data[1] && m_data[2] == rhs.m_data[2];
         }
 
-        bool operator!=(const Matrix3x3& rhs) const noexcept
+        MATH_LIB_FORCE_INLINE bool operator!=(const Matrix3x3& rhs) const noexcept
         {
             return !this->operator==(rhs);
         }

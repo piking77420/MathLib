@@ -144,9 +144,17 @@ namespace MathLib::Benchmark
             const T& v1 = vectors[i++ % vectors.size()];
             const T& v2 = vectors[i++ % vectors.size()];
 
-            auto result = T::cross(v1, v2);
-
-            benchmark::DoNotOptimize(result);
+            if constexpr (std::is_same_v<T, Vector4<double>>)
+            {
+                const T& v3 = vectors[i++ % vectors.size()];
+                auto result = T::cross(v1, v2, v3);
+                benchmark::DoNotOptimize(result);
+            }
+            else
+            {
+                auto result = T::cross(v1, v2);
+                benchmark::DoNotOptimize(result);
+            }
         }
     }
 
