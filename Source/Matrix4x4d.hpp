@@ -229,31 +229,6 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Matrix4x4& transpose() noexcept
         {
-#if defined(SIMD_AVX)
-            // [a e c g]
-            const __m256d t0 = _mm256_unpacklo_pd(m_data[0], m_data[1]);
-
-            // [b f d h]
-            const __m256d t1 = _mm256_unpackhi_pd(m_data[0], m_data[1]);
-
-            // [i m k o]
-            const __m256d t2 = _mm256_unpacklo_pd(m_data[2], m_data[3]);
-
-            // [j n l p]
-            const __m256d t3 = _mm256_unpackhi_pd(m_data[2], m_data[3]);
-
-            // [a e i m]
-            m_data[0] = _mm256_permute2f128_pd(t0, t2, 0x20);
-
-            // [b f j n]
-            m_data[1] = _mm256_permute2f128_pd(t1, t3, 0x20);
-
-            // [c g k o]
-            m_data[2] = _mm256_permute2f128_pd(t0, t2, 0x31);
-
-            // [d h l p]
-            m_data[3] = _mm256_permute2f128_pd(t1, t3, 0x31);
-#else
             double* ptr = reinterpret_cast<double*>(&m_data[0]);
 
             static constexpr std::size_t m12offset = 1;
@@ -281,9 +256,6 @@ namespace MathLib
             std::swap(ptr[m24offset], ptr[m42offset]);
 
             std::swap(ptr[m34offset], ptr[m43offset]);
-
-#endif // SIMD_AVX
-
             return *this;
         }
 

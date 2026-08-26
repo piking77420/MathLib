@@ -29,8 +29,11 @@ namespace MathLib::Benchmark
         std::size_t i = 0;
         for (auto _ : state)
         {
-            const T& v1 = vectors[i++ % vectors.size()];
-            const T& v2 = vectors[i++ % vectors.size()];
+            const T& v1 = vectors[i];
+            ++i;
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i];
             auto result = T::dot(v1, v2);
             benchmark::DoNotOptimize(result);
         }
@@ -43,9 +46,12 @@ namespace MathLib::Benchmark
         std::size_t i = 0;
         for (auto _ : state)
         {
-            const T& v = vectors[i++ % vectors.size()];
+            const T& v = vectors[i];
             auto result = v.lengthSquare();
             benchmark::DoNotOptimize(result);
+            ++i;
+            if (i == vectors.size())
+                i = 0;
         }
     }
 
@@ -56,9 +62,12 @@ namespace MathLib::Benchmark
         std::size_t i = 0;
         for (auto _ : state)
         {
-            const T& v = vectors[i++ % vectors.size()];
+            const T& v = vectors[i];
             auto result = v.length();
             benchmark::DoNotOptimize(result);
+            ++i;
+            if (i == vectors.size())
+                i = 0;
         }
     }
 
@@ -71,11 +80,12 @@ namespace MathLib::Benchmark
 
         for (auto _ : state)
         {
-            const T& v1 = vectors[i++ % vectors.size()];
-            const T& v2 = vectors[i++ % vectors.size()];
-
+            const T& v1 = vectors[i];
+            ++i;
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i];
             auto result = T::distanceSquare(v1, v2);
-
             benchmark::DoNotOptimize(result);
         }
     }
@@ -89,17 +99,18 @@ namespace MathLib::Benchmark
 
         for (auto _ : state)
         {
-            const T& v1 = vectors[i++ % vectors.size()];
-            const T& v2 = vectors[i++ % vectors.size()];
-
+            const T& v1 = vectors[i];
+            ++i;
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i];
             auto result = T::distance(v1, v2);
-
             benchmark::DoNotOptimize(result);
         }
     }
 
     template<VectorMath T, bool hardwareAlign>
-    void getNormalize(benchmark::State& state)
+    void normalize(benchmark::State& state)
     {
         static const auto vectors = makeRandom<T, hardwareAlign>();
 
@@ -107,16 +118,17 @@ namespace MathLib::Benchmark
 
         for (auto _ : state)
         {
-            const T& v = vectors[i++ % vectors.size()];
-
-            auto result = v.getNormalize();
-
-            benchmark::DoNotOptimize(result);
+            T v = vectors[i];
+            v.normalize();
+            benchmark::DoNotOptimize(v);
+            ++i;
+            if (i == vectors.size())
+                i = 0;
         }
     }
 
     template<VectorMath T, bool hardwareAlign>
-    void getNormalizeFast(benchmark::State& state)
+    void normalizeFast(benchmark::State& state)
     {
         static const auto vectors = makeRandom<T, hardwareAlign>();
 
@@ -124,11 +136,12 @@ namespace MathLib::Benchmark
 
         for (auto _ : state)
         {
-            const T& v = vectors[i++ % vectors.size()];
-
-            auto result = v.getNormalizeFast();
-
-            benchmark::DoNotOptimize(result);
+            T v = vectors[i];
+            v.normalizeFast();
+            benchmark::DoNotOptimize(v);
+            ++i;
+            if (i == vectors.size())
+                i = 0;
         }
     }
 
@@ -141,12 +154,18 @@ namespace MathLib::Benchmark
 
         for (auto _ : state)
         {
-            const T& v1 = vectors[i++ % vectors.size()];
-            const T& v2 = vectors[i++ % vectors.size()];
+            const T& v1 = vectors[i];
+            ++i;
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i];
 
             if constexpr (std::is_same_v<T, Vector4<double>>)
             {
-                const T& v3 = vectors[i++ % vectors.size()];
+                ++i;
+                if (i == vectors.size())
+                    i = 0;
+                const T& v3 = vectors[i];
                 auto result = T::cross(v1, v2, v3);
                 benchmark::DoNotOptimize(result);
             }
@@ -167,8 +186,11 @@ namespace MathLib::Benchmark
 
         for (auto _ : state)
         {
-            const T& v1 = vectors[i++ % vectors.size()];
-            const T& v2 = vectors[i++ % vectors.size()];
+            const T& v1 = vectors[i];
+            ++i;
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i];
 
             auto result = T::max(v1, v2);
 
@@ -185,8 +207,11 @@ namespace MathLib::Benchmark
 
         for (auto _ : state)
         {
-            const T& v1 = vectors[i++ % vectors.size()];
-            const T& v2 = vectors[i++ % vectors.size()];
+            const T& v1 = vectors[i];
+            ++i;
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i];
 
             auto result = T::min(v1, v2);
 
@@ -201,8 +226,11 @@ namespace MathLib::Benchmark
         std::size_t i = 0;
         for (auto _ : state)
         {
-            const T& v = vectors[i++ % vectors.size()];
+            const T& v = vectors[i];
             auto result = v.abs();
+            ++i;
+            if (i == vectors.size())
+                i = 0;
             benchmark::DoNotOptimize(result);
         }
     }
@@ -213,8 +241,8 @@ namespace MathLib::Benchmark
     BENCHMARK_TEMPLATE(length, VectorType, HardwareAlign);                                                             \
     BENCHMARK_TEMPLATE(distanceSquare, VectorType, HardwareAlign);                                                     \
     BENCHMARK_TEMPLATE(distance, VectorType, HardwareAlign);                                                           \
-    BENCHMARK_TEMPLATE(getNormalize, VectorType, HardwareAlign);                                                       \
-    BENCHMARK_TEMPLATE(getNormalizeFast, VectorType, HardwareAlign);                                                   \
+    BENCHMARK_TEMPLATE(normalize, VectorType, HardwareAlign);                                                          \
+    BENCHMARK_TEMPLATE(normalizeFast, VectorType, HardwareAlign);                                                      \
     BENCHMARK_TEMPLATE(cross, VectorType, HardwareAlign);                                                              \
     BENCHMARK_TEMPLATE(min, VectorType, HardwareAlign);                                                                \
     BENCHMARK_TEMPLATE(max, VectorType, HardwareAlign);                                                                \
