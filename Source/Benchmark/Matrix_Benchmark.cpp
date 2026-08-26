@@ -2,6 +2,7 @@
 #define MATH_LIB_MATRIX_BENCHMARK_H
 
 #include <cstddef>
+#include <cstdint>
 #include <benchmark/benchmark.h>
 #include <BenchmarkHeader.hpp>
 #include <BenchmarkMaker.hpp>
@@ -29,40 +30,66 @@ namespace MathLib::Benchmark
     void determinant(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
-        std::size_t i = 0;
+        size_t i = 0;
+        constexpr int64_t batchSize = 32;
         for (auto _ : state)
         {
-            const T& m = matrices[i++ % matrices.size()];
-            const auto result = m.determinant();
-            benchmark::DoNotOptimize(result);
+            for (size_t j = 0; j < batchSize; ++j)
+            {
+                const T& m = matrices[i];
+                auto result = m.determinant();
+                benchmark::DoNotOptimize(result);
+                ++i;
+                if (i == matrices.size())
+                    i = 0;
+            }
         }
+        state.SetItemsProcessed(state.iterations() * batchSize);
     }
 
     template<Matrix T, bool hardwareAlign>
     void transpose(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
-        std::size_t i = 0;
+        size_t i = 0;
+        constexpr int64_t batchSize = 32;
+
         for (auto _ : state)
         {
-            const T& m = matrices[i++ % matrices.size()];
-            const auto transpose = m.getTranspose();
-            benchmark::DoNotOptimize(transpose);
+            for (size_t j = 0; j < batchSize; ++j)
+            {
+                const T& m = matrices[i];
+                auto transpose = m.getTranspose();
+                benchmark::DoNotOptimize(transpose);
+                ++i;
+                if (i == matrices.size())
+                    i = 0;
+            }
         }
+        state.SetItemsProcessed(state.iterations() * batchSize);
     }
 
     template<Matrix T, bool hardwareAlign>
     void inverse(benchmark::State& state)
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
-        std::size_t i = 0;
+        size_t i = 0;
+        constexpr int64_t batchSize = 32;
+
         for (auto _ : state)
         {
-            const T& m = matrices[i++ % matrices.size()];
-            const auto inverse = m.getInverse();
+            for (size_t j = 0; j < batchSize; ++j)
+            {
+                const T& m = matrices[i];
+                auto inverse = m.getInverse();
 
-            benchmark::DoNotOptimize(inverse);
+                benchmark::DoNotOptimize(inverse);
+                ++i;
+                if (i == matrices.size())
+                    i = 0;
+            }
         }
+        state.SetItemsProcessed(state.iterations() * batchSize);
     }
 
     template<Matrix T, bool hardwareAlign>
@@ -70,40 +97,55 @@ namespace MathLib::Benchmark
     {
         static const auto matrices = makeRandom<T, hardwareAlign>();
         static const auto vectors = makeRandom<typename T::_VectorType, hardwareAlign>();
-        std::size_t i = 0;
-        for (auto _ : state)
+        size_t i = 0;
+        constexpr int64_t batchSize = 32;
+        for (size_t j = 0; j < batchSize; ++j)
         {
-            const T& m = matrices[i++ % matrices.size()];
-            const auto& v = vectors[i % vectors.size()];
-            auto result = m * v;
-            benchmark::DoNotOptimize(result);
+            for (auto _ : state)
+            {
+                const T& m = matrices[i];
+                const auto& v = vectors[i];
+                auto result = m * v;
+                benchmark::DoNotOptimize(result);
+                ++i;
+                if (i == matrices.size())
+                    i = 0;
+            }
         }
+        state.SetItemsProcessed(state.iterations() * batchSize);
     }
+
     static constexpr size_t iterationCount = 1'000'000ull;
 
 #define MAKE_BENCHMARK_MATRIX(MatrixType, HardwareAlign)                                                               \
-    BENCHMARK_TEMPLATE(determinant, MatrixType, HardwareAlign);                                                        \
-    BENCHMARK_TEMPLATE(transpose, MatrixType, HardwareAlign);                                                          \
-    BENCHMARK_TEMPLATE(inverse, MatrixType, HardwareAlign);                                                            \
-    BENCHMARK_TEMPLATE(multiplyVector, MatrixType, HardwareAlign);
+    BENCHMARK_TEMPLATE(determinant, MatrixType, HardwareAlign)                                                         \
+        ->MinTime(1.0)                                                                                                 \
+        ->Repetitions(10)                                                                                              \
+        ->ReportAggregatesOnly(true);                                                                                  \
+    BENCHMARK_TEMPLATE(transpose, MatrixType, HardwareAlign)                                                           \
+        ->MinTime(1.0)                                                                                                 \
+        ->Repetitions(10)                                                                                              \
+        ->ReportAggregatesOnly(true);                                                                                  \
+    BENCHMARK_TEMPLATE(inverse, MatrixType, HardwareAlign)->MinTime(1.0)->Repetitions(10)->ReportAggregatesOnly(true); \
+    BENCHMARK_TEMPLATE(multiplyVector, MatrixType, HardwareAlign)                                                      \
+        ->MinTime(1.0)                                                                                                 \
+        ->Repetitions(10)                                                                                              \
+        ->ReportAggregatesOnly(true);
 
     namespace Matrix2x2dBenchmark
     {
         MAKE_BENCHMARK_MATRIX(Matrix2x2d, falseSharing);
-        MAKE_BENCHMARK_MATRIX(Matrix2x2d, avoidFalseSharing);
     } // namespace Matrix2x2dBenchmark
 
     namespace Matrix3x3Benchmark
     {
         MAKE_BENCHMARK_MATRIX(Matrix3x3d, falseSharing);
-        MAKE_BENCHMARK_MATRIX(Matrix3x3d, avoidFalseSharing);
 
     } // namespace Matrix3x3Benchmark
 
     namespace Matrix4x4Benchmark
     {
         MAKE_BENCHMARK_MATRIX(Matrix4x4d, falseSharing);
-        MAKE_BENCHMARK_MATRIX(Matrix4x4d, avoidFalseSharing);
 
     } // namespace Matrix4x4Benchmark
 }

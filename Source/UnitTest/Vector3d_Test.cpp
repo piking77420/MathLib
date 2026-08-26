@@ -538,7 +538,7 @@ TEST(TestVector3, cross)
         Vector3d a = Vector3d(3.0, -2.0, 5.0);
         setHighLaneValue(a, -4.0);
         Vector3d b = Vector3d(-1.0, 4.0, 2.0);
-        setHighLaneValue(a, 10.0);
+        setHighLaneValue(b, 10.0);
 
         const Vector3d result = Vector3d::cross(a, b);
         EXPECT_DOUBLE_EQ(result.getX(), -24.0);
