@@ -10,39 +10,31 @@ namespace MathLib
 
     Vector2<double> Vector3<double>::xz() const noexcept
     {
-        return static_cast<Vector2d>(xzy());
+        return Vector2d(m_x, m_z);
     }
 
     Vector2<double> Vector3<double>::yx() const noexcept
     {
-#if defined(SIMD_AVX)
-        return Vector2d(_mm_permute_pd(_mm256_castpd256_pd128(m_data), 0b01));
-#else
-        return static_cast<Vector2d>(yxz());
-#endif
+        return Vector2d(m_y, m_x);
     }
 
     Vector2<double> Vector3<double>::yz() const noexcept
     {
-        return static_cast<Vector2d>(yzx());
+        return Vector2d(m_y, m_z);
     }
 
     Vector2<double> Vector3<double>::zx() const noexcept
     {
-        return static_cast<Vector2d>(zxy());
+        return Vector2d(m_z, m_x);
     }
 
     Vector2<double> Vector3<double>::zy() const noexcept
     {
-        return static_cast<Vector2d>(zyx());
+        return Vector2d(m_z, m_y);
     }
 
     Vector3<double>::operator Vector2<double>() const noexcept
     {
-#if defined(SIMD_AVX)
-        return Vector2<double>(_mm256_castpd256_pd128(m_data));
-#else
         return Vector2d(m_x, m_y);
-#endif
     }
 } // namespace MathLib

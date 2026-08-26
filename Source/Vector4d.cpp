@@ -7,20 +7,34 @@ namespace MathLib
 {
     Vector4<double> Vector4<double>::cross(const Vector4& a, const Vector4& b, const Vector4& c) noexcept
     {
-        // clang-format off
-        const Matrix3x3<double> m0 = Matrix3x3<double>(static_cast<Vector3d>(a.yzwx()),
-                                                       static_cast<Vector3d>(b.yzwx()), 
-                                                       static_cast<Vector3d>(c.yzwx()));
-        const Matrix3x3<double> m1 = Matrix3x3<double>(static_cast<Vector3d>(a.xzwy()),
-                                                       static_cast<Vector3d>(b.xzwy()), 
-                                                       static_cast<Vector3d>(c.xzwy()));
-        const Matrix3x3<double> m2 = Matrix3x3<double>(static_cast<Vector3d>(a.xywz()),
-                                                       static_cast<Vector3d>(b.xywz()), 
-                                                       static_cast<Vector3d>(c.xywz()));
+        std::array<double, 4> af;
+        std::array<double, 4> bf;
+        std::array<double, 4> cf;
 
-        const Matrix3x3<double> m3 = Matrix3x3<double>(static_cast<Vector3d>(a),
-                                                       static_cast<Vector3d>(b), 
-                                                       static_cast<Vector3d>(c));
+        a.storeToUnalignedDouble(af);
+        b.storeToUnalignedDouble(bf);
+        c.storeToUnalignedDouble(cf);
+
+        // clang-format off
+        const Matrix3x3d m0(
+            af[1], af[2], af[3],
+            bf[1], bf[2], bf[3],
+            cf[1], cf[2], cf[3]);
+
+        const Matrix3x3d m1(
+            af[0], af[2], af[3],
+            bf[0], bf[2], bf[3],
+            cf[0], cf[2], cf[3]);
+
+        const Matrix3x3d m2(
+            af[0], af[1], af[3],
+            bf[0], bf[1], bf[3],
+            cf[0], cf[1], cf[3]);
+
+        const Matrix3x3d m3(
+            af[0], af[1], af[2],
+            bf[0], bf[1], bf[2],
+            cf[0], cf[1], cf[2]);
         // clang-format on
 
         return Vector4<double>(m0.determinant(), -m1.determinant(), m2.determinant(), -m3.determinant());
@@ -117,8 +131,9 @@ namespace MathLib
     Vector4<double>::operator Vector3<double>() const noexcept
     {
 #if defined(SIMD_AVX)
-        // Vector3<double> stores [x, y, z, unused] in __m256d
-        return Vector3<double>(m_data);
+        std::array<double, 4> data;
+        storeToAlignedDouble(data);
+        return Vector3<double>(data[0], data[1], data[2]);
 #else
         return Vector3<double>(m_x, m_y, m_z);
 #endif
