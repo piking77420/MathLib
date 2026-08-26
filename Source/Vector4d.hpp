@@ -448,11 +448,7 @@ namespace MathLib
             return fuzzyEqual(getW(), 1.0);
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 cross(const Vector4& a, const Vector4& b) noexcept
-        {
-            // TODO
-            return Vector4::zero();
-        }
+        [[nodiscard]] static Vector4 cross(const Vector4& a, const Vector4& b, const Vector4& c) noexcept;
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 min(const Vector4& a, const Vector4& b) noexcept
         {

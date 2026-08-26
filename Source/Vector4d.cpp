@@ -1,9 +1,31 @@
+#include <Matrix3x3d.hpp>
 #include <Vector4d.hpp>
 #include <Vector3d.hpp>
 #include <Vector2d.hpp>
 
 namespace MathLib
 {
+    Vector4<double> Vector4<double>::cross(const Vector4& a, const Vector4& b, const Vector4& c) noexcept
+    {
+        // clang-format off
+        const Matrix3x3<double> m0 = Matrix3x3<double>(static_cast<Vector3d>(a.yzwx()),
+                                                       static_cast<Vector3d>(b.yzwx()), 
+                                                       static_cast<Vector3d>(c.yzwx()));
+        const Matrix3x3<double> m1 = Matrix3x3<double>(static_cast<Vector3d>(a.xzwy()),
+                                                       static_cast<Vector3d>(b.xzwy()), 
+                                                       static_cast<Vector3d>(c.xzwy()));
+        const Matrix3x3<double> m2 = Matrix3x3<double>(static_cast<Vector3d>(a.xywz()),
+                                                       static_cast<Vector3d>(b.xywz()), 
+                                                       static_cast<Vector3d>(c.xywz()));
+
+        const Matrix3x3<double> m3 = Matrix3x3<double>(static_cast<Vector3d>(a),
+                                                       static_cast<Vector3d>(b), 
+                                                       static_cast<Vector3d>(c));
+        // clang-format on
+
+        return Vector4<double>(m0.determinant(), -m1.determinant(), m2.determinant(), -m3.determinant());
+    }
+
     Vector3<double> Vector4<double>::xyz() const noexcept
     {
         return static_cast<Vector3<double>>(*this);

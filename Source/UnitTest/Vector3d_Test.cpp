@@ -10,17 +10,36 @@
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 using namespace MathLib;
 
-constexpr bool isValidHighLane([[maybe_unused]] const Vector3d& _v)
+double getHightLaneValue([[maybe_unused]] const Vector3d& v)
 {
 #if defined(SIMD_AVX)
-    const __m128d zw = _mm256_extractf128_pd(_v, 1);
+    const __m128d zw = _mm256_extractf128_pd(v, 1);
     double w = _mm_cvtsd_f64(_mm_unpackhi_pd(zw, zw));
 
     // bot are valid exemple when we negate an vector we dont handle the w component
-    return w == 0.0 || w == -0.0;
+    return w;
 #else
-    return true;
+    return 0.0;
 #endif // defined(SIMD_AVX)
+}
+
+void setHighLaneValue(Vector3d& v, double value)
+{
+#if defined(SIMD_AVX)
+    __m256d* lanes = reinterpret_cast<__m256d*>(&v);
+
+    *lanes = (_mm256_blend_pd(*lanes, _mm256_set1_pd(value), 0b1000));
+#else
+    double* datas = reinterpret_cast<double*>(&v);
+    datas[3] = value;
+#endif // defined(SIMD_AVX)
+}
+
+constexpr bool isValidHighLane(const Vector3d& v)
+{
+    const double w = getHightLaneValue(v);
+    // bot are valid exemple when we negate an vector we dont handle the w component
+    return w == 0.0 || w == -0.0;
 }
 
 TEST(TestVector3, Constructor)
@@ -503,6 +522,56 @@ TEST(TestVector3, cross)
         EXPECT_DOUBLE_EQ(minusX.getY(), 0.0);
         EXPECT_DOUBLE_EQ(minusX.getZ(), 0.0);
         EXPECT_TRUE(isValidHighLane(minusX));
+    }
+    // random
+    {
+        const Vector3d a = Vector3d(3.0, -2.0, 5.0);
+        const Vector3d b = Vector3d(-1.0, 4.0, 2.0);
+
+        const Vector3d result = Vector3d::cross(a, b);
+        EXPECT_DOUBLE_EQ(result.getX(), -24.0);
+        EXPECT_DOUBLE_EQ(result.getY(), -11.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 10.0);
+    }
+    // random with hack
+    {
+        Vector3d a = Vector3d(3.0, -2.0, 5.0);
+        setHighLaneValue(a, -4.0);
+        Vector3d b = Vector3d(-1.0, 4.0, 2.0);
+        setHighLaneValue(a, 10.0);
+
+        const Vector3d result = Vector3d::cross(a, b);
+        EXPECT_DOUBLE_EQ(result.getX(), -24.0);
+        EXPECT_DOUBLE_EQ(result.getY(), -11.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 10.0);
+    }
+}
+
+TEST(TestVector3, mix)
+{
+    {
+        const Vector3d a(1.0, 2.0, 3.0);
+        const Vector3d b(4.0, 5.0, 6.0);
+        const Vector3d c(7.0, 8.0, 10.0);
+
+        const double result = Vector3d::mix(a, b, c);
+
+        EXPECT_DOUBLE_EQ(result, -3.0);
+    }
+    // with high lanes corruption
+    {
+        {
+            Vector3d a(1.0, 2.0, 3.0);
+            setHighLaneValue(a, -4.0);
+            Vector3d b(4.0, 5.0, 6.0);
+            setHighLaneValue(b, 2.0);
+            Vector3d c(7.0, 8.0, 10.0);
+            setHighLaneValue(c, 90.0);
+
+            const double result = Vector3d::mix(a, b, c);
+
+            EXPECT_DOUBLE_EQ(result, -3.0);
+        }
     }
 }
 
