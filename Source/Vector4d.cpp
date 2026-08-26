@@ -1,3 +1,4 @@
+#include <array>
 #include <Matrix3x3d.hpp>
 #include <Vector4d.hpp>
 #include <Vector3d.hpp>
