@@ -396,7 +396,39 @@ namespace MathLib
             return fuzzyEqual(getW(), 1.0);
         }
 
-        [[nodiscard]] static Vector4 cross(const Vector4& a, const Vector4& b, const Vector4& c) noexcept;
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 cross(const Vector4& a, const Vector4& b,
+                                                                 const Vector4& c) noexcept
+        {
+            // Get all scalar
+            const double ax = a.getX();
+            const double ay = a.getY();
+            const double az = a.getZ();
+            const double aw = a.getW();
+
+            const double bx = b.getX();
+            const double by = b.getY();
+            const double bz = b.getZ();
+            const double bw = b.getW();
+
+            const double cx = c.getX();
+            const double cy = c.getY();
+            const double cz = c.getZ();
+            const double cw = c.getW();
+
+            // manually do the cors product or determinant
+            const double mYZ = by * cz - bz * cy;
+            const double mYW = by * cw - bw * cy;
+            const double mZW = bz * cw - bw * cz;
+
+            const double mXZ = bx * cz - bz * cx;
+            const double mXW = bx * cw - bw * cx;
+
+            const double mXY = bx * cy - by * cx;
+
+            // manuall dot
+            return Vector4(ay * mZW - az * mYW + aw * mYZ, -(ax * mZW - az * mXW + aw * mXZ),
+                           ax * mYW - ay * mXW + aw * mXY, -(ax * mYZ - ay * mXZ + az * mXY));
+        }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 min(const Vector4& a, const Vector4& b) noexcept
         {

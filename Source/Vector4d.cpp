@@ -6,33 +6,6 @@
 
 namespace MathLib
 {
-    Vector4<double> Vector4<double>::cross(const Vector4& a, const Vector4& b, const Vector4& c) noexcept
-    {
-        // clang-format off
-        const Matrix3x3d m0(
-            a.getY(), a.getZ(), a.getW(),
-            b.getY(), b.getZ(), b.getW(),
-            c.getY(), c.getZ(), c.getW());
-
-        const Matrix3x3d m1(
-            a.getX(), a.getZ(), a.getW(),
-            b.getX(), b.getZ(), b.getW(),
-            c.getX(), c.getZ(), c.getW());
-
-        const Matrix3x3d m2(
-            a.getX(), a.getY(), a.getW(),
-            b.getX(), b.getY(), b.getW(),
-            c.getX(), c.getY(), c.getW());
-
-        const Matrix3x3d m3(
-            a.getX(), a.getY(), a.getZ(),
-            b.getX(), b.getY(), b.getZ(),
-            c.getX(), c.getY(), c.getZ());
-        // clang-format on
-
-        return Vector4<double>(m0.determinant(), -m1.determinant(), m2.determinant(), -m3.determinant());
-    }
-
     Vector3<double> Vector4<double>::xyz() const noexcept
     {
         return static_cast<Vector3<double>>(*this);
