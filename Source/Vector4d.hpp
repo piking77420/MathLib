@@ -10,6 +10,8 @@
 #include <span>
 #include <MathLibHeader.hpp>
 
+#include <AVX.hpp>
+
 namespace MathLib
 {
     template<typename T>
@@ -28,19 +30,19 @@ namespace MathLib
     class Vector2<double>;
 
     template<>
-    class Vector4<double>
+    class alignas(VECTOR4D_ALIGNEMENT) Vector4<double>
     {
     public:
         explicit Vector4() = default;
 
         ~Vector4() = default;
 
-#if defined(SIMD_AVX)
-        MATH_LIB_FORCE_INLINE Vector4(__m256d data) noexcept
+#if defined(MATH_LIB_INTRINSIC)
+        MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
         {
-            _mm256_store_pd(reinterpret_cast<double*>(m_data.data()), data);
+            Simd::storeUnaligned(reg, m_data.data());
         }
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
 
         MATH_LIB_FORCE_INLINE explicit Vector4(double x, double y, double z, double w)
             : m_data({x, y, z, w})
@@ -100,64 +102,56 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Vector4& operator+=(const Vector4& other) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptrThis = reinterpret_cast<double*>(m_data.data());
-            const double* ptrOther = reinterpret_cast<const double*>(&other);
-            _mm256_store_pd(ptrThis, _mm256_add_pd(_mm256_load_pd(ptrThis), _mm256_load_pd(ptrOther)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::add(*this, other));
 #else
-            m_data[0] += other.getX();
+            m_data[0] += other.m_data[0];
             m_data[1] += other.m_data[1];
             m_data[2] += other.m_data[2];
             m_data[3] += other.m_data[3];
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
 
             ASSERT_IS_FINITE(*this) return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator-=(const Vector4& other) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptrThis = reinterpret_cast<double*>(m_data.data());
-            const double* ptrOther = reinterpret_cast<const double*>(&other);
-            _mm256_store_pd(ptrThis, _mm256_sub_pd(_mm256_load_pd(ptrThis), _mm256_load_pd(ptrOther)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::sub(*this, other));
 #else
-            m_data[0] -= other.getX();
+            m_data[0] -= other.m_data[0];
             m_data[1] -= other.m_data[1];
             m_data[2] -= other.m_data[2];
             m_data[3] -= other.m_data[3];
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator*=(const Vector4& other) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptrThis = reinterpret_cast<double*>(m_data.data());
-            const double* ptrOther = reinterpret_cast<const double*>(&other);
-            _mm256_store_pd(ptrThis, _mm256_mul_pd(_mm256_load_pd(ptrThis), _mm256_load_pd(ptrOther)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::mul(*this, other));
 #else
-            m_data[0] *= other.getX();
+            m_data[0] *= other.m_data[0];
             m_data[1] *= other.m_data[1];
             m_data[2] *= other.m_data[2];
             m_data[3] *= other.m_data[3];
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator/=(const Vector4& other) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptrThis = reinterpret_cast<double*>(m_data.data());
-            const double* ptrOther = reinterpret_cast<const double*>(&other);
-            _mm256_store_pd(ptrThis, _mm256_div_pd(_mm256_load_pd(ptrThis), _mm256_load_pd(ptrOther)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::div(*this, other));
 #else
-            m_data[0] /= other.getX();
+            m_data[0] /= other.m_data[0];
             m_data[1] /= other.m_data[1];
             m_data[2] /= other.m_data[2];
             m_data[3] /= other.m_data[3];
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
@@ -188,60 +182,56 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Vector4& operator+=(const double scalar) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptr = reinterpret_cast<double*>(m_data.data());
-            _mm256_store_pd(ptr, _mm256_add_pd(_mm256_load_pd(ptr), _mm256_set1_pd(scalar)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::add(*this, Simd::makeVector4D(scalar)));
 #else
             m_data[0] += scalar;
             m_data[1] += scalar;
             m_data[2] += scalar;
             m_data[3] += scalar;
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator-=(const double scalar) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptr = reinterpret_cast<double*>(m_data.data());
-            _mm256_store_pd(ptr, _mm256_sub_pd(_mm256_load_pd(ptr), _mm256_set1_pd(scalar)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::sub(*this, Simd::makeVector4D(scalar)));
 #else
             m_data[0] -= scalar;
             m_data[1] -= scalar;
             m_data[2] -= scalar;
             m_data[3] -= scalar;
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator*=(double scalar) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptr = reinterpret_cast<double*>(m_data.data());
-            _mm256_store_pd(ptr, _mm256_mul_pd(_mm256_load_pd(ptr), _mm256_set1_pd(scalar)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::mul(*this, Simd::makeVector4D(scalar)));
 #else
             m_data[0] *= scalar;
             m_data[1] *= scalar;
             m_data[2] *= scalar;
             m_data[3] *= scalar;
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator/=(double scalar) noexcept
         {
-#if defined(SIMD_AVX)
-            double* ptr = reinterpret_cast<double*>(m_data.data());
-            _mm256_store_pd(ptr, _mm256_div_pd(_mm256_load_pd(ptr), _mm256_set1_pd(scalar)));
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Vector4(Simd::div(*this, Simd::makeVector4D(scalar)));
 #else
             m_data[0] /= scalar;
             m_data[1] /= scalar;
             m_data[2] /= scalar;
             m_data[3] /= scalar;
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
             ASSERT_IS_FINITE(*this)
             return *this;
         }
@@ -415,26 +405,24 @@ namespace MathLib
         {
             ASSERT_IS_FINITE(a)
             ASSERT_IS_FINITE(b)
-#if defined(SIMD_AVX)
-            return _mm256_min_pd(_mm256_load_pd(reinterpret_cast<const double*>(&a)),
-                                 _mm256_load_pd(reinterpret_cast<const double*>(&b)));
+#if defined(MATH_LIB_INTRINSIC)
+            return Vector4(Simd::min(a, b));
 #else
             return Vector4(std::min(a.getX(), b.getX()), std::min(a.getY(), b.getY()), std::min(a.getZ(), b.getZ()),
                            std::min(a.getW(), b.getW()));
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 max(const Vector4& a, const Vector4& b) noexcept
         {
             ASSERT_IS_FINITE(a)
             ASSERT_IS_FINITE(b)
-#if defined(SIMD_AVX)
-            return _mm256_max_pd(_mm256_load_pd(reinterpret_cast<const double*>(&a)),
-                                 _mm256_load_pd(reinterpret_cast<const double*>(&b)));
+#if defined(MATH_LIB_INTRINSIC)
+            return Vector4(Simd::max(a, b));
 #else
             return Vector4(std::max(a.getX(), b.getX()), std::max(a.getY(), b.getY()), std::max(a.getZ(), b.getZ()),
                            std::max(a.getW(), b.getW()));
-#endif // defined(SIMD_AVX)
+#endif // defined(MATH_LIB_INTRINSIC)
         }
 
         static Vector4 unitX()
@@ -637,6 +625,13 @@ namespace MathLib
         explicit operator Vector3<double>() const noexcept;
 
         explicit operator Vector2<double>() const noexcept;
+
+#if defined(MATH_LIB_INTRINSIC)
+        operator Simd::VectorRegister4Double() const noexcept
+        {
+            return Simd::makeVector4DUnaligned(m_data.data());
+        }
+#endif // defined(MATH_LIB_INTRINSIC)
 
     private:
         std::array<double, 4> m_data;

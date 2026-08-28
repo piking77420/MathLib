@@ -235,6 +235,82 @@ namespace MathLib::Benchmark
         }
     }
 
+    template<VectorMath T, bool hardwareAlign>
+    void add(benchmark::State& state)
+    {
+        static const auto vectors = makeRandom<T, hardwareAlign>();
+        std::size_t i = 0;
+        for (auto _ : state)
+        {
+            const T& v1 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            auto result = v1 + v2;
+
+            benchmark::DoNotOptimize(result);
+        }
+    }
+
+    template<VectorMath T, bool hardwareAlign>
+    void sub(benchmark::State& state)
+    {
+        static const auto vectors = makeRandom<T, hardwareAlign>();
+        std::size_t i = 0;
+        for (auto _ : state)
+        {
+            const T& v1 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            auto result = v1 - v2;
+
+            benchmark::DoNotOptimize(result);
+        }
+    }
+
+    template<VectorMath T, bool hardwareAlign>
+    void mul(benchmark::State& state)
+    {
+        static const auto vectors = makeRandom<T, hardwareAlign>();
+        std::size_t i = 0;
+        for (auto _ : state)
+        {
+            const T& v1 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            auto result = v1 * v2;
+
+            benchmark::DoNotOptimize(result);
+        }
+    }
+
+    template<VectorMath T, bool hardwareAlign>
+    void div(benchmark::State& state)
+    {
+        static const auto vectors = makeRandom<T, hardwareAlign>();
+        std::size_t i = 0;
+        for (auto _ : state)
+        {
+            const T& v1 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            const T& v2 = vectors[i++];
+            if (i == vectors.size())
+                i = 0;
+            auto result = v1 / v2;
+
+            benchmark::DoNotOptimize(result);
+        }
+    }
+
 #define MAKE_BENCHMARK_VECTOR(VectorType, HardwareAlign)                                                               \
     BENCHMARK_TEMPLATE(dot, VectorType, HardwareAlign);                                                                \
     BENCHMARK_TEMPLATE(lengthSquare, VectorType, HardwareAlign);                                                       \
@@ -246,7 +322,11 @@ namespace MathLib::Benchmark
     BENCHMARK_TEMPLATE(cross, VectorType, HardwareAlign);                                                              \
     BENCHMARK_TEMPLATE(min, VectorType, HardwareAlign);                                                                \
     BENCHMARK_TEMPLATE(max, VectorType, HardwareAlign);                                                                \
-    BENCHMARK_TEMPLATE(abs, VectorType, HardwareAlign);
+    BENCHMARK_TEMPLATE(abs, VectorType, HardwareAlign);                                                                \
+    BENCHMARK_TEMPLATE(add, VectorType, HardwareAlign);                                                                \
+    BENCHMARK_TEMPLATE(sub, VectorType, HardwareAlign);                                                                \
+    BENCHMARK_TEMPLATE(mul, VectorType, HardwareAlign);                                                                \
+    BENCHMARK_TEMPLATE(div, VectorType, HardwareAlign);
 
     namespace Vector2Benchmark
     {
