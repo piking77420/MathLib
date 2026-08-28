@@ -99,9 +99,10 @@ namespace MathLib::Benchmark
         static const auto vectors = makeRandom<typename T::_VectorType, hardwareAlign>();
         size_t i = 0;
         constexpr int64_t batchSize = 32;
-        for (size_t j = 0; j < batchSize; ++j)
+
+        for (auto _ : state)
         {
-            for (auto _ : state)
+            for (size_t j = 0; j < batchSize; ++j)
             {
                 const T& m = matrices[i];
                 const auto& v = vectors[i];
@@ -112,6 +113,7 @@ namespace MathLib::Benchmark
                     i = 0;
             }
         }
+
         state.SetItemsProcessed(state.iterations() * batchSize);
     }
 
@@ -134,12 +136,12 @@ namespace MathLib::Benchmark
 
     namespace Matrix2x2dBenchmark
     {
-        MAKE_BENCHMARK_MATRIX(Matrix2x2d, falseSharing);
+        // MAKE_BENCHMARK_MATRIX(Matrix2x2d, falseSharing);
     } // namespace Matrix2x2dBenchmark
 
     namespace Matrix3x3Benchmark
     {
-        MAKE_BENCHMARK_MATRIX(Matrix3x3d, falseSharing);
+        // MAKE_BENCHMARK_MATRIX(Matrix3x3d, falseSharing);
 
     } // namespace Matrix3x3Benchmark
 

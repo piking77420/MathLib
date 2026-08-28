@@ -121,6 +121,7 @@
       "hidden": true,
       "cacheVariables": {
         "MATHLIB_USE_INTRINSIC": true,
+        "MATHLIB_USE_FMA": true,
         "MATHLIB_SIMD_EXT": "AVX2"
       }
     },
@@ -129,6 +130,7 @@
       "hidden": true,
       "cacheVariables": {
         "MATHLIB_USE_INTRINSIC": true,
+        "MATHLIB_USE_FMA": true,
         "MATHLIB_SIMD_EXT": "NEON"
       }
     },

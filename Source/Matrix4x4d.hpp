@@ -2,6 +2,7 @@
 #define MATH_LIB_MATRIX4X4D_H
 
 #include <cstring>
+#include <Vector3d.hpp>
 #include <Vector4d.hpp>
 #include <AVX.hpp>
 
@@ -420,18 +421,38 @@ namespace MathLib
         [[nodiscard]] Vector4d operator*(const Vector4d& rhs) const noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
-            const Simd::VectorRegister4Double rhsR4D = Simd::makeVector4DUnaligned(rhs.data());
-            const Simd::VectorRegister4Double row1 = Simd::makeVector4DAligned(m_data[0].data());
-            const Simd::VectorRegister4Double row2 = Simd::makeVector4DAligned(m_data[1].data());
-            const Simd::VectorRegister4Double row3 = Simd::makeVector4DAligned(m_data[2].data());
-            const Simd::VectorRegister4Double row4 =
-                Simd::makeVector4DAligned(reinterpret_cast<const double*>(&m_data[3]));
-            return Vector4d(Simd::dot(row1, rhsR4D), Simd::dot(row2, rhsR4D), Simd::dot(row3, rhsR4D),
-                            Simd::dot(row4, rhsR4D));
+            // clang-format off
+            const double row1x = m_data[0].getX(); const double row1y = m_data[0].getY(); const double row1z = m_data[0].getZ(); const double row1w = m_data[0].getW();
+            const double row2x = m_data[1].getX(); const double row2y = m_data[1].getY(); const double row2z = m_data[1].getZ(); const double row2w = m_data[1].getW();
+            const double row3x = m_data[2].getX(); const double row3y = m_data[2].getY(); const double row3z = m_data[2].getZ(); const double row3w = m_data[2].getW();
+            const double row4x = m_data[3].getX(); const double row4y = m_data[3].getY(); const double row4z = m_data[3].getZ(); const double row4w = m_data[3].getW();
+            // clang-format on
+
+            const Simd::VectorRegister4Double col0 = Simd::makeVector4D(row1x, row2x, row3x, row4x);
+            const Simd::VectorRegister4Double col1 = Simd::makeVector4D(row1y, row2y, row3y, row4y);
+            const Simd::VectorRegister4Double col2 = Simd::makeVector4D(row1z, row2z, row3z, row4z);
+            const Simd::VectorRegister4Double col3 = Simd::makeVector4D(row1w, row2w, row3w, row4w);
+
+            const Simd::VectorRegister4Double x = Simd::makeVector4D(rhs.getX());
+            const Simd::VectorRegister4Double y = Simd::makeVector4D(rhs.getY());
+            const Simd::VectorRegister4Double z = Simd::makeVector4D(rhs.getZ());
+            const Simd::VectorRegister4Double w = Simd::makeVector4D(rhs.getW());
+
+            Simd::VectorRegister4Double result = Simd::mul(col0, x);
+            result = Simd::fma(col1, y, result);
+            result = Simd::fma(col2, z, result);
+            result = Simd::fma(col3, w, result);
+
+            return Vector4d(result);
 #else
             return Vector4d(Vector4d::dot(m_data[0], rhs), Vector4d::dot(m_data[1], rhs), Vector4d::dot(m_data[2], rhs),
                             Vector4d::dot(m_data[3], rhs));
 #endif // defined(MATH_LIB_INTRINSIC)
+        }
+
+        [[nodiscard]] Vector4d operator*(const Vector3<double>& rhs) const noexcept
+        {
+            return operator*(Vector4d(rhs.getX(), rhs.getY(), rhs.getZ(), 1.0));
         }
 
         Matrix4x4& operator*=(Matrix4x4 rhs) noexcept

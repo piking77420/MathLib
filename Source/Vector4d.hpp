@@ -44,9 +44,14 @@ namespace MathLib
             MATH_LIB_FORCE_INLINE explicit Vector4(double x)
             : m_data({x, x, x, x})
 
+                  {ASSERT_IS_FINITE(*this)}
+
+#if defined(MATH_LIB_INTRINSIC)
+            MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
         {
-            ASSERT_IS_FINITE(*this)
+            Simd::storeUnaligned(reg, m_data.data());
         }
+#endif // defined(MATH_LIB_INTRINSIC)
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE const double* data() const noexcept
         {
@@ -628,22 +633,15 @@ namespace MathLib
 
         explicit operator Vector2<double>() const noexcept;
 
-    private:
-        std::array<double, 4> m_data;
-
-#if defined(MATH_LIB_INTRINSIC)
-        MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
-        {
-            Simd::storeUnaligned(reg, m_data.data());
-        }
-#endif // defined(MATH_LIB_INTRINSIC)
-
 #if defined(MATH_LIB_INTRINSIC)
         operator Simd::VectorRegister4Double() const noexcept
         {
             return Simd::makeVector4DUnaligned(m_data.data());
         }
 #endif // defined(MATH_LIB_INTRINSIC)
+
+    private:
+        std::array<double, 4> m_data;
     };
 
     using Vector4d = Vector4<double>;

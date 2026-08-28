@@ -34,6 +34,11 @@ namespace MathLib::Simd
         return _mm256_set1_pd(value);
     }
 
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4DZero() noexcept
+    {
+        return _mm256_setzero_pd();
+    }
+
     MATH_LIB_FORCE_INLINE void storeAligned(VectorRegister4Double v, double* ptr) noexcept
     {
         _mm256_store_pd(ptr, v);
@@ -78,6 +83,18 @@ namespace MathLib::Simd
                                                                   const VectorRegister4Double& b) noexcept
     {
         return _mm256_max_pd(a, b);
+    }
+
+    // a * b + c
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double fma(const VectorRegister4Double& a,
+                                                                  const VectorRegister4Double& b,
+                                                                  const VectorRegister4Double& c) noexcept
+    {
+#if defined(SIMD_FMA)
+        return _mm256_fmadd_pd(a, b, c);
+#else
+        return mul(add(a, b), c);
+#endif
     }
 
     [[nodiscard]] MATH_LIB_FORCE_INLINE double dot(const VectorRegister4Double& a, const VectorRegister4Double& b)
