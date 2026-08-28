@@ -283,38 +283,19 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 operator-() const noexcept
         {
-#if defined(SIMD_AVX)
-            // -0.0 has only the sign bit set: 0x8000000000000000
-            constexpr size_t mask = 0x7FFFFFFFFFFFull;
-            return Vector4{
-                _mm256_xor_pd(_mm256_load_pd(reinterpret_cast<const double*>(m_data.data())), _mm256_set1_pd(-0.0))};
-#else
             return Vector4(-m_data[0], -m_data[1], -m_data[2], -m_data[3]);
-#endif // defined(SIMD_AVX)
         }
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& a, const Vector4& b)
         {
             ASSERT_IS_FINITE(a)
             ASSERT_IS_FINITE(b)
-#if defined(SIMD_AVX) && 0
-            // [ax*bx, ay*by, az*bz, aw*bw]
-            const __m256d mul = _mm256_mul_pd(_mm256_load_pd(a.m_data.data()), _mm256_load_pd(b.m_data.data()));
 
-            const __m128d low = _mm256_castpd256_pd128(mul);
-            const __m128d high = _mm256_extractf128_pd(mul, 1);
-
-            const __m128d sum = _mm_add_pd(low, high); // [x+z, y+w]
-            const __m128d dot = _mm_hadd_pd(sum, sum); // [x+y+z+w, ...]
-
-            return _mm_cvtsd_f64(dot);
-#else
             const double x2 = a.getX() * b.getX();
             const double y2 = a.getY() * b.getY();
             const double z2 = a.getZ() * b.getZ();
             const double w2 = a.getW() * b.getW();
             return x2 + y2 + z2 + w2;
-#endif // defined(SIMD_AVX)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
@@ -487,137 +468,10 @@ namespace MathLib
             return Vector4(std::abs(getX()), std::abs(m_data[1]), std::abs(m_data[2]), std::abs(m_data[3]));
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 4>& span) const noexcept
-        {
-            ASSERT_IS_FINITE(*this);
-
-            span[0] = getX();
-            span[1] = m_data[1];
-            span[2] = m_data[2];
-            span[3] = m_data[3];
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const ptr) const noexcept
-        {
-            storeToUnalignedDouble(std::span<double, 4>(ptr, 4));
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 4>& span) const noexcept
-        {
-            ASSERT_IS_FINITE(*this);
-
-            span[0] = static_cast<float>(getX());
-            span[1] = static_cast<float>(m_data[1]);
-            span[2] = static_cast<float>(m_data[2]);
-            span[3] = static_cast<float>(m_data[3]);
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const ptr) const noexcept
-        {
-            storeToUnAlignedFloat(std::span<float, 4>(ptr, 4));
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 4>& span) const noexcept
-        {
-            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(span.data()));
-            ASSERT_IS_FINITE(*this);
-
-            span[0] = getX();
-            span[1] = m_data[1];
-            span[2] = m_data[2];
-            span[3] = m_data[3];
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const ptr) const noexcept
-        {
-            storeToAlignedDouble(std::span<double, 4>(ptr, 4));
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 4>& span) const noexcept
-        {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
-            ASSERT_IS_FINITE(*this);
-
-            span[0] = static_cast<float>(getX());
-            span[1] = static_cast<float>(m_data[1]);
-            span[2] = static_cast<float>(m_data[2]);
-            span[3] = static_cast<float>(m_data[3]);
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const ptr) const noexcept
-        {
-            storeToAlignedFloat(std::span<float, 4>(ptr, 4));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 4>& span) noexcept
-        {
-            m_data[0] = span[0];
-            m_data[1] = span[1];
-            m_data[2] = span[2];
-            m_data[3] = span[3];
-
-            ASSERT_IS_FINITE(*this);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const double* const ptr) noexcept
-        {
-            fromUnalignedDouble(std::span<const double, 4>(ptr, 4));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const std::span<const float, 4>& span) noexcept
-        {
-            m_data[0] = static_cast<double>(span[0]);
-            m_data[1] = static_cast<double>(span[1]);
-            m_data[2] = static_cast<double>(span[2]);
-            m_data[3] = static_cast<double>(span[3]);
-
-            ASSERT_IS_FINITE(*this);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const float* const ptr) noexcept
-        {
-            fromUnAlignedFloat(std::span<const float, 4>(ptr, 4));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 4>& span) noexcept
-        {
-            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(span.data()));
-
-            m_data[0] = span[0];
-            m_data[1] = span[1];
-            m_data[2] = span[2];
-            m_data[3] = span[3];
-
-            ASSERT_IS_FINITE(*this);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const ptr) noexcept
-        {
-            fromAlignedDouble(std::span<const double, 4>(ptr, 4));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 4>& span) noexcept
-        {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
-
-            m_data[0] = static_cast<double>(span[0]);
-            m_data[1] = static_cast<double>(span[1]);
-            m_data[2] = static_cast<double>(span[2]);
-            m_data[3] = static_cast<double>(span[3]);
-
-            ASSERT_IS_FINITE(*this);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const ptr) noexcept
-        {
-            fromAlignedFloat(std::span<const float, 4>(ptr, 4));
-        }
-
         friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& ostream, const Vector4& vec)
         {
-            std::array<double, 4> data;
-            vec.storeToUnalignedDouble(data);
-            ostream << "x: " << data[0] << ", y: " << data[1] << ", z: " << data[2] << ", w: " << data[3];
+            ostream << "x: " << vec.m_data[0] << ", y: " << vec.m_data[1] << ", z: " << vec.m_data[2]
+                    << ", w: " << vec.m_data[3];
 
             return ostream;
         }
@@ -802,11 +656,7 @@ struct std::formatter<MathLib::Vector4d>
 
     static std::format_context::iterator format(const MathLib::Vector4d& v, std::format_context& ctx)
     {
-        std::array<double, 4> data;
-
-        v.storeToUnalignedDouble(data);
-
-        return std::format_to(ctx.out(), "x: {}, y: {}, z: {}, w: {}", data[0], data[1], data[2], data[3]);
+        return std::format_to(ctx.out(), "x: {}, y: {}, z: {}, w: {}", v.getX(), v.getY(), v.getZ(), v.getW());
     }
 };
 
