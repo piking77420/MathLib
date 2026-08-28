@@ -2,6 +2,7 @@
 #define MATH_LIB_MATRIX3X3D_H
 
 #include <array>
+#include <cstring>
 #include <Vector3d.hpp>
 
 namespace MathLib

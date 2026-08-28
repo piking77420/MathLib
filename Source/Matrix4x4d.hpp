@@ -1,6 +1,7 @@
 #ifndef MATH_LIB_MATRIX4X4D_H
 #define MATH_LIB_MATRIX4X4D_H
 
+#include <cstring>
 #include <Vector4d.hpp>
 
 namespace MathLib
