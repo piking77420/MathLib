@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <Vector4d.hpp>
+#include <AVX.hpp>
 
 namespace MathLib
 {
@@ -12,7 +13,7 @@ namespace MathLib
     // Matrix elements are stored in row-major order
     // Mathematical operations use a column-vector convention
     template<>
-    class Matrix4x4<double>
+    class alignas(VECTOR4D_ALIGNEMENT) Matrix4x4<double>
     {
     public:
         using _VectorType = Vector4d;
@@ -418,8 +419,19 @@ namespace MathLib
 
         [[nodiscard]] Vector4d operator*(const Vector4d& rhs) const noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            const Simd::VectorRegister4Double rhsR4D = Simd::makeVector4DUnaligned(rhs.data());
+            const Simd::VectorRegister4Double row1 = Simd::makeVector4DAligned(m_data[0].data());
+            const Simd::VectorRegister4Double row2 = Simd::makeVector4DAligned(m_data[1].data());
+            const Simd::VectorRegister4Double row3 = Simd::makeVector4DAligned(m_data[2].data());
+            const Simd::VectorRegister4Double row4 =
+                Simd::makeVector4DAligned(reinterpret_cast<const double*>(&m_data[3]));
+            return Vector4d(Simd::dot(row1, rhsR4D), Simd::dot(row2, rhsR4D), Simd::dot(row3, rhsR4D),
+                            Simd::dot(row4, rhsR4D));
+#else
             return Vector4d(Vector4d::dot(m_data[0], rhs), Vector4d::dot(m_data[1], rhs), Vector4d::dot(m_data[2], rhs),
                             Vector4d::dot(m_data[3], rhs));
+#endif // defined(MATH_LIB_INTRINSIC)
         }
 
         Matrix4x4& operator*=(Matrix4x4 rhs) noexcept

@@ -80,6 +80,25 @@ namespace MathLib::Simd
         return _mm256_max_pd(a, b);
     }
 
+    [[nodiscard]] MATH_LIB_FORCE_INLINE double dot(const VectorRegister4Double& a, const VectorRegister4Double& b)
+    {
+        // [ax*bx, ay*by, az*bz, aw*bw]
+        const __m256d mul = _mm256_mul_pd(a, b);
+
+        // [ax*bx, ay*by]
+        const __m128d low = _mm256_castpd256_pd128(mul);
+
+        // [az*bz, aw*bw]
+        const __m128d high = _mm256_extractf128_pd(mul, 1);
+        // [ax*bx + az*bz, ay*by + aw*bw]
+        const __m128d sum = _mm_add_pd(low, high);
+
+        // Move high lane into low lane.
+        const __m128d highSum = _mm_unpackhi_pd(sum, sum);
+
+        // (ax*bx + az*bz) + (ay*by + aw*bw)
+        return _mm_cvtsd_f64(_mm_add_sd(sum, highSum));
+    }
 } // namespace MathLib::Simd
 
 #endif // defined(SIMD_AVX)

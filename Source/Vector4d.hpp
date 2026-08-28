@@ -9,7 +9,6 @@
 #include <ostream>
 #include <span>
 #include <MathLibHeader.hpp>
-
 #include <AVX.hpp>
 
 namespace MathLib
@@ -37,13 +36,6 @@ namespace MathLib
 
         ~Vector4() = default;
 
-#if defined(MATH_LIB_INTRINSIC)
-        MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
-        {
-            Simd::storeUnaligned(reg, m_data.data());
-        }
-#endif // defined(MATH_LIB_INTRINSIC)
-
         MATH_LIB_FORCE_INLINE explicit Vector4(double x, double y, double z, double w)
             : m_data({x, y, z, w})
 
@@ -54,6 +46,16 @@ namespace MathLib
 
         {
             ASSERT_IS_FINITE(*this)
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const double* data() const noexcept
+        {
+            return m_data.data();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE double* data() noexcept
+        {
+            return m_data.data();
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double getX() const noexcept
@@ -262,7 +264,7 @@ namespace MathLib
 
         [[nodiscard]] bool operator==(const Vector4& other) const
         {
-            return fuzzyZero(getX() - other.getX()) && fuzzyZero(m_data[1] - other.m_data[1]) &&
+            return fuzzyZero(m_data[0] - other.m_data[0]) && fuzzyZero(m_data[1] - other.m_data[1]) &&
                    fuzzyZero(m_data[2] - other.m_data[2]) && fuzzyZero(m_data[3] - other.m_data[3]);
         }
 
@@ -626,15 +628,22 @@ namespace MathLib
 
         explicit operator Vector2<double>() const noexcept;
 
+    private:
+        std::array<double, 4> m_data;
+
+#if defined(MATH_LIB_INTRINSIC)
+        MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
+        {
+            Simd::storeUnaligned(reg, m_data.data());
+        }
+#endif // defined(MATH_LIB_INTRINSIC)
+
 #if defined(MATH_LIB_INTRINSIC)
         operator Simd::VectorRegister4Double() const noexcept
         {
             return Simd::makeVector4DUnaligned(m_data.data());
         }
 #endif // defined(MATH_LIB_INTRINSIC)
-
-    private:
-        std::array<double, 4> m_data;
     };
 
     using Vector4d = Vector4<double>;
