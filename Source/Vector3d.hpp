@@ -32,14 +32,10 @@ namespace MathLib
         ~Vector3() = default;
 
         MATH_LIB_FORCE_INLINE explicit Vector3(double x, double y, double z)
-            : m_x(x)
-            , m_y(y)
-            , m_z(z){ASSERT_IS_FINITE(*this)}
+            : m_data({x, y, z}){ASSERT_IS_FINITE(*this)}
 
             MATH_LIB_FORCE_INLINE explicit Vector3(double x)
-            : m_x(x)
-            , m_y(x)
-            , m_z(x)
+            : m_data({x, x, x})
 
         {
             ASSERT_IS_FINITE(*this)
@@ -47,50 +43,50 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double getX() const noexcept
         {
-            return m_x;
+            return m_data[0];
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double getY() const noexcept
         {
-            return m_y;
+            return m_data[1];
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE double getZ() const noexcept
         {
-            return m_z;
+            return m_data[2];
         }
 
         MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
-            m_x = x;
+            m_data[0] = x;
             ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE void setY(double y) noexcept
         {
-            m_y = y;
+            m_data[1] = y;
             ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE void setZ(double z) noexcept
         {
-            m_z = z;
+            m_data[2] = z;
             ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE Vector3& operator+=(const Vector3& other) noexcept
         {
-            m_x += other.m_x;
-            m_y += other.m_y;
-            m_z += other.m_z;
+            m_data[0] += other.m_data[0];
+            m_data[1] += other.m_data[1];
+            m_data[2] += other.m_data[2];
             ASSERT_IS_FINITE(*this) return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector3& operator-=(const Vector3& other) noexcept
         {
-            m_x -= other.m_x;
-            m_y -= other.m_y;
-            m_z -= other.m_z;
+            m_data[0] -= other.m_data[0];
+            m_data[1] -= other.m_data[1];
+            m_data[2] -= other.m_data[2];
 
             ASSERT_IS_FINITE(*this)
             return *this;
@@ -98,18 +94,18 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Vector3& operator*=(const Vector3& other) noexcept
         {
-            m_x *= other.m_x;
-            m_y *= other.m_y;
-            m_z *= other.m_z;
+            m_data[0] *= other.m_data[0];
+            m_data[1] *= other.m_data[1];
+            m_data[2] *= other.m_data[2];
             ASSERT_IS_FINITE(*this)
             return *this;
         }
 
         MATH_LIB_FORCE_INLINE Vector3& operator/=(const Vector3& other) noexcept
         {
-            m_x /= other.m_x;
-            m_y /= other.m_y;
-            m_z /= other.m_z;
+            m_data[0] /= other.m_data[0];
+            m_data[1] /= other.m_data[1];
+            m_data[2] /= other.m_data[2];
             ASSERT_IS_FINITE(*this)
             return *this;
         }
@@ -140,9 +136,9 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Vector3& operator+=(const double scalar) noexcept
         {
-            m_x += scalar;
-            m_y += scalar;
-            m_z += scalar;
+            m_data[0] += scalar;
+            m_data[1] += scalar;
+            m_data[2] += scalar;
 
             ASSERT_IS_FINITE(*this)
             return *this;
@@ -150,9 +146,9 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Vector3& operator-=(const double scalar) noexcept
         {
-            m_x -= scalar;
-            m_y -= scalar;
-            m_z -= scalar;
+            m_data[0] -= scalar;
+            m_data[1] -= scalar;
+            m_data[2] -= scalar;
 
             ASSERT_IS_FINITE(*this)
             return *this;
@@ -160,9 +156,9 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Vector3& operator*=(double scalar) noexcept
         {
-            m_x *= scalar;
-            m_y *= scalar;
-            m_z *= scalar;
+            m_data[0] *= scalar;
+            m_data[1] *= scalar;
+            m_data[2] *= scalar;
 
             ASSERT_IS_FINITE(*this)
             return *this;
@@ -170,9 +166,9 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Vector3& operator/=(double scalar) noexcept
         {
-            m_x /= scalar;
-            m_y /= scalar;
-            m_z /= scalar;
+            m_data[0] /= scalar;
+            m_data[1] /= scalar;
+            m_data[2] /= scalar;
 
             ASSERT_IS_FINITE(*this)
             return *this;
@@ -204,7 +200,8 @@ namespace MathLib
 
         [[nodiscard]] bool operator==(const Vector3& other) const
         {
-            return fuzzyZero(m_x - other.m_x) && fuzzyZero(m_y - other.m_y) && fuzzyZero(m_z - other.m_z);
+            return fuzzyZero(m_data[0] - other.m_data[0]) && fuzzyZero(m_data[1] - other.m_data[1]) &&
+                   fuzzyZero(m_data[2] - other.m_data[2]);
         }
 
         [[nodiscard]] bool operator!=(const Vector3& other) const
@@ -215,14 +212,14 @@ namespace MathLib
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector3 operator-() const noexcept
         {
             ASSERT_IS_FINITE(*this)
-            return Vector3(-m_x, -m_y, -m_z);
+            return Vector3(-m_data[0], -m_data[1], -m_data[2]);
         }
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector3& a, const Vector3& b)
         {
             ASSERT_IS_FINITE(a)
             ASSERT_IS_FINITE(b)
-            return (a.m_x * b.m_x) + (a.m_y * b.m_y) + (a.m_z * b.m_z);
+            return (a.m_data[0] * b.m_data[0]) + (a.m_data[1] * b.m_data[1]) + (a.m_data[2] * b.m_data[2]);
         }
 
         [[nodiscard]] static MATH_LIB_FORCE_INLINE Vector3 cross(const Vector3& a, const Vector3& b)
@@ -332,7 +329,7 @@ namespace MathLib
 
         [[nodiscard]] Vector3 abs() const
         {
-            return Vector3{std::abs(m_x), std::abs(m_y), std::abs(m_z)};
+            return Vector3{std::abs(m_data[0]), std::abs(m_data[1]), std::abs(m_data[2])};
         }
 
         static Vector3 unitX()
@@ -355,141 +352,41 @@ namespace MathLib
             return Vector3(0.0, 0.0, 0.0);
         }
 
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(const std::span<double, 3>& span) const noexcept
-        {
-            ASSERT_IS_FINITE(*this);
-            span[0] = m_x;
-            span[1] = m_y;
-            span[2] = m_z;
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToUnalignedDouble(double* const ptr) const noexcept
-        {
-            storeToUnalignedDouble(std::span<double, 3>(ptr, 3));
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(const std::span<float, 3>& span) const noexcept
-        {
-            ASSERT_IS_FINITE(*this);
-            span[0] = static_cast<float>(m_x);
-            span[1] = static_cast<float>(m_y);
-            span[2] = static_cast<float>(m_z);
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToUnAlignedFloat(float* const ptr) const noexcept
-        {
-            storeToUnAlignedFloat(std::span<float, 3>(ptr, 3));
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(const std::span<double, 3>& span) const noexcept
-        {
-            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(span.data()));
-            storeToUnalignedDouble(span);
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedDouble(double* const ptr) const noexcept
-        {
-            storeToAlignedDouble(std::span<double, 3>(ptr, 3));
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(const std::span<float, 3>& span) const noexcept
-        {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
-            storeToUnAlignedFloat(span);
-        }
-
-        MATH_LIB_FORCE_INLINE void storeToAlignedFloat(float* const ptr) const noexcept
-        {
-            storeToAlignedFloat(std::span<float, 3>(ptr, 3));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const std::span<const double, 3>& span) noexcept
-        {
-            m_x = span[0];
-            m_y = span[1];
-            m_z = span[2];
-
-            ASSERT_IS_FINITE(*this);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnalignedDouble(const double* const ptr) noexcept
-        {
-            fromUnalignedDouble(std::span<const double, 3>(ptr, 3));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const std::span<const float, 3>& span) noexcept
-        {
-            m_x = static_cast<double>(span[0]);
-            m_y = static_cast<double>(span[1]);
-            m_z = static_cast<double>(span[2]);
-            ASSERT_IS_FINITE(*this);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromUnAlignedFloat(const float* const ptr) noexcept
-        {
-            fromUnAlignedFloat(std::span<const float, 3>(ptr, 3));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const std::span<const double, 3>& span) noexcept
-        {
-            MATHLIB_ASSERT(isAligned<AVX_ALIGNEMENT>(span.data()));
-            fromUnalignedDouble(span);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedDouble(const double* const ptr) noexcept
-        {
-            fromAlignedDouble(std::span<const double, 3>(ptr, 3));
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const std::span<const float, 3>& span) noexcept
-        {
-            MATHLIB_ASSERT(isAligned<SSE_ALIGNEMENT>(span.data()));
-            fromUnAlignedFloat(span);
-            ASSERT_IS_FINITE(*this);
-        }
-
-        MATH_LIB_FORCE_INLINE void fromAlignedFloat(const float* const ptr) noexcept
-        {
-            fromAlignedFloat(std::span<const float, 3>(ptr, 3));
-        }
-
         friend MATH_LIB_FORCE_INLINE std::ostream& operator<<(std::ostream& ostream, const Vector3& vec)
         {
-            std::array<double, 3> data;
-            vec.storeToUnalignedDouble(data);
-            ostream << "x: " << data[0] << ", y: " << data[1] << ", z: " << data[2];
+            ostream << "x: " << vec.m_data[0] << ", y: " << vec.m_data[1] << ", z: " << vec.m_data[2];
 
             return ostream;
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE bool isFinite() const
         {
-            return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z);
+            return std::isfinite(m_data[0]) && std::isfinite(m_data[1]) && std::isfinite(m_data[2]);
         }
 
         [[nodiscard]] Vector3<double> xzy() const noexcept
         {
-            return Vector3(m_x, m_z, m_y);
+            return Vector3(getX(), getZ(), getY());
         }
 
         [[nodiscard]] Vector3<double> yxz() const noexcept
         {
-            return Vector3(m_y, m_x, m_z);
+            return Vector3(getY(), getX(), getZ());
         }
 
         [[nodiscard]] Vector3<double> yzx() const noexcept
         {
-            return Vector3(m_y, m_z, m_x);
+            return Vector3(getY(), getZ(), getX());
         }
 
         [[nodiscard]] Vector3<double> zxy() const noexcept
         {
-            return Vector3(m_z, m_x, m_y);
+            return Vector3(getZ(), getX(), getY());
         }
 
         [[nodiscard]] Vector3<double> zyx() const noexcept
         {
-            return Vector3(m_z, m_y, m_x);
+            return Vector3(getZ(), getY(), getX());
         }
 
         [[nodiscard]] Vector2<double> xy() const noexcept;
@@ -507,9 +404,7 @@ namespace MathLib
         explicit operator Vector2<double>() const noexcept;
 
     private:
-        double m_x;
-        double m_y;
-        double m_z;
+        std::array<double, 3> m_data;
     };
 
     using Vector3d = Vector3<double>;
@@ -528,11 +423,7 @@ struct std::formatter<MathLib::Vector3d>
 
     static std::format_context::iterator format(const MathLib::Vector3d& v, std::format_context& ctx)
     {
-        std::array<double, 3> data;
-
-        v.storeToUnalignedDouble(data);
-
-        return std::format_to(ctx.out(), "x: {}, y: {}, z: {}", data[0], data[1], data[2]);
+        return std::format_to(ctx.out(), "x: {}, y: {}, z: {}", v.getX(), v.getY(), v.getZ());
     }
 };
 

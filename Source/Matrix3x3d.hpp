@@ -1,6 +1,8 @@
 #ifndef MATH_LIB_MATRIX3X3D_H
 #define MATH_LIB_MATRIX3X3D_H
 
+#include <array>
+#include <cstring>
 #include <Vector3d.hpp>
 
 namespace MathLib
@@ -176,16 +178,30 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Matrix3x3& inverse() noexcept
         {
-            const Vector3d cofactor0 = Vector3d::cross(m_data[1], m_data[2]);
-            const double determinant = Vector3d::dot(m_data[0], cofactor0);
+            // clang-format off
+             const double row1x = m_data[0].getX(); const double row1y = m_data[0].getY(); const double row1z = m_data[0].getZ();
+             const double row2x = m_data[1].getX(); const double row2y = m_data[1].getY(); const double row2z = m_data[1].getZ();
+             const double row3x = m_data[2].getX(); const double row3y = m_data[2].getY(); const double row3z = m_data[2].getZ();
+             double inv[9];
 
-            if (fuzzyZero(determinant))
+             inv[0] = (row2y * row3z) - (row2z * row3y); inv[1] = (row3y * row1z) - (row3z * row1y); inv[2] = (row1y * row2z) - (row1z * row2y);
+             inv[3] = (row2z * row3x) - (row2x * row3z); inv[4] = (row3z * row1x) - (row3x * row1z); inv[5] = (row1z * row2x) - (row1x * row2z);
+             inv[6] = (row2x * row3y) - (row2y * row3x); inv[7] = (row3x * row1y) - (row3y * row1x); inv[8] = (row1x * row2y) - (row1y * row2x);
+            // clang-format on
+            const double determinant = row1x * inv[0] + row1y * inv[3] + row1z * inv[6];
+
+            if (fuzzyZero(determinant) || !std::isfinite(determinant))
+            {
                 return *this;
+            }
 
-            const double invDeterminant = (1.0 / determinant);
-            const Vector3d cofactor1 = Vector3d::cross(m_data[2], m_data[0]);
-            const Vector3d cofactor2 = Vector3d::cross(m_data[0], m_data[1]);
-            *this = Matrix3x3(cofactor0, cofactor1, cofactor2).transpose() * invDeterminant;
+            const double invDeterminant = 1.0 / determinant;
+            for (auto& d : inv)
+                d = d * invDeterminant;
+
+            static_assert(sizeof(m_data) == sizeof(inv));
+            std::memcpy(m_data.data(), inv, sizeof(m_data));
+
             return *this;
         }
 
