@@ -270,7 +270,48 @@ namespace MathLib
             return Vector4d::dot(m_data[0], Vector4d::cross(m_data[1], m_data[2], m_data[3]));
         }
 
-        Matrix4x4& inverse() noexcept;
+        MATH_LIB_FORCE_INLINE Matrix4x4& inverse() noexcept
+        {
+            // clang-format off
+            const double row1x = m_data[0].getX(); const double row1y = m_data[0].getY(); const double row1z = m_data[0].getZ(); const double row1w = m_data[0].getW();
+            const double row2x = m_data[1].getX(); const double row2y = m_data[1].getY(); const double row2z = m_data[1].getZ(); const double row2w = m_data[1].getW();
+            const double row3x = m_data[2].getX(); const double row3y = m_data[2].getY(); const double row3z = m_data[2].getZ(); const double row3w = m_data[2].getW();
+            const double row4x = m_data[3].getX(); const double row4y = m_data[3].getY(); const double row4z = m_data[3].getZ(); const double row4w = m_data[3].getW();
+
+            double inv[16];
+            inv[0]   =  row2y * row3z * row4w - row2y * row3w * row4z - row3y * row2z * row4w + row3y * row2w * row4z + row4y * row2z * row3w - row4y * row2w * row3z;
+            inv[1]   = -row1y * row3z * row4w + row1y * row3w * row4z + row3y * row1z * row4w - row3y * row1w * row4z - row4y * row1z * row3w + row4y * row1w * row3z;
+            inv[2]   =  row1y * row2z * row4w - row1y * row2w * row4z - row2y * row1z * row4w + row2y * row1w * row4z + row4y * row1z * row2w - row4y * row1w * row2z;
+            inv[3]   = -row1y * row2z * row3w + row1y * row2w * row3z + row2y * row1z * row3w - row2y * row1w * row3z - row3y * row1z * row2w + row3y * row1w * row2z;
+            inv[4]   = -row2x * row3z * row4w + row2x * row3w * row4z + row3x * row2z * row4w - row3x * row2w * row4z - row4x * row2z * row3w + row4x * row2w * row3z;
+            inv[5]   =  row1x * row3z * row4w - row1x * row3w * row4z - row3x * row1z * row4w + row3x * row1w * row4z + row4x * row1z * row3w - row4x * row1w * row3z;
+            inv[6]   = -row1x * row2z * row4w + row1x * row2w * row4z + row2x * row1z * row4w - row2x * row1w * row4z - row4x * row1z * row2w + row4x * row1w * row2z;
+            inv[7]   =  row1x * row2z * row3w - row1x * row2w * row3z - row2x * row1z * row3w + row2x * row1w * row3z + row3x * row1z * row2w - row3x * row1w * row2z;
+            inv[8]   =  row2x * row3y * row4w - row2x * row3w * row4y - row3x * row2y * row4w + row3x * row2w * row4y + row4x * row2y * row3w - row4x * row2w * row3y;
+            inv[9]   = -row1x * row3y * row4w + row1x * row3w * row4y + row3x * row1y * row4w - row3x * row1w * row4y - row4x * row1y * row3w + row4x * row1w * row3y;
+            inv[10]  =  row1x * row2y * row4w - row1x * row2w * row4y - row2x * row1y * row4w + row2x * row1w * row4y + row4x * row1y * row2w - row4x * row1w * row2y;
+            inv[11]  = -row1x * row2y * row3w + row1x * row2w * row3y + row2x * row1y * row3w - row2x * row1w * row3y - row3x * row1y * row2w + row3x * row1w * row2y;
+            inv[12]  = -row2x * row3y * row4z + row2x * row3z * row4y + row3x * row2y * row4z - row3x * row2z * row4y - row4x * row2y * row3z + row4x * row2z * row3y;
+            inv[13]  =  row1x * row3y * row4z - row1x * row3z * row4y - row3x * row1y * row4z + row3x * row1z * row4y + row4x * row1y * row3z - row4x * row1z * row3y;
+            inv[14]  = -row1x * row2y * row4z + row1x * row2z * row4y + row2x * row1y * row4z - row2x * row1z * row4y - row4x * row1y * row2z + row4x * row1z * row2y;
+            inv[15]  =  row1x * row2y * row3z - row1x * row2z * row3y - row2x * row1y * row3z + row2x * row1z * row3y + row3x * row1y * row2z - row3x * row1z * row2y;
+
+            // clang-format on
+            const double determinant = row1x * inv[0] + row1y * inv[4] + row1z * inv[8] + row1w * inv[12];
+            if (fuzzyZero(determinant) || !std::isfinite(determinant))
+            {
+                return *this;
+            }
+
+            const double invDeterminant = 1.0 / determinant;
+            for (auto& d : inv)
+                d = d * invDeterminant;
+
+            static_assert(sizeof(m_data) == sizeof(inv));
+            std::memcpy(m_data.data(), inv, sizeof(m_data));
+
+            return *this;
+        }
 
         Matrix4x4 getInverse() const noexcept
         {

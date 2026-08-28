@@ -28,7 +28,7 @@ namespace MathLib
     class Vector2<double>;
 
     template<>
-    class alignas(32) Vector4<double>
+    class Vector4<double>
     {
     public:
         explicit Vector4() = default;
