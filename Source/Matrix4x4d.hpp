@@ -2,7 +2,9 @@
 #define MATH_LIB_MATRIX4X4D_H
 
 #include <cstring>
+#include <Vector3d.hpp>
 #include <Vector4d.hpp>
+#include <AVX.hpp>
 
 namespace MathLib
 {
@@ -12,7 +14,7 @@ namespace MathLib
     // Matrix elements are stored in row-major order
     // Mathematical operations use a column-vector convention
     template<>
-    class Matrix4x4<double>
+    class alignas(VECTOR4D_ALIGNEMENT) Matrix4x4<double>
     {
     public:
         using _VectorType = Vector4d;
@@ -41,7 +43,27 @@ namespace MathLib
             : m_data{row1, row2, row3, row4}
         {
         }
-        // clang-format on
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const double* data() const noexcept
+        {
+            return m_data[0].data();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE double* data() noexcept
+        {
+            return m_data[0].data();
+        }
+
+        [[nodiscard]] static Matrix4x4 zero() noexcept
+        {
+            // clang-format off
+            return Matrix4x4(0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0);
+            // clang-format on
+        }
+
         [[nodiscard]] static Matrix4x4 identity() noexcept
         {
             // clang-format off
@@ -322,10 +344,22 @@ namespace MathLib
 
         Matrix4x4& operator+=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] += value;
             m_data[1] += value;
             m_data[2] += value;
             m_data[3] += value;
+#endif
             return *this;
         }
 
@@ -338,10 +372,23 @@ namespace MathLib
 
         Matrix4x4& operator-=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] -= value;
             m_data[1] -= value;
             m_data[2] -= value;
             m_data[3] -= value;
+#endif
             return *this;
         }
 
@@ -354,10 +401,23 @@ namespace MathLib
 
         Matrix4x4& operator*=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] *= value;
             m_data[1] *= value;
             m_data[2] *= value;
             m_data[3] *= value;
+#endif
             return *this;
         }
 
@@ -370,10 +430,23 @@ namespace MathLib
 
         Matrix4x4& operator/=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] /= value;
             m_data[1] /= value;
             m_data[2] /= value;
             m_data[3] /= value;
+#endif
             return *this;
         }
 
@@ -386,10 +459,27 @@ namespace MathLib
 
         Matrix4x4& operator+=(const Matrix4x4& rhs) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const double* otherPtr = rhs.data();
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
+                               ptr + 4);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 8), Simd::makeVector4DAligned(otherPtr + 8)),
+                               ptr + 8);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 12), Simd::makeVector4DAligned(otherPtr + 12)),
+                               ptr + 12);
+#else
             m_data[0] += rhs.m_data[0];
             m_data[1] += rhs.m_data[1];
             m_data[2] += rhs.m_data[2];
             m_data[3] += rhs.m_data[3];
+#endif
+
             return *this;
         }
 
@@ -402,10 +492,26 @@ namespace MathLib
 
         Matrix4x4& operator-=(const Matrix4x4& rhs) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const double* otherPtr = rhs.data();
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
+                               ptr + 4);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 8), Simd::makeVector4DAligned(otherPtr + 8)),
+                               ptr + 8);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 12), Simd::makeVector4DAligned(otherPtr + 12)),
+                               ptr + 12);
+#else
             m_data[0] -= rhs.m_data[0];
             m_data[1] -= rhs.m_data[1];
             m_data[2] -= rhs.m_data[2];
             m_data[3] -= rhs.m_data[3];
+#endif
             return *this;
         }
 
@@ -418,8 +524,39 @@ namespace MathLib
 
         [[nodiscard]] Vector4d operator*(const Vector4d& rhs) const noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            // clang-format off
+            const double row1x = m_data[0].getX(); const double row1y = m_data[0].getY(); const double row1z = m_data[0].getZ(); const double row1w = m_data[0].getW();
+            const double row2x = m_data[1].getX(); const double row2y = m_data[1].getY(); const double row2z = m_data[1].getZ(); const double row2w = m_data[1].getW();
+            const double row3x = m_data[2].getX(); const double row3y = m_data[2].getY(); const double row3z = m_data[2].getZ(); const double row3w = m_data[2].getW();
+            const double row4x = m_data[3].getX(); const double row4y = m_data[3].getY(); const double row4z = m_data[3].getZ(); const double row4w = m_data[3].getW();
+            // clang-format on
+
+            const Simd::VectorRegister4Double col0 = Simd::makeVector4D(row1x, row2x, row3x, row4x);
+            const Simd::VectorRegister4Double col1 = Simd::makeVector4D(row1y, row2y, row3y, row4y);
+            const Simd::VectorRegister4Double col2 = Simd::makeVector4D(row1z, row2z, row3z, row4z);
+            const Simd::VectorRegister4Double col3 = Simd::makeVector4D(row1w, row2w, row3w, row4w);
+
+            const Simd::VectorRegister4Double x = Simd::makeVector4D(rhs.getX());
+            const Simd::VectorRegister4Double y = Simd::makeVector4D(rhs.getY());
+            const Simd::VectorRegister4Double z = Simd::makeVector4D(rhs.getZ());
+            const Simd::VectorRegister4Double w = Simd::makeVector4D(rhs.getW());
+
+            Simd::VectorRegister4Double result = Simd::mul(col0, x);
+            result = Simd::fma(col1, y, result);
+            result = Simd::fma(col2, z, result);
+            result = Simd::fma(col3, w, result);
+
+            return Vector4d(result);
+#else
             return Vector4d(Vector4d::dot(m_data[0], rhs), Vector4d::dot(m_data[1], rhs), Vector4d::dot(m_data[2], rhs),
                             Vector4d::dot(m_data[3], rhs));
+#endif // defined(MATH_LIB_INTRINSIC)
+        }
+
+        [[nodiscard]] Vector4d operator*(const Vector3<double>& rhs) const noexcept
+        {
+            return operator*(Vector4d(rhs.getX(), rhs.getY(), rhs.getZ(), 1.0));
         }
 
         Matrix4x4& operator*=(Matrix4x4 rhs) noexcept

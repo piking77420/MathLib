@@ -67,7 +67,7 @@ TEST(TestMatrix3x3d, identity)
 
 TEST(TestMatrix3x3d, setter)
 {
-    Matrix3x3d m;
+    Matrix3x3d m = Matrix3x3d::zero();
     m.setM11(1.0) //
         .setM12(2.0)
         .setM13(3.0)

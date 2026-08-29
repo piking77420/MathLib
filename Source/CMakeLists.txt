@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-set(MATHLIB_SOURCES 
+set(MATHLIB_SOURCES
+    AVX.hpp
     CpuInstructionSet.cpp
     CpuInstructionSet.hpp
     MathLibHeader.hpp
@@ -43,6 +44,21 @@ target_include_directories(
 foreach(SIMD_EXT IN LISTS MATHLIB_SIMD_EXT)
         mathlib_enable_simd(${PROJECT_NAME} ${SIMD_EXT})
 endforeach()
+
+if (MATHLIB_USE_INTRINSIC)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC MATH_LIB_INTRINSIC)
+endif()
+
+if (MATHLIB_USE_FMA)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC SIMD_FMA)
+endif()
+
+if (CPU_X86_64 OR CPU_X86)
+    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND MATHLIB_USE_FMA)
+        target_compile_options(${target} PRIVATE -mfma)
+    endif()
+endif()
+
 
 enable_testing()
 if (BUILD_UNIT_TEST)

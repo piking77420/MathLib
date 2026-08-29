@@ -57,13 +57,11 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
             m_data[0] = x;
-            ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE void setY(double y) noexcept
         {
             m_data[1] = y;
-            ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE Vector2& operator+=(const Vector2& other) noexcept

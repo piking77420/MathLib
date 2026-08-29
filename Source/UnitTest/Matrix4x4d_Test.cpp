@@ -93,7 +93,7 @@ TEST(TestMatrix4x4d, identity)
 
 TEST(TestMatrix4x4d, setter)
 {
-    Matrix4x4d m;
+    Matrix4x4d m = Matrix4x4d::zero();
     m.setM11(1.0) //
         .setM12(2.0)
         .setM13(3.0)
@@ -1005,6 +1005,44 @@ TEST(TestMatrix4x4d, mulMatrixOperator)
         EXPECT_DOUBLE_EQ(m.getM43(), 444.0);
         EXPECT_DOUBLE_EQ(m.getM44(), 386.0);
     }
+}
+
+TEST(TestMatrix4x4d, mulVector4Operator)
+{
+    // clang-format off
+    const Matrix4x4d m(1.0,  2.0,  3.0,  4.0,
+                       5.0,  6.0,  7.0,  8.0,
+                       9.0, 10.0, 11.0, 12.0,
+                      13.0, 14.0, 15.0, 16.0);
+
+    const Vector4d v(1.0, 2.0, 3.0, 4.0);
+    // clang-format on
+
+    const Vector4d result = m * v;
+
+    EXPECT_DOUBLE_EQ(result.getX(), 30.0);
+    EXPECT_DOUBLE_EQ(result.getY(), 70.0);
+    EXPECT_DOUBLE_EQ(result.getZ(), 110.0);
+    EXPECT_DOUBLE_EQ(result.getW(), 150.0);
+}
+
+TEST(TestMatrix4x4d, mulVector3Operator)
+{
+    // clang-format off
+    const Matrix4x4d m(1.0,  2.0,  3.0,  4.0,
+                       5.0,  6.0,  7.0,  8.0,
+                       9.0, 10.0, 11.0, 12.0,
+                      13.0, 14.0, 15.0, 16.0);
+
+    const Vector3d v(1.0, 2.0, 3.0);
+    // clang-format on
+
+    const Vector4d result = m * v;
+
+    EXPECT_DOUBLE_EQ(result.getX(), 18.0);
+    EXPECT_DOUBLE_EQ(result.getY(), 46.0);
+    EXPECT_DOUBLE_EQ(result.getZ(), 74.0);
+    EXPECT_DOUBLE_EQ(result.getW(), 102.0);
 }
 
 TEST(TestMatrix4x4d, cmpOperator)
