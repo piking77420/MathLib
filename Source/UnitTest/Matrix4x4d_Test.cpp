@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <MathLibHeader.hpp>
-#include <Vector3.hpp>
-#include <Vector4.hpp>
 #include <Matrix4x4d.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)

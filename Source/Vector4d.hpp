@@ -88,25 +88,21 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE void setX(double x) noexcept
         {
             m_data[0] = x;
-            ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE void setY(double y) noexcept
         {
             m_data[1] = y;
-            ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE void setZ(double z) noexcept
         {
             m_data[2] = z;
-            ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE void setW(double w) noexcept
         {
             m_data[3] = w;
-            ASSERT_IS_FINITE(*this);
         }
 
         MATH_LIB_FORCE_INLINE Vector4& operator+=(const Vector4& other) noexcept
