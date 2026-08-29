@@ -43,6 +43,16 @@ namespace MathLib
             : m_data{row1, row2, row3, row4}
         {
         }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const double* data() const noexcept
+        {
+            return m_data[0].data();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE double* data() noexcept
+        {
+            return m_data[0].data();
+        }
         // clang-format on
         [[nodiscard]] static Matrix4x4 identity() noexcept
         {
@@ -324,10 +334,22 @@ namespace MathLib
 
         Matrix4x4& operator+=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] += value;
             m_data[1] += value;
             m_data[2] += value;
             m_data[3] += value;
+#endif
             return *this;
         }
 
@@ -340,10 +362,23 @@ namespace MathLib
 
         Matrix4x4& operator-=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] -= value;
             m_data[1] -= value;
             m_data[2] -= value;
             m_data[3] -= value;
+#endif
             return *this;
         }
 
@@ -356,10 +391,23 @@ namespace MathLib
 
         Matrix4x4& operator*=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] *= value;
             m_data[1] *= value;
             m_data[2] *= value;
             m_data[3] *= value;
+#endif
             return *this;
         }
 
@@ -372,10 +420,23 @@ namespace MathLib
 
         Matrix4x4& operator/=(const double value) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+
+            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+#else
             m_data[0] /= value;
             m_data[1] /= value;
             m_data[2] /= value;
             m_data[3] /= value;
+#endif
             return *this;
         }
 
@@ -388,10 +449,27 @@ namespace MathLib
 
         Matrix4x4& operator+=(const Matrix4x4& rhs) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const double* otherPtr = rhs.data();
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
+                               ptr + 4);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 8), Simd::makeVector4DAligned(otherPtr + 8)),
+                               ptr + 8);
+
+            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 12), Simd::makeVector4DAligned(otherPtr + 12)),
+                               ptr + 12);
+#else
             m_data[0] += rhs.m_data[0];
             m_data[1] += rhs.m_data[1];
             m_data[2] += rhs.m_data[2];
             m_data[3] += rhs.m_data[3];
+#endif
+
             return *this;
         }
 
@@ -404,10 +482,26 @@ namespace MathLib
 
         Matrix4x4& operator-=(const Matrix4x4& rhs) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+
+            double* ptr = data();
+            const double* otherPtr = rhs.data();
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
+                               ptr + 4);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 8), Simd::makeVector4DAligned(otherPtr + 8)),
+                               ptr + 8);
+
+            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 12), Simd::makeVector4DAligned(otherPtr + 12)),
+                               ptr + 12);
+#else
             m_data[0] -= rhs.m_data[0];
             m_data[1] -= rhs.m_data[1];
             m_data[2] -= rhs.m_data[2];
             m_data[3] -= rhs.m_data[3];
+#endif
             return *this;
         }
 

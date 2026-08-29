@@ -38,16 +38,18 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE explicit Vector4(double x, double y, double z, double w)
             : m_data({x, y, z, w})
+        {
+            ASSERT_IS_FINITE(*this);
+        }
 
-                  {ASSERT_IS_FINITE(*this)}
-
-            MATH_LIB_FORCE_INLINE explicit Vector4(double x)
+        MATH_LIB_FORCE_INLINE explicit Vector4(double x)
             : m_data({x, x, x, x})
-
-                  {ASSERT_IS_FINITE(*this)}
+        {
+            ASSERT_IS_FINITE(*this);
+        }
 
 #if defined(MATH_LIB_INTRINSIC)
-            MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
+        MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
         {
             Simd::storeUnaligned(reg, m_data.data());
         }
