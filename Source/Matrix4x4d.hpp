@@ -53,7 +53,17 @@ namespace MathLib
         {
             return m_data[0].data();
         }
-        // clang-format on
+
+        [[nodiscard]] static Matrix4x4 zero() noexcept
+        {
+            // clang-format off
+            return Matrix4x4(0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0);
+            // clang-format on
+        }
+
         [[nodiscard]] static Matrix4x4 identity() noexcept
         {
             // clang-format off

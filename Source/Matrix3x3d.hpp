@@ -38,6 +38,14 @@ namespace MathLib
         {
         }
 
+        [[nodiscard]] static Matrix3x3 zero() noexcept
+        {
+            // clang-format off
+            return Matrix3x3(0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0);
+            // clang-format on
+        }
         [[nodiscard]] static Matrix3x3 identity() noexcept
         {
             // clang-format off

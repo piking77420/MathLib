@@ -34,6 +34,14 @@ namespace MathLib
         {
         }
 
+        [[nodiscard]] static Matrix2x2 zero() noexcept
+        {
+            // clang-format off
+            return Matrix2x2(0.0, 0.0,
+                             0.0, 0.0);
+            // clang-format on
+        }
+
         [[nodiscard]] static Matrix2x2 identity() noexcept
         {
             // clang-format off

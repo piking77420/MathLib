@@ -40,7 +40,7 @@ TEST(TestMatrixd2x2, identity)
 
 TEST(TestMatrixd2x2, setter)
 {
-    Matrix2x2d m;
+    Matrix2x2d m = Matrix2x2d::zero();
     m.setM11(1.0) //
         .setM12(2.0)
         .setM21(3.0)

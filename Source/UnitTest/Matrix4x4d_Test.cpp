@@ -95,7 +95,7 @@ TEST(TestMatrix4x4d, identity)
 
 TEST(TestMatrix4x4d, setter)
 {
-    Matrix4x4d m;
+    Matrix4x4d m = Matrix4x4d::zero();
     m.setM11(1.0) //
         .setM12(2.0)
         .setM13(3.0)
