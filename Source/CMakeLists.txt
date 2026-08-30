@@ -9,6 +9,7 @@ set(MATHLIB_SOURCES
     AVX.hpp
     CpuInstructionSet.cpp
     CpuInstructionSet.hpp
+    NEON.hpp
     MathLibHeader.hpp
     Matrix2x2.hpp
     Matrix3x3.hpp

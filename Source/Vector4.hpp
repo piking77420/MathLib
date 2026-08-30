@@ -10,6 +10,7 @@
 #include <span>
 #include <MathLibHeader.hpp>
 #include <AVX.hpp>
+#include <NEON.hpp>
 #include <SSE.hpp>
 
 namespace MathLib
