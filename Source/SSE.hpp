@@ -37,6 +37,7 @@ namespace MathLib::Simd
 #endif // _mm_load1_ps
     }
 
+    template<float>
     [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Float makeVector4Zero() noexcept
     {
         return _mm_setzero_ps();

@@ -19,6 +19,14 @@
 #define CPU_ARM_32 1
 #endif
 
+#if (defined(__arm__) && !defined(__aarch64__))
+#error "32-bit ARM is not supported"
+#endif
+
+#if defined(__i386__) || defined(_M_IX86)
+#error "32-bit x86 is not supported"
+#endif
+
 #if CPU_X86_64
 
 #if defined(MATHLIB_SIMD_LEVEL_AVX2)
@@ -72,7 +80,7 @@
 #include <arm_sve.h>
 #endif
 
-#if SIMD_ARM_NEON
+#if SIMD_NEON
 #include <arm_neon.h>
 #endif
 

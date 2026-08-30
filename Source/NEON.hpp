@@ -35,6 +35,7 @@ namespace MathLib::Simd
         return vdupq_n_f32(value);
     }
 
+    template<float>
     [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Float makeVector4Zero() noexcept
     {
         return vdupq_n_f32(0.0f);
@@ -71,17 +72,7 @@ namespace MathLib::Simd
     [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Float div(const VectorRegister4Float& a,
                                                                  const VectorRegister4Float& b) noexcept
     {
-#if defined(__aarch64__)
         return vdivq_f32(a, b);
-#else
-        // ARMv7 NEON has no native vector float division.
-        // Reciprocal estimate + Newton-Raphson refinement.
-        float32x4_t recip = vrecpeq_f32(b);
-        recip = vmulq_f32(vrecpsq_f32(b, recip), recip);
-        recip = vmulq_f32(vrecpsq_f32(b, recip), recip);
-
-        return vmulq_f32(a, recip);
-#endif
     }
 
     [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Float min(const VectorRegister4Float& a,
@@ -101,60 +92,42 @@ namespace MathLib::Simd
                                                                  const VectorRegister4Float& b,
                                                                  const VectorRegister4Float& c) noexcept
     {
-#if defined(__aarch64__)
         return vfmaq_f32(c, a, b);
-#else
-        // vmlaq_f32 computes c + a * b,
-        // but isn't necessarily fused on ARMv7.
-        return vmlaq_f32(c, a, b);
-#endif
     }
 
     [[nodiscard]] MATH_LIB_FORCE_INLINE float dot(const VectorRegister4Float& a, const VectorRegister4Float& b) noexcept
     {
-        const float32x4_t product = vmulq_f32(a, b);
-
-#if defined(__aarch64__)
-        return vaddvq_f32(product);
-#else
-        const float32x2_t low = vget_low_f32(product);
-        const float32x2_t high = vget_high_f32(product);
-
-        const float32x2_t sum = vadd_f32(low, high);
-        const float32x2_t pairSum = vpadd_f32(sum, sum);
-
-        return vget_lane_f32(pairSum, 0);
-#endif
+        return vaddvq_f32(vmulq_f32(a, b));
     }
 
-#if defined(__aarch64__)
     struct VectorRegister4Double
     {
         float64x2_t low;
         float64x2_t high;
     };
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4DAligned(const double* ptr) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4Aligned(const double* ptr) noexcept
     {
         return {vld1q_f64(ptr), vld1q_f64(ptr + 2)};
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4DUnaligned(const double* ptr) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4Unaligned(const double* ptr) noexcept
     {
         return {vld1q_f64(ptr), vld1q_f64(ptr + 2)};
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4D(double x, double y, double z,
-                                                                           double w) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4(double x, double y, double z,
+                                                                          double w) noexcept
     {
-        return {{x, y}, {z, w}};
+        return {float64x2_t{x, y}, float64x2_t{z, w}};
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4D(double value) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4(double value) noexcept
     {
         return {vdupq_n_f64(value), vdupq_n_f64(value)};
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4DZero() noexcept
+    template<double>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4Zero() noexcept
     {
         return {vdupq_n_f64(0.0), vdupq_n_f64(0.0)};
     }
@@ -225,8 +198,6 @@ namespace MathLib::Simd
 
         return vaddvq_f64(sum);
     }
-
-#endif // defined(__aarch64__)
 
 } // namespace MathLib::Simd
 
