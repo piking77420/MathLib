@@ -10,6 +10,7 @@
 #include <span>
 #include <MathLibHeader.hpp>
 #include <AVX.hpp>
+#include <SSE.hpp>
 
 namespace MathLib
 {
@@ -26,6 +27,11 @@ namespace MathLib
     class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Vector4 // TODO is align or not
     {
     public:
+#if defined(MATH_LIB_INTRINSIC)
+        using _VectorInstrinsic =
+            std::conditional_t<std::is_same_v<T, float>, Simd::VectorRegister4Float, Simd::VectorRegister4Double>;
+#endif
+
         explicit Vector4() = default;
 
         ~Vector4() = default;
@@ -43,7 +49,7 @@ namespace MathLib
         }
 
 #if defined(MATH_LIB_INTRINSIC)
-        MATH_LIB_FORCE_INLINE Vector4(const Simd::VectorRegister4Double& reg) noexcept
+        MATH_LIB_FORCE_INLINE Vector4(const _VectorInstrinsic& reg) noexcept
         {
             Simd::storeUnaligned(reg, m_data.data());
         }
@@ -182,7 +188,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector4& operator+=(const T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
-            *this = Vector4(Simd::add(*this, Simd::makeVector4D(scalar)));
+            *this = Vector4(Simd::add(*this, Simd::makeVector4(scalar)));
 #else
             m_data[0] += scalar;
             m_data[1] += scalar;
@@ -196,7 +202,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector4& operator-=(const T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
-            *this = Vector4(Simd::sub(*this, Simd::makeVector4D(scalar)));
+            *this = Vector4(Simd::sub(*this, Simd::makeVector4(scalar)));
 #else
             m_data[0] -= scalar;
             m_data[1] -= scalar;
@@ -210,7 +216,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector4& operator*=(T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
-            *this = Vector4(Simd::mul(*this, Simd::makeVector4D(scalar)));
+            *this = Vector4(Simd::mul(*this, Simd::makeVector4(scalar)));
 #else
             m_data[0] *= scalar;
             m_data[1] *= scalar;
@@ -224,7 +230,7 @@ namespace MathLib
         MATH_LIB_FORCE_INLINE Vector4& operator/=(T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
-            *this = Vector4(Simd::div(*this, Simd::makeVector4D(scalar)));
+            *this = Vector4(Simd::div(*this, Simd::makeVector4(scalar)));
 #else
             m_data[0] /= scalar;
             m_data[1] /= scalar;
@@ -684,9 +690,9 @@ namespace MathLib
         }
 
 #if defined(MATH_LIB_INTRINSIC)
-        operator Simd::VectorRegister4Double() const noexcept
+        operator _VectorInstrinsic() const noexcept
         {
-            return Simd::makeVector4DUnaligned(m_data.data());
+            return Simd::makeVector4Unaligned(m_data.data());
         }
 #endif // defined(MATH_LIB_INTRINSIC)
 

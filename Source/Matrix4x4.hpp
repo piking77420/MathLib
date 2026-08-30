@@ -15,6 +15,9 @@ namespace MathLib
     {
     public:
         using _VectorType = Vector4<T>;
+#if defined(MATH_LIB_INTRINSIC)
+        using _VectorInstrinsic = Vector4<T>::_VectorInstrinsic;
+#endif
 
         explicit Matrix4x4() = default;
 
@@ -343,14 +346,14 @@ namespace MathLib
         {
 #if defined(MATH_LIB_INTRINSIC)
             T* ptr = data();
-            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+            const _VectorInstrinsic valueAsVector4DRegister = Simd::makeVector4(value);
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr), valueAsVector4DRegister), ptr);
 
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
 
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
 
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
 #else
             m_data[0] += value;
             m_data[1] += value;
@@ -372,14 +375,14 @@ namespace MathLib
 #if defined(MATH_LIB_INTRINSIC)
 
             T* ptr = data();
-            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+            const auto valueAsVector4DRegister = Simd::makeVector4(value);
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr), valueAsVector4DRegister), ptr);
 
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
 
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
 
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
 #else
             m_data[0] -= value;
             m_data[1] -= value;
@@ -401,14 +404,14 @@ namespace MathLib
 #if defined(MATH_LIB_INTRINSIC)
 
             T* ptr = data();
-            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
-            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+            const auto valueAsVector4DRegister = Simd::makeVector4(value);
+            Simd::storeAligned(Simd::mul(Simd::makeVector4Aligned(ptr), valueAsVector4DRegister), ptr);
 
-            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+            Simd::storeAligned(Simd::mul(Simd::makeVector4Aligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
 
-            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+            Simd::storeAligned(Simd::mul(Simd::makeVector4Aligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
 
-            Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+            Simd::storeAligned(Simd::mul(Simd::makeVector4Aligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
 #else
             m_data[0] *= value;
             m_data[1] *= value;
@@ -430,14 +433,14 @@ namespace MathLib
 #if defined(MATH_LIB_INTRINSIC)
 
             T* ptr = data();
-            const auto valueAsVector4DRegister = Simd::makeVector4D(value);
-            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
+            const auto valueAsVector4DRegister = Simd::makeVector4(value);
+            Simd::storeAligned(Simd::div(Simd::makeVector4Aligned(ptr), valueAsVector4DRegister), ptr);
 
-            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
+            Simd::storeAligned(Simd::div(Simd::makeVector4Aligned(ptr + 4), valueAsVector4DRegister), ptr + 4);
 
-            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
+            Simd::storeAligned(Simd::div(Simd::makeVector4Aligned(ptr + 8), valueAsVector4DRegister), ptr + 8);
 
-            Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
+            Simd::storeAligned(Simd::div(Simd::makeVector4Aligned(ptr + 12), valueAsVector4DRegister), ptr + 12);
 #else
             m_data[0] /= value;
             m_data[1] /= value;
@@ -460,15 +463,15 @@ namespace MathLib
 
             T* ptr = data();
             const T* otherPtr = rhs.data();
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr), Simd::makeVector4Aligned(otherPtr)), ptr);
 
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr + 4), Simd::makeVector4Aligned(otherPtr + 4)),
                                ptr + 4);
 
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 8), Simd::makeVector4DAligned(otherPtr + 8)),
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr + 8), Simd::makeVector4Aligned(otherPtr + 8)),
                                ptr + 8);
 
-            Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 12), Simd::makeVector4DAligned(otherPtr + 12)),
+            Simd::storeAligned(Simd::add(Simd::makeVector4Aligned(ptr + 12), Simd::makeVector4Aligned(otherPtr + 12)),
                                ptr + 12);
 #else
             m_data[0] += rhs.m_data[0];
@@ -493,15 +496,15 @@ namespace MathLib
 
             T* ptr = data();
             const T* otherPtr = rhs.data();
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr), Simd::makeVector4Aligned(otherPtr)), ptr);
 
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr + 4), Simd::makeVector4Aligned(otherPtr + 4)),
                                ptr + 4);
 
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 8), Simd::makeVector4DAligned(otherPtr + 8)),
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr + 8), Simd::makeVector4Aligned(otherPtr + 8)),
                                ptr + 8);
 
-            Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 12), Simd::makeVector4DAligned(otherPtr + 12)),
+            Simd::storeAligned(Simd::sub(Simd::makeVector4Aligned(ptr + 12), Simd::makeVector4Aligned(otherPtr + 12)),
                                ptr + 12);
 #else
             m_data[0] -= rhs.m_data[0];
@@ -529,17 +532,17 @@ namespace MathLib
             const T row4x = m_data[3].getX(); const T row4y = m_data[3].getY(); const T row4z = m_data[3].getZ(); const T row4w = m_data[3].getW();
             // clang-format on
 
-            const Simd::VectorRegister4Double col0 = Simd::makeVector4D(row1x, row2x, row3x, row4x);
-            const Simd::VectorRegister4Double col1 = Simd::makeVector4D(row1y, row2y, row3y, row4y);
-            const Simd::VectorRegister4Double col2 = Simd::makeVector4D(row1z, row2z, row3z, row4z);
-            const Simd::VectorRegister4Double col3 = Simd::makeVector4D(row1w, row2w, row3w, row4w);
+            const _VectorInstrinsic col0 = Simd::makeVector4(row1x, row2x, row3x, row4x);
+            const _VectorInstrinsic col1 = Simd::makeVector4(row1y, row2y, row3y, row4y);
+            const _VectorInstrinsic col2 = Simd::makeVector4(row1z, row2z, row3z, row4z);
+            const _VectorInstrinsic col3 = Simd::makeVector4(row1w, row2w, row3w, row4w);
 
-            const Simd::VectorRegister4Double x = Simd::makeVector4D(rhs.getX());
-            const Simd::VectorRegister4Double y = Simd::makeVector4D(rhs.getY());
-            const Simd::VectorRegister4Double z = Simd::makeVector4D(rhs.getZ());
-            const Simd::VectorRegister4Double w = Simd::makeVector4D(rhs.getW());
+            const _VectorInstrinsic x = Simd::makeVector4(rhs.getX());
+            const _VectorInstrinsic y = Simd::makeVector4(rhs.getY());
+            const _VectorInstrinsic z = Simd::makeVector4(rhs.getZ());
+            const _VectorInstrinsic w = Simd::makeVector4(rhs.getW());
 
-            Simd::VectorRegister4Double result = Simd::mul(col0, x);
+            _VectorInstrinsic result = Simd::mul(col0, x);
             result = Simd::fma(col1, y, result);
             result = Simd::fma(col2, z, result);
             result = Simd::fma(col3, w, result);
