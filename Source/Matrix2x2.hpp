@@ -1,5 +1,5 @@
-#ifndef MATH_LIB_MATRIX2X2D_H
-#define MATH_LIB_MATRIX2X2D_H
+#ifndef MATH_LIB_MATRIX2X2_H
+#define MATH_LIB_MATRIX2X2_H
 
 #include <array>
 #include <Vector2.hpp>
@@ -281,4 +281,4 @@ namespace MathLib
     using Matrix2x2d = Matrix2x2<double>;
 } // namespace MathLib
 
-#endif // MATH_LIB_MATRIX2X2D_H
+#endif // MATH_LIB_MATRIX2X2_H

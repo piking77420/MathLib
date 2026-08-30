@@ -1,5 +1,5 @@
-#ifndef MATH_LIB_MATRIX3X3D_H
-#define MATH_LIB_MATRIX3X3D_H
+#ifndef MATH_LIB_MATRIX3X3_H
+#define MATH_LIB_MATRIX3X3_H
 
 #include <array>
 #include <cstring>
@@ -361,4 +361,4 @@ namespace MathLib
     using Matrix3x3d = Matrix3x3<double>;
 } // namespace MathLib
 
-#endif // MATH_LIB_MATRIX3X3D_H
+#endif // MATH_LIB_MATRIX3X3_H

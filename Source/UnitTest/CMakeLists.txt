@@ -25,15 +25,18 @@ enable_testing()
 set(TEST_SOURCES
     Utils_Test.cpp
     Matrix2x2d_Test.cpp
+    Matrix2x2f_Test.cpp
     Matrix3x3d_Test.cpp
+    Matrix3x3f_Test.cpp
     Matrix4x4d_Test.cpp
+    Matrix4x4f_Test.cpp
     SimdExtension_Test.cpp
-    Vector2f_Test.cpp
     Vector2d_Test.cpp
-    Vector3f_Test.cpp
+    Vector2f_Test.cpp
     Vector3d_Test.cpp
-    Vector4f_Test.cpp
-    Vector4d_Test.cpp)
+    Vector3f_Test.cpp
+    Vector4d_Test.cpp
+    Vector4f_Test.cpp)
 
 add_executable(
         ${PROJECT_NAME}

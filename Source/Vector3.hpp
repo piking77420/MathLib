@@ -1,5 +1,5 @@
-#ifndef MATH_LIB_VECTOR3D_H
-#define MATH_LIB_VECTOR3D_H
+#ifndef MATH_LIB_VECTOR3_H
+#define MATH_LIB_VECTOR3_H
 
 #include <array>
 #include <algorithm>
@@ -443,4 +443,4 @@ struct std::formatter<MathLib::Vector3<T>, char>
     }
 };
 
-#endif // MATH_LIB_VECTOR3D_H
+#endif // MATH_LIB_VECTOR3_H

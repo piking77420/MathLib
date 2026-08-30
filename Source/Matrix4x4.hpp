@@ -1,5 +1,5 @@
-#ifndef MATH_LIB_MATRIX4X4D_H
-#define MATH_LIB_MATRIX4X4D_H
+#ifndef MATH_LIB_MATRIX4X4_H
+#define MATH_LIB_MATRIX4X4_H
 
 #include <cstring>
 #include <Vector3.hpp>
@@ -20,10 +20,10 @@ namespace MathLib
 
         ~Matrix4x4() = default;
         // clang-format off
-        MATH_LIB_FORCE_INLINE explicit Matrix4x4(double getM11, double getM12, double getM13, double getM14,
-                                                 double getM21, double getM22, double getM23, double getM24,
-                                                 double getM31, double getM32, double getM33, double getM34,
-                                                 double getM41, double getM42, double getM43, double getM44)
+        MATH_LIB_FORCE_INLINE explicit Matrix4x4(T getM11, T getM12, T getM13, T getM14,
+                                                 T getM21, T getM22, T getM23, T getM24,
+                                                 T getM31, T getM32, T getM33, T getM34,
+                                                 T getM41, T getM42, T getM43, T getM44)
             : m_data{Vector4<T>(getM11, getM12, getM13, getM14), 
                      Vector4<T>(getM21, getM22, getM23, getM24),
                      Vector4<T>(getM31, getM32, getM33, getM34),
@@ -33,20 +33,20 @@ namespace MathLib
         }
         // clang-format on
         // clang-format off
-        MATH_LIB_FORCE_INLINE explicit Matrix4x4(const Vector4d& row1, 
-                                                 const Vector4d& row2, 
-                                                 const Vector4d& row3,
-                                                 const Vector4d& row4)
+        MATH_LIB_FORCE_INLINE explicit Matrix4x4(const Vector4<T>& row1, 
+                                                 const Vector4<T>& row2, 
+                                                 const Vector4<T>& row3,
+                                                 const Vector4<T>& row4)
             : m_data{row1, row2, row3, row4}
         {
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE const double* data() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const T* data() const noexcept
         {
             return m_data[0].data();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double* data() noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T* data() noexcept
         {
             return m_data[0].data();
         }
@@ -71,177 +71,177 @@ namespace MathLib
             // clang-format on
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM11() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM11() const noexcept
         {
             return m_data[0].getX();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM12() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM12() const noexcept
         {
             return m_data[0].getY();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM13() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM13() const noexcept
         {
             return m_data[0].getZ();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM14() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM14() const noexcept
         {
             return m_data[0].getW();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM21() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM21() const noexcept
         {
             return m_data[1].getX();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM22() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM22() const noexcept
         {
             return m_data[1].getY();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM23() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM23() const noexcept
         {
             return m_data[1].getZ();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM24() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM24() const noexcept
         {
             return m_data[1].getW();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM31() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM31() const noexcept
         {
             return m_data[2].getX();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM32() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM32() const noexcept
         {
             return m_data[2].getY();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM33() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM33() const noexcept
         {
             return m_data[2].getZ();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM34() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM34() const noexcept
         {
             return m_data[2].getW();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM41() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM41() const noexcept
         {
             return m_data[3].getX();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM42() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM42() const noexcept
         {
             return m_data[3].getY();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM43() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM43() const noexcept
         {
             return m_data[3].getZ();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM44() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM44() const noexcept
         {
             return m_data[3].getW();
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM11(double getM11) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM11(T getM11) noexcept
         {
             m_data[0].setX(getM11);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM12(double getM12) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM12(T getM12) noexcept
         {
             m_data[0].setY(getM12);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM13(double getM13) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM13(T getM13) noexcept
         {
             m_data[0].setZ(getM13);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM14(double getM14) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM14(T getM14) noexcept
         {
             m_data[0].setW(getM14);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM21(double getM21) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM21(T getM21) noexcept
         {
             m_data[1].setX(getM21);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM22(double getM22) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM22(T getM22) noexcept
         {
             m_data[1].setY(getM22);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM23(double getM23) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM23(T getM23) noexcept
         {
             m_data[1].setZ(getM23);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM24(double getM24) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM24(T getM24) noexcept
         {
             m_data[1].setW(getM24);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM31(double getM31) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM31(T getM31) noexcept
         {
             m_data[2].setX(getM31);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM32(double getM32) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM32(T getM32) noexcept
         {
             m_data[2].setY(getM32);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM33(double getM33) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM33(T getM33) noexcept
         {
             m_data[2].setZ(getM33);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM34(double getM34) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM34(T getM34) noexcept
         {
             m_data[2].setW(getM34);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM41(double getM41) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM41(T getM41) noexcept
         {
             m_data[3].setX(getM41);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM42(double getM42) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM42(T getM42) noexcept
         {
             m_data[3].setY(getM42);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM43(double getM43) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM43(T getM43) noexcept
         {
             m_data[3].setZ(getM43);
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Matrix4x4& setM44(double getM44) noexcept
+        MATH_LIB_FORCE_INLINE Matrix4x4& setM44(T getM44) noexcept
         {
             m_data[3].setW(getM44);
             return *this;
@@ -249,7 +249,7 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Matrix4x4& transpose() noexcept
         {
-            double* ptr = reinterpret_cast<double*>(&m_data[0]);
+            T* ptr = reinterpret_cast<T*>(&m_data[0]);
 
             static constexpr std::size_t m12offset = 1;
             static constexpr std::size_t m13offset = 2;
@@ -285,20 +285,20 @@ namespace MathLib
             return m.transpose();
         }
 
-        MATH_LIB_FORCE_INLINE double determinant() const noexcept
+        MATH_LIB_FORCE_INLINE T determinant() const noexcept
         {
-            return Vector4d::dot(m_data[0], Vector4d::cross(m_data[1], m_data[2], m_data[3]));
+            return Vector4<T>::dot(m_data[0], Vector4<T>::cross(m_data[1], m_data[2], m_data[3]));
         }
 
         MATH_LIB_FORCE_INLINE Matrix4x4& inverse() noexcept
         {
             // clang-format off
-            const double row1x = m_data[0].getX(); const double row1y = m_data[0].getY(); const double row1z = m_data[0].getZ(); const double row1w = m_data[0].getW();
-            const double row2x = m_data[1].getX(); const double row2y = m_data[1].getY(); const double row2z = m_data[1].getZ(); const double row2w = m_data[1].getW();
-            const double row3x = m_data[2].getX(); const double row3y = m_data[2].getY(); const double row3z = m_data[2].getZ(); const double row3w = m_data[2].getW();
-            const double row4x = m_data[3].getX(); const double row4y = m_data[3].getY(); const double row4z = m_data[3].getZ(); const double row4w = m_data[3].getW();
+            const T row1x = m_data[0].getX(); const T row1y = m_data[0].getY(); const T row1z = m_data[0].getZ(); const T row1w = m_data[0].getW();
+            const T row2x = m_data[1].getX(); const T row2y = m_data[1].getY(); const T row2z = m_data[1].getZ(); const T row2w = m_data[1].getW();
+            const T row3x = m_data[2].getX(); const T row3y = m_data[2].getY(); const T row3z = m_data[2].getZ(); const T row3w = m_data[2].getW();
+            const T row4x = m_data[3].getX(); const T row4y = m_data[3].getY(); const T row4z = m_data[3].getZ(); const T row4w = m_data[3].getW();
 
-            double inv[16];
+            T inv[16];
             inv[0]   =  row2y * row3z * row4w - row2y * row3w * row4z - row3y * row2z * row4w + row3y * row2w * row4z + row4y * row2z * row3w - row4y * row2w * row3z;
             inv[1]   = -row1y * row3z * row4w + row1y * row3w * row4z + row3y * row1z * row4w - row3y * row1w * row4z - row4y * row1z * row3w + row4y * row1w * row3z;
             inv[2]   =  row1y * row2z * row4w - row1y * row2w * row4z - row2y * row1z * row4w + row2y * row1w * row4z + row4y * row1z * row2w - row4y * row1w * row2z;
@@ -317,13 +317,13 @@ namespace MathLib
             inv[15]  =  row1x * row2y * row3z - row1x * row2z * row3y - row2x * row1y * row3z + row2x * row1z * row3y + row3x * row1y * row2z - row3x * row1z * row2y;
 
             // clang-format on
-            const double determinant = row1x * inv[0] + row1y * inv[4] + row1z * inv[8] + row1w * inv[12];
+            const T determinant = row1x * inv[0] + row1y * inv[4] + row1z * inv[8] + row1w * inv[12];
             if (fuzzyZero(determinant) || !std::isfinite(determinant))
             {
                 return *this;
             }
 
-            const double invDeterminant = 1.0 / determinant;
+            const T invDeterminant = 1.0 / determinant;
             for (auto& d : inv)
                 d = d * invDeterminant;
 
@@ -339,10 +339,10 @@ namespace MathLib
             return m.inverse();
         }
 
-        Matrix4x4& operator+=(const double value) noexcept
+        Matrix4x4& operator+=(const T value) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
-            double* ptr = data();
+            T* ptr = data();
             const auto valueAsVector4DRegister = Simd::makeVector4D(value);
             Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
 
@@ -360,18 +360,18 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix4x4 operator+(double scalar) const
+        [[nodiscard]] Matrix4x4 operator+(T scalar) const
         {
             Matrix4x4 result = *this;
             result += scalar;
             return result;
         }
 
-        Matrix4x4& operator-=(const double value) noexcept
+        Matrix4x4& operator-=(const T value) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
 
-            double* ptr = data();
+            T* ptr = data();
             const auto valueAsVector4DRegister = Simd::makeVector4D(value);
             Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
 
@@ -389,18 +389,18 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix4x4 operator-(double scalar) const
+        [[nodiscard]] Matrix4x4 operator-(T scalar) const
         {
             Matrix4x4 result = *this;
             result -= scalar;
             return result;
         }
 
-        Matrix4x4& operator*=(const double value) noexcept
+        Matrix4x4& operator*=(const T value) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
 
-            double* ptr = data();
+            T* ptr = data();
             const auto valueAsVector4DRegister = Simd::makeVector4D(value);
             Simd::storeAligned(Simd::mul(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
 
@@ -418,18 +418,18 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix4x4 operator*(double scalar) const
+        [[nodiscard]] Matrix4x4 operator*(T scalar) const
         {
             Matrix4x4 result = *this;
             result *= scalar;
             return result;
         }
 
-        Matrix4x4& operator/=(const double value) noexcept
+        Matrix4x4& operator/=(const T value) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
 
-            double* ptr = data();
+            T* ptr = data();
             const auto valueAsVector4DRegister = Simd::makeVector4D(value);
             Simd::storeAligned(Simd::div(Simd::makeVector4DAligned(ptr), valueAsVector4DRegister), ptr);
 
@@ -447,7 +447,7 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix4x4 operator/(double scalar) const
+        [[nodiscard]] Matrix4x4 operator/(T scalar) const
         {
             Matrix4x4 result = *this;
             result /= scalar;
@@ -458,8 +458,8 @@ namespace MathLib
         {
 #if defined(MATH_LIB_INTRINSIC)
 
-            double* ptr = data();
-            const double* otherPtr = rhs.data();
+            T* ptr = data();
+            const T* otherPtr = rhs.data();
             Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
 
             Simd::storeAligned(Simd::add(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
@@ -491,8 +491,8 @@ namespace MathLib
         {
 #if defined(MATH_LIB_INTRINSIC)
 
-            double* ptr = data();
-            const double* otherPtr = rhs.data();
+            T* ptr = data();
+            const T* otherPtr = rhs.data();
             Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr), Simd::makeVector4DAligned(otherPtr)), ptr);
 
             Simd::storeAligned(Simd::sub(Simd::makeVector4DAligned(ptr + 4), Simd::makeVector4DAligned(otherPtr + 4)),
@@ -519,14 +519,14 @@ namespace MathLib
             return result;
         }
 
-        [[nodiscard]] Vector4d operator*(const Vector4d& rhs) const noexcept
+        [[nodiscard]] Vector4<T> operator*(const Vector4<T>& rhs) const noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
             // clang-format off
-            const double row1x = m_data[0].getX(); const double row1y = m_data[0].getY(); const double row1z = m_data[0].getZ(); const double row1w = m_data[0].getW();
-            const double row2x = m_data[1].getX(); const double row2y = m_data[1].getY(); const double row2z = m_data[1].getZ(); const double row2w = m_data[1].getW();
-            const double row3x = m_data[2].getX(); const double row3y = m_data[2].getY(); const double row3z = m_data[2].getZ(); const double row3w = m_data[2].getW();
-            const double row4x = m_data[3].getX(); const double row4y = m_data[3].getY(); const double row4z = m_data[3].getZ(); const double row4w = m_data[3].getW();
+            const T row1x = m_data[0].getX(); const T row1y = m_data[0].getY(); const T row1z = m_data[0].getZ(); const T row1w = m_data[0].getW();
+            const T row2x = m_data[1].getX(); const T row2y = m_data[1].getY(); const T row2z = m_data[1].getZ(); const T row2w = m_data[1].getW();
+            const T row3x = m_data[2].getX(); const T row3y = m_data[2].getY(); const T row3z = m_data[2].getZ(); const T row3w = m_data[2].getW();
+            const T row4x = m_data[3].getX(); const T row4y = m_data[3].getY(); const T row4z = m_data[3].getZ(); const T row4w = m_data[3].getW();
             // clang-format on
 
             const Simd::VectorRegister4Double col0 = Simd::makeVector4D(row1x, row2x, row3x, row4x);
@@ -544,16 +544,16 @@ namespace MathLib
             result = Simd::fma(col2, z, result);
             result = Simd::fma(col3, w, result);
 
-            return Vector4d(result);
+            return Vector4<T>(result);
 #else
-            return Vector4d(Vector4d::dot(m_data[0], rhs), Vector4d::dot(m_data[1], rhs), Vector4d::dot(m_data[2], rhs),
-                            Vector4d::dot(m_data[3], rhs));
+            return Vector4<T>(Vector4<T>::dot(m_data[0], rhs), Vector4<T>::dot(m_data[1], rhs),
+                              Vector4<T>::dot(m_data[2], rhs), Vector4<T>::dot(m_data[3], rhs));
 #endif // defined(MATH_LIB_INTRINSIC)
         }
 
-        [[nodiscard]] Vector4d operator*(const Vector3<double>& rhs) const noexcept
+        [[nodiscard]] Vector4<T> operator*(const Vector3<T>& rhs) const noexcept
         {
-            return operator*(Vector4d(rhs.getX(), rhs.getY(), rhs.getZ(), 1.0));
+            return operator*(Vector4<T>(rhs.getX(), rhs.getY(), rhs.getZ(), 1.0));
         }
 
         Matrix4x4& operator*=(Matrix4x4 rhs) noexcept
@@ -563,29 +563,29 @@ namespace MathLib
             // an row * row multiplication
             rhs.transpose();
 
-            const double m11 = Vector4d::dot(m_data[0], rhs.m_data[0]);
-            const double m12 = Vector4d::dot(m_data[0], rhs.m_data[1]);
-            const double m13 = Vector4d::dot(m_data[0], rhs.m_data[2]);
-            const double m14 = Vector4d::dot(m_data[0], rhs.m_data[3]);
-            const Vector4d row1 = Vector4d(m11, m12, m13, m14);
+            const T m11 = Vector4<T>::dot(m_data[0], rhs.m_data[0]);
+            const T m12 = Vector4<T>::dot(m_data[0], rhs.m_data[1]);
+            const T m13 = Vector4<T>::dot(m_data[0], rhs.m_data[2]);
+            const T m14 = Vector4<T>::dot(m_data[0], rhs.m_data[3]);
+            const Vector4<T> row1 = Vector4<T>(m11, m12, m13, m14);
 
-            const double m21 = Vector4d::dot(m_data[1], rhs.m_data[0]);
-            const double m22 = Vector4d::dot(m_data[1], rhs.m_data[1]);
-            const double m23 = Vector4d::dot(m_data[1], rhs.m_data[2]);
-            const double m24 = Vector4d::dot(m_data[1], rhs.m_data[3]);
-            const Vector4d row2 = Vector4d(m21, m22, m23, m24);
+            const T m21 = Vector4<T>::dot(m_data[1], rhs.m_data[0]);
+            const T m22 = Vector4<T>::dot(m_data[1], rhs.m_data[1]);
+            const T m23 = Vector4<T>::dot(m_data[1], rhs.m_data[2]);
+            const T m24 = Vector4<T>::dot(m_data[1], rhs.m_data[3]);
+            const Vector4<T> row2 = Vector4<T>(m21, m22, m23, m24);
 
-            const double m31 = Vector4d::dot(m_data[2], rhs.m_data[0]);
-            const double m32 = Vector4d::dot(m_data[2], rhs.m_data[1]);
-            const double m33 = Vector4d::dot(m_data[2], rhs.m_data[2]);
-            const double m34 = Vector4d::dot(m_data[2], rhs.m_data[3]);
-            const Vector4d row3 = Vector4d(m31, m32, m33, m34);
+            const T m31 = Vector4<T>::dot(m_data[2], rhs.m_data[0]);
+            const T m32 = Vector4<T>::dot(m_data[2], rhs.m_data[1]);
+            const T m33 = Vector4<T>::dot(m_data[2], rhs.m_data[2]);
+            const T m34 = Vector4<T>::dot(m_data[2], rhs.m_data[3]);
+            const Vector4<T> row3 = Vector4<T>(m31, m32, m33, m34);
 
-            const double m41 = Vector4d::dot(m_data[3], rhs.m_data[0]);
-            const double m42 = Vector4d::dot(m_data[3], rhs.m_data[1]);
-            const double m43 = Vector4d::dot(m_data[3], rhs.m_data[2]);
-            const double m44 = Vector4d::dot(m_data[3], rhs.m_data[3]);
-            const Vector4d row4 = Vector4d(m41, m42, m43, m44);
+            const T m41 = Vector4<T>::dot(m_data[3], rhs.m_data[0]);
+            const T m42 = Vector4<T>::dot(m_data[3], rhs.m_data[1]);
+            const T m43 = Vector4<T>::dot(m_data[3], rhs.m_data[2]);
+            const T m44 = Vector4<T>::dot(m_data[3], rhs.m_data[3]);
+            const Vector4<T> row4 = Vector4<T>(m41, m42, m43, m44);
 
             // clang-format off
             *this = Matrix4x4(row1,
@@ -615,10 +615,11 @@ namespace MathLib
         }
 
     private:
-        std::array<Vector4d, 4> m_data;
+        std::array<Vector4<T>, 4> m_data;
     };
 
     using Matrix4x4d = Matrix4x4<double>;
+    using Matrix4x4f = Matrix4x4<float>;
 } // namespace MathLib
 
-#endif // MATH_LIB_MATRIX4X4D_H
+#endif // MATH_LIB_MATRIX4X4_H

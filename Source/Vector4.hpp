@@ -1,5 +1,5 @@
-#ifndef MATH_LIB_VECTOR4D_H
-#define MATH_LIB_VECTOR4D_H
+#ifndef MATH_LIB_VECTOR4_H
+#define MATH_LIB_VECTOR4_H
 
 #include <array>
 #include <algorithm>
@@ -363,7 +363,7 @@ namespace MathLib
 
         [[nodiscard]] bool isHomogeneous() const
         {
-            return fuzzyEqual(getW(), 1.0);
+            return fuzzyEqual(getW(), static_cast<T>(1.0));
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector4 cross(const Vector4& a, const Vector4& b,
@@ -713,4 +713,4 @@ struct std::formatter<MathLib::Vector4<T>, char>
     }
 };
 
-#endif // MATH_LIB_VECTOR4D_H
+#endif // MATH_LIB_VECTOR4_H
