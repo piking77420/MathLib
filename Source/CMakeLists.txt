@@ -45,7 +45,7 @@ endif()
 
 if (CPU_X86_64 OR CPU_X86)
     if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND MATHLIB_USE_FMA)
-        target_compile_options(${PROJECT_NAME} PRIVATE -mfma)
+        target_compile_options(${PROJECT_NAME} PUBLIC -mfma)
     endif()
 endif()
 

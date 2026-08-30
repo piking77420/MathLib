@@ -111,7 +111,6 @@ jobs:
             configure_args: >-
               -G "Visual Studio 18 2026"
               -A x64
-              -DCMAKE_CXX_FLAGS=/arch:AVX2
               -DMATHLIB_SIMD_EXT=AVX2
               -DMATHLIB_USE_INTRINSIC=ON
               -DMATHLIB_USE_FMA=ON
@@ -136,7 +135,6 @@ jobs:
               -G "Visual Studio 18 2026"
               -A x64
               -T ClangCL
-              -DCMAKE_CXX_FLAGS=/arch:AVX2
               -DMATHLIB_SIMD_EXT=AVX2
               -DMATHLIB_USE_INTRINSIC=ON
               -DMATHLIB_USE_FMA=ON

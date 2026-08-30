@@ -4,8 +4,9 @@
 #include <MathLibHeader.hpp>
 
 #define VECTOR4F_ALIGNEMENT 16
+#define VECTOR4D_ALIGNEMENT 32
 
-#if defined(SIMD_ARM_NEON)
+#if defined(SIMD_NEON)
 
 #include <arm_neon.h>
 
@@ -229,6 +230,6 @@ namespace MathLib::Simd
 
 } // namespace MathLib::Simd
 
-#endif // defined(SIMD_ARM_NEON)
+#endif // defined(SIMD_NEON)
 
 #endif // MATH_LIB_NEON_H

@@ -48,16 +48,15 @@
 
 // ARM SIMD
 #if defined(MATHLIB_SIMD_LEVEL_SVE)
-#define SIMD_ARM_SVE 1
+#define SIMD_SVE 1
 #endif
 
 #if defined(MATHLIB_SIMD_LEVEL_SVE2)
-#define SIMD_ARM_SVE2 1
+#define SIMD_SVE2 1
 #endif
 
-#if defined(MATHLIB_SIMD_LEVEL)
-#define SIMD_ARM_NEON 1
-#endif
+// NEON is always available on ARM64 / AArch64.
+#define SIMD_NEON 1
 
 #endif // CPU_ARM_64
 
@@ -65,11 +64,11 @@
 #include <immintrin.h>
 #endif // CPU_X86_64
 
-#if SIMD_ARM_SVE
+#if SIMD_SVE
 #include <arm_sve.h>
 #endif
 
-#if SIMD_ARM_SVE2
+#if SIMD_SVE2
 #include <arm_sve.h>
 #endif
 
