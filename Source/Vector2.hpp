@@ -14,11 +14,10 @@
 namespace MathLib
 {
     template<typename T>
+        requires(std::is_floating_point_v<T>)
     class Vector2
     {
     public:
-        static_assert(std::is_floating_point_v<T>);
-
         explicit Vector2() = default;
 
         ~Vector2() = default;

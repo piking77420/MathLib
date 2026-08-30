@@ -15,9 +15,11 @@
 namespace MathLib
 {
     template<typename T>
+        requires(std::is_floating_point_v<T>)
     class Vector2;
 
     template<typename T>
+        requires(std::is_floating_point_v<T>)
     class Vector3
     {
     public:

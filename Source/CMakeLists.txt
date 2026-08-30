@@ -12,12 +12,10 @@ set(MATHLIB_SOURCES
     MathLibHeader.hpp
     Matrix2x2.hpp
     Matrix3x3.hpp
-    Matrix4x4d.cpp
-    Matrix4x4d.hpp
+    Matrix4x4.hpp
     Vector2.hpp
     Vector3.hpp
-    Vector4d.cpp
-    Vector4d.hpp)
+    Vector4.hpp)
 
 add_library(
     ${PROJECT_NAME}

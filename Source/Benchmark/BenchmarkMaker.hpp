@@ -8,10 +8,10 @@
 #include <MathLibHeader.hpp>
 #include <Matrix2x2.hpp>
 #include <Matrix3x3.hpp>
-#include <Matrix4x4d.hpp>
+#include <Matrix4x4.hpp>
 #include <Vector2.hpp>
 #include <Vector3.hpp>
-#include <Vector4d.hpp>
+#include <Vector4.hpp>
 
 namespace MathLib::Benchmark
 {

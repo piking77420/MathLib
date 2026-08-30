@@ -4,6 +4,7 @@
 #include <MathLibHeader.hpp>
 
 #define VECTOR4D_ALIGNEMENT 32
+#define VECTOR4F_ALIGNEMENT 16
 
 #if defined(SIMD_AVX)
 

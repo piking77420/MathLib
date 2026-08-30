@@ -10,31 +10,33 @@
 #include <span>
 #include <MathLibHeader.hpp>
 #include <AVX.hpp>
-#include <Vector2.hpp>
 
 namespace MathLib
 {
     template<typename T>
-    class Vector4;
+        requires(std::is_floating_point_v<T>)
+    class Vector2;
 
     template<typename T>
+        requires(std::is_floating_point_v<T>)
     class Vector3;
 
-    template<>
-    class alignas(VECTOR4D_ALIGNEMENT) Vector4<double>
+    template<typename T>
+        requires(std::is_floating_point_v<T>)
+    class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Vector4 // TODO is align or not
     {
     public:
         explicit Vector4() = default;
 
         ~Vector4() = default;
 
-        MATH_LIB_FORCE_INLINE explicit Vector4(double x, double y, double z, double w)
+        MATH_LIB_FORCE_INLINE explicit Vector4(T x, T y, T z, T w)
             : m_data({x, y, z, w})
         {
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE explicit Vector4(double x)
+        MATH_LIB_FORCE_INLINE explicit Vector4(T x)
             : m_data({x, x, x, x})
         {
             ASSERT_IS_FINITE(*this);
@@ -47,52 +49,52 @@ namespace MathLib
         }
 #endif // defined(MATH_LIB_INTRINSIC)
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE const double* data() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const T* data() const noexcept
         {
             return m_data.data();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double* data() noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T* data() noexcept
         {
             return m_data.data();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getX() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getX() const noexcept
         {
             return m_data[0];
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getY() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getY() const noexcept
         {
             return m_data[1];
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getZ() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getZ() const noexcept
         {
             return m_data[2];
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getW() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getW() const noexcept
         {
             return m_data[3];
         }
 
-        MATH_LIB_FORCE_INLINE void setX(double x) noexcept
+        MATH_LIB_FORCE_INLINE void setX(T x) noexcept
         {
             m_data[0] = x;
         }
 
-        MATH_LIB_FORCE_INLINE void setY(double y) noexcept
+        MATH_LIB_FORCE_INLINE void setY(T y) noexcept
         {
             m_data[1] = y;
         }
 
-        MATH_LIB_FORCE_INLINE void setZ(double z) noexcept
+        MATH_LIB_FORCE_INLINE void setZ(T z) noexcept
         {
             m_data[2] = z;
         }
 
-        MATH_LIB_FORCE_INLINE void setW(double w) noexcept
+        MATH_LIB_FORCE_INLINE void setW(T w) noexcept
         {
             m_data[3] = w;
         }
@@ -177,7 +179,7 @@ namespace MathLib
             return lhs;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator+=(const double scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator+=(const T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
             *this = Vector4(Simd::add(*this, Simd::makeVector4D(scalar)));
@@ -191,7 +193,7 @@ namespace MathLib
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator-=(const double scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator-=(const T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
             *this = Vector4(Simd::sub(*this, Simd::makeVector4D(scalar)));
@@ -205,7 +207,7 @@ namespace MathLib
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator*=(double scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator*=(T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
             *this = Vector4(Simd::mul(*this, Simd::makeVector4D(scalar)));
@@ -219,7 +221,7 @@ namespace MathLib
             return *this;
         }
 
-        MATH_LIB_FORCE_INLINE Vector4& operator/=(double scalar) noexcept
+        MATH_LIB_FORCE_INLINE Vector4& operator/=(T scalar) noexcept
         {
 #if defined(MATH_LIB_INTRINSIC)
             *this = Vector4(Simd::div(*this, Simd::makeVector4D(scalar)));
@@ -233,25 +235,25 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 lhs, const double scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator+(Vector4 lhs, const T scalar) noexcept
         {
             lhs += scalar;
             return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 lhs, const double scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator-(Vector4 lhs, const T scalar) noexcept
         {
             lhs -= scalar;
             return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator*(Vector4 lhs, const double scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator*(Vector4 lhs, const T scalar) noexcept
         {
             lhs *= scalar;
             return lhs;
         }
 
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator/(Vector4 lhs, const double scalar) noexcept
+        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Vector4 operator/(Vector4 lhs, const T scalar) noexcept
         {
             lhs /= scalar;
             return lhs;
@@ -273,43 +275,43 @@ namespace MathLib
             return Vector4(-m_data[0], -m_data[1], -m_data[2], -m_data[3]);
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double dot(const Vector4& a, const Vector4& b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE T dot(const Vector4& a, const Vector4& b)
         {
             ASSERT_IS_FINITE(a)
             ASSERT_IS_FINITE(b)
 
-            const double x2 = a.getX() * b.getX();
-            const double y2 = a.getY() * b.getY();
-            const double z2 = a.getZ() * b.getZ();
-            const double w2 = a.getW() * b.getW();
+            const T x2 = a.getX() * b.getX();
+            const T y2 = a.getY() * b.getY();
+            const T z2 = a.getZ() * b.getZ();
+            const T w2 = a.getW() * b.getW();
             return x2 + y2 + z2 + w2;
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double lengthSquare() const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T lengthSquare() const
         {
             return dot(*this, *this);
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double length() const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T length() const
         {
             return std::sqrt(lengthSquare());
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distanceSquare(const Vector4& a, const Vector4& b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE T distanceSquare(const Vector4& a, const Vector4& b)
         {
             ASSERT_IS_FINITE(a)
             ASSERT_IS_FINITE(b)
             return (b - a).lengthSquare();
         }
 
-        [[nodiscard]] static MATH_LIB_FORCE_INLINE double distance(const Vector4& a, const Vector4& b)
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE T distance(const Vector4& a, const Vector4& b)
         {
             return std::sqrt(distanceSquare(a, b));
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 getNormalize() const
         {
-            const double currentLength = length();
+            const T currentLength = length();
 
             if (fuzzyZero(currentLength))
             {
@@ -321,20 +323,20 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 getNormalizeFast() const
         {
-            const double currentLength = length();
+            const T currentLength = length();
 
             if (fuzzyZero(currentLength))
             {
                 return *this;
             }
 
-            const double invLength = 1.0 / currentLength;
+            const T invLength = 1.0 / currentLength;
             return *this * invLength;
         }
 
         Vector4& normalize()
         {
-            const double currentLength = length();
+            const T currentLength = length();
 
             if (fuzzyZero(currentLength))
             {
@@ -347,14 +349,14 @@ namespace MathLib
 
         Vector4& normalizeFast()
         {
-            const double currentLength = length();
+            const T currentLength = length();
 
             if (fuzzyZero(currentLength))
             {
                 return *this;
             }
 
-            const double invLength = 1.0 / currentLength;
+            const T invLength = 1.0 / currentLength;
             *this *= invLength;
             return *this;
         }
@@ -368,30 +370,30 @@ namespace MathLib
                                                                  const Vector4& c) noexcept
         {
             // Get all scalar
-            const double ax = a.getX();
-            const double ay = a.getY();
-            const double az = a.getZ();
-            const double aw = a.getW();
+            const T ax = a.getX();
+            const T ay = a.getY();
+            const T az = a.getZ();
+            const T aw = a.getW();
 
-            const double bx = b.getX();
-            const double by = b.getY();
-            const double bz = b.getZ();
-            const double bw = b.getW();
+            const T bx = b.getX();
+            const T by = b.getY();
+            const T bz = b.getZ();
+            const T bw = b.getW();
 
-            const double cx = c.getX();
-            const double cy = c.getY();
-            const double cz = c.getZ();
-            const double cw = c.getW();
+            const T cx = c.getX();
+            const T cy = c.getY();
+            const T cz = c.getZ();
+            const T cw = c.getW();
 
             // manually do the cors product or determinant
-            const double mYZ = by * cz - bz * cy;
-            const double mYW = by * cw - bw * cy;
-            const double mZW = bz * cw - bw * cz;
+            const T mYZ = by * cz - bz * cy;
+            const T mYW = by * cw - bw * cy;
+            const T mZW = bz * cw - bw * cz;
 
-            const double mXZ = bx * cz - bz * cx;
-            const double mXW = bx * cw - bw * cx;
+            const T mXZ = bx * cz - bz * cx;
+            const T mXW = bx * cw - bw * cx;
 
-            const double mXY = bx * cy - by * cx;
+            const T mXY = bx * cy - by * cx;
 
             // manuall dot
             return Vector4(ay * mZW - az * mYW + aw * mYZ, -(ax * mZW - az * mXW + aw * mXZ),
@@ -583,45 +585,103 @@ namespace MathLib
             return Vector4(getW(), getZ(), getY(), getX());
         }
 
-        [[nodiscard]] Vector3<double> xyz() const noexcept;
+        Vector3<T> xyz() const noexcept
+        {
+            return static_cast<Vector3<T>>(*this);
+        };
 
-        [[nodiscard]] Vector3<double> xzy() const noexcept;
+        Vector3<T> xzy() const noexcept
+        {
+            return static_cast<Vector3<T>>(xzyw());
+        }
 
-        [[nodiscard]] Vector3<double> yxz() const noexcept;
+        Vector3<T> yxz() const noexcept
+        {
+            return static_cast<Vector3<T>>(yxzw());
+        }
+        Vector3<T> yzx() const noexcept
+        {
+            return static_cast<Vector3<T>>(yzxw());
+        }
 
-        [[nodiscard]] Vector3<double> yzx() const noexcept;
+        Vector3<T> zxy() const noexcept
+        {
+            return static_cast<Vector3<T>>(zxyw());
+        }
+        Vector3<T> zyx() const noexcept
+        {
+            return static_cast<Vector3<T>>(zyxw());
+        }
 
-        [[nodiscard]] Vector3<double> zxy() const noexcept;
+        Vector2<T> xy() const noexcept
+        {
+            return static_cast<Vector2<T>>(*this);
+        }
 
-        [[nodiscard]] Vector3<double> zyx() const noexcept;
+        Vector2<T> xz() const noexcept
+        {
+            return static_cast<Vector2<T>>(xzwy());
+        }
 
-        [[nodiscard]] Vector2<double> xy() const noexcept;
+        Vector2<T> xw() const noexcept
+        {
+            return static_cast<Vector2<T>>(xwyz());
+        }
 
-        [[nodiscard]] Vector2<double> xz() const noexcept;
+        Vector2<T> yx() const noexcept
+        {
+            return static_cast<Vector2<T>>(yxzw());
+        }
 
-        [[nodiscard]] Vector2<double> xw() const noexcept;
+        Vector2<T> yz() const noexcept
+        {
+            return static_cast<Vector2<T>>(yzxw());
+        }
 
-        [[nodiscard]] Vector2<double> yx() const noexcept;
+        Vector2<T> yw() const noexcept
+        {
+            return static_cast<Vector2<T>>(ywxz());
+        }
 
-        [[nodiscard]] Vector2<double> yz() const noexcept;
+        Vector2<T> zx() const noexcept
+        {
+            return static_cast<Vector2<T>>(zxyw());
+        }
 
-        [[nodiscard]] Vector2<double> yw() const noexcept;
+        Vector2<T> zy() const noexcept
+        {
+            return static_cast<Vector2<T>>(zywx());
+        }
 
-        [[nodiscard]] Vector2<double> zx() const noexcept;
+        Vector2<T> zw() const noexcept
+        {
+            return static_cast<Vector2<T>>(zwxy());
+        }
 
-        [[nodiscard]] Vector2<double> zy() const noexcept;
+        Vector2<T> wx() const noexcept
+        {
+            return static_cast<Vector2<T>>(wxyz());
+        }
 
-        [[nodiscard]] Vector2<double> zw() const noexcept;
+        Vector2<T> wy() const noexcept
+        {
+            return static_cast<Vector2<T>>(wyxz());
+        }
 
-        [[nodiscard]] Vector2<double> wx() const noexcept;
+        Vector2<T> wz() const noexcept
+        {
+            return static_cast<Vector2<T>>(wzxy());
+        }
 
-        [[nodiscard]] Vector2<double> wy() const noexcept;
+        operator Vector3<T>() const noexcept
+        {
+            return Vector3<T>(getX(), getY(), getZ());
+        }
 
-        [[nodiscard]] Vector2<double> wz() const noexcept;
-
-        explicit operator Vector3<double>() const noexcept;
-
-        explicit operator Vector2<double>() const noexcept;
+        operator Vector2<T>() const noexcept
+        {
+            return Vector2<T>(getX(), getY());
+        }
 
 #if defined(MATH_LIB_INTRINSIC)
         operator Simd::VectorRegister4Double() const noexcept
@@ -631,22 +691,23 @@ namespace MathLib
 #endif // defined(MATH_LIB_INTRINSIC)
 
     private:
-        std::array<double, 4> m_data;
+        std::array<T, 4> m_data;
     };
 
+    using Vector4f = Vector4<float>;
     using Vector4d = Vector4<double>;
 
 } // MathLib
 
-template<>
-struct std::formatter<MathLib::Vector4d>
+template<typename T>
+struct std::formatter<MathLib::Vector4<T>, char>
 {
     constexpr static std::format_parse_context::const_iterator parse(std::format_parse_context& ctx)
     {
         return ctx.begin();
     }
 
-    static std::format_context::iterator format(const MathLib::Vector4d& v, std::format_context& ctx)
+    static std::format_context::iterator format(const MathLib::Vector4<T>& v, std::format_context& ctx)
     {
         return std::format_to(ctx.out(), "x: {}, y: {}, z: {}, w: {}", v.getX(), v.getY(), v.getZ(), v.getW());
     }

@@ -32,6 +32,7 @@ set(TEST_SOURCES
     Vector2d_Test.cpp
     Vector3f_Test.cpp
     Vector3d_Test.cpp
+    Vector4f_Test.cpp
     Vector4d_Test.cpp)
 
 add_executable(

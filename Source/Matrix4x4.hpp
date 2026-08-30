@@ -3,21 +3,18 @@
 
 #include <cstring>
 #include <Vector3.hpp>
-#include <Vector4d.hpp>
+#include <Vector4.hpp>
 #include <AVX.hpp>
 
 namespace MathLib
 {
-    template<typename T>
-    class Matrix4x4;
-
     // Matrix elements are stored in row-major order
     // Mathematical operations use a column-vector convention
-    template<>
-    class alignas(VECTOR4D_ALIGNEMENT) Matrix4x4<double>
+    template<typename T>
+    class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Matrix4x4
     {
     public:
-        using _VectorType = Vector4d;
+        using _VectorType = Vector4<T>;
 
         explicit Matrix4x4() = default;
 
@@ -27,10 +24,10 @@ namespace MathLib
                                                  double getM21, double getM22, double getM23, double getM24,
                                                  double getM31, double getM32, double getM33, double getM34,
                                                  double getM41, double getM42, double getM43, double getM44)
-            : m_data{Vector4d(getM11, getM12, getM13, getM14), 
-                     Vector4d(getM21, getM22, getM23, getM24),
-                     Vector4d(getM31, getM32, getM33, getM34),
-                     Vector4d(getM41, getM42, getM43, getM44)}
+            : m_data{Vector4<T>(getM11, getM12, getM13, getM14), 
+                     Vector4<T>(getM21, getM22, getM23, getM24),
+                     Vector4<T>(getM31, getM32, getM33, getM34),
+                     Vector4<T>(getM41, getM42, getM43, getM44)}
         {
 
         }

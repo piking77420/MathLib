@@ -256,12 +256,12 @@ TEST(TestVector3f, cmpOperator)
         EXPECT_TRUE(v1 != v2);
     }
 
-    constexpr double DoubleEpsilonHalf = 0.5 * DoubleEpsilon;
-    constexpr double DoubleEpsilon2 = 2.0 * DoubleEpsilon;
+    constexpr float FloatEpsilonHalf = 0.5 * FloatEpsilon;
+    constexpr float FloatEpsilon2 = 2.0 * FloatEpsilon;
 
     {
         const Vector3d v1(1.0, 2.0, 3.0);
-        const Vector3d v2(1.0 - DoubleEpsilonHalf, 2.0 - DoubleEpsilonHalf, 3.0 - DoubleEpsilonHalf);
+        const Vector3d v2(1.0 - FloatEpsilonHalf, 2.0 - FloatEpsilonHalf, 3.0 - FloatEpsilonHalf);
 
         EXPECT_TRUE(v1 == v2);
         EXPECT_FALSE(v1 != v2);
@@ -269,7 +269,7 @@ TEST(TestVector3f, cmpOperator)
 
     {
         const Vector3d v1(1.0, 2.0, 3.0);
-        const Vector3d v2(1.0 - DoubleEpsilon2, 2.0 - DoubleEpsilon2, 3.0 - DoubleEpsilon2);
+        const Vector3d v2(1.0 - FloatEpsilon2, 2.0 - FloatEpsilon2, 3.0 - FloatEpsilon2);
 
         EXPECT_TRUE(v1 != v2);
         EXPECT_FALSE(v1 == v2);
@@ -477,7 +477,7 @@ TEST(TestVector3f, mix)
         const Vector3d b(4.0, 5.0, 6.0);
         const Vector3d c(7.0, 8.0, 10.0);
 
-        const double result = Vector3d::mix(a, b, c);
+        const float result = Vector3d::mix(a, b, c);
 
         EXPECT_FLOAT_EQ(result, -3.0);
     }
@@ -707,7 +707,7 @@ TEST(TestVector3f, distance)
         const Vector3d v1(2.0, -5.0, 7.0);
         const Vector3d v2(-3.0, 1.0, 4.0);
 
-        const double distance = Vector3d::distance(v1, v2);
+        const float distance = Vector3d::distance(v1, v2);
 
         EXPECT_FLOAT_EQ(distance * distance, Vector3d::distanceSquare(v1, v2));
     }
@@ -719,11 +719,11 @@ TEST(TestVector3f, getNormalize)
         const Vector3d v(3.0, 4.0, 0.0);
         const Vector3d normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
 
         // getNormalize() must not modify the original vector.
         EXPECT_FLOAT_EQ(v.getX(), 3.0);
@@ -735,7 +735,7 @@ TEST(TestVector3f, getNormalize)
         const Vector3d v(-1.0, -2.0, 4.0);
         const Vector3d normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -743,10 +743,10 @@ TEST(TestVector3f, getNormalize)
         const Vector3d v = Vector3d::unitX();
         const Vector3d normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
     }
 
     // Zero vector.
@@ -767,11 +767,11 @@ TEST(TestVector3f, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     {
@@ -779,7 +779,7 @@ TEST(TestVector3f, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -788,10 +788,10 @@ TEST(TestVector3f, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 0.0, FloatEpsilon);
     }
 
     // Zero vector should remain zero.
@@ -821,11 +821,11 @@ TEST(TestVector3f, getNormalizeFast)
         const Vector3d v(3.0, 4.0, 0.0);
         const Vector3d normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
 
         // getNormalizeFast() must not modify the original vector.
         EXPECT_FLOAT_EQ(v.getX(), 3.0);
@@ -837,7 +837,7 @@ TEST(TestVector3f, getNormalizeFast)
         const Vector3d v(-1.0, -2.0, 4.0);
         const Vector3d normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -845,10 +845,10 @@ TEST(TestVector3f, getNormalizeFast)
         const Vector3d v = Vector3d::unitX();
         const Vector3d normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
     }
 
     // Zero vector.
@@ -869,11 +869,11 @@ TEST(TestVector3f, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     {
@@ -881,7 +881,7 @@ TEST(TestVector3f, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -890,10 +890,10 @@ TEST(TestVector3f, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 0.0, FloatEpsilon);
     }
 
     // Zero vector should remain zero.

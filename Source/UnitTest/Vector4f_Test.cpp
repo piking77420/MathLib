@@ -13,17 +13,17 @@
 
 using namespace MathLib;
 
-TEST(TestVector4d, Constructor)
+TEST(TestVector4f, Constructor)
 {
     const Vector4d v = Vector4d(1., 2., 3., 4.);
 
-    EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-    EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-    EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+    EXPECT_FLOAT_EQ(v.getX(), 1.0);
+    EXPECT_FLOAT_EQ(v.getY(), 2.0);
+    EXPECT_FLOAT_EQ(v.getZ(), 3.0);
+    EXPECT_FLOAT_EQ(v.getW(), 4.0);
 }
 
-TEST(TestVector4d, Setter)
+TEST(TestVector4f, Setter)
 {
     Vector4d v{};
     v.setX(1.);
@@ -31,23 +31,23 @@ TEST(TestVector4d, Setter)
     v.setZ(3.);
     v.setW(4.);
 
-    EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-    EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-    EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+    EXPECT_FLOAT_EQ(v.getX(), 1.0);
+    EXPECT_FLOAT_EQ(v.getY(), 2.0);
+    EXPECT_FLOAT_EQ(v.getZ(), 3.0);
+    EXPECT_FLOAT_EQ(v.getW(), 4.0);
 }
 
-TEST(TestVector4d, addVectorOperator)
+TEST(TestVector4f, addVectorOperator)
 {
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
         const Vector4d v1 = Vector4d(4., 5., 6., 7.);
         v += v1;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 11.0);
+        EXPECT_FLOAT_EQ(v.getX(), 5.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 9.0);
+        EXPECT_FLOAT_EQ(v.getW(), 11.0);
     }
 
     {
@@ -55,14 +55,14 @@ TEST(TestVector4d, addVectorOperator)
         const Vector4d v2 = Vector4d(4., 5., 6., 7.);
         const Vector4d v = v1 + v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 11.0);
+        EXPECT_FLOAT_EQ(v.getX(), 5.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 9.0);
+        EXPECT_FLOAT_EQ(v.getW(), 11.0);
     }
 }
 
-TEST(TestVector4d, subVectorOperator)
+TEST(TestVector4f, subVectorOperator)
 {
     {
         Vector4d v(1.0, 2.0, 3.0, 4.0);
@@ -70,10 +70,10 @@ TEST(TestVector4d, subVectorOperator)
 
         v -= v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), -7.0);
+        EXPECT_FLOAT_EQ(v.getY(), -8.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 1.0);
+        EXPECT_FLOAT_EQ(v.getW(), 0.0);
     }
 
     {
@@ -82,14 +82,14 @@ TEST(TestVector4d, subVectorOperator)
 
         const Vector4d v = v1 - v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), -7.0);
+        EXPECT_FLOAT_EQ(v.getY(), -8.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 1.0);
+        EXPECT_FLOAT_EQ(v.getW(), 0.0);
     }
 }
 
-TEST(TestVector4d, mulVectorOperator)
+TEST(TestVector4f, mulVectorOperator)
 {
     {
         Vector4d v(1.0, 2.0, 3.0, 4.0);
@@ -97,10 +97,10 @@ TEST(TestVector4d, mulVectorOperator)
 
         v *= v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 16.0);
+        EXPECT_FLOAT_EQ(v.getX(), 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 6.0);
+        EXPECT_FLOAT_EQ(v.getW(), 16.0);
     }
 
     {
@@ -109,14 +109,14 @@ TEST(TestVector4d, mulVectorOperator)
 
         const Vector4d v = v1 * v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 16);
+        EXPECT_FLOAT_EQ(v.getX(), 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 6.0);
+        EXPECT_FLOAT_EQ(v.getW(), 16);
     }
 }
 
-TEST(TestVector4d, divVectorOperator)
+TEST(TestVector4f, divVectorOperator)
 {
     {
         Vector4d v(1.0, 2.0, 3.0, 4.0);
@@ -124,10 +124,10 @@ TEST(TestVector4d, divVectorOperator)
 
         v /= v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 1.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.2);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_FLOAT_EQ(v.getW(), 1.0);
     }
 
     {
@@ -136,142 +136,142 @@ TEST(TestVector4d, divVectorOperator)
 
         const Vector4d v = v1 / v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 1.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.2);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_FLOAT_EQ(v.getW(), 1.0);
     }
 }
 
-TEST(TestVector4d, addScalarOperator)
+TEST(TestVector4f, addScalarOperator)
 {
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
         v += 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 9.0);
+        EXPECT_FLOAT_EQ(v.getX(), 6.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 8.0);
+        EXPECT_FLOAT_EQ(v.getW(), 9.0);
     }
 
     {
         const Vector4d v = Vector4d(1., 2., 3., 4.) + 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 9.0);
+        EXPECT_FLOAT_EQ(v.getX(), 6.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 8.0);
+        EXPECT_FLOAT_EQ(v.getW(), 9.0);
     }
 }
 
-TEST(TestVector4d, subScalarOperator)
+TEST(TestVector4f, subScalarOperator)
 {
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
         v -= 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
-        EXPECT_DOUBLE_EQ(v.getW(), -1.0);
+        EXPECT_FLOAT_EQ(v.getX(), -4.0);
+        EXPECT_FLOAT_EQ(v.getY(), -3.0);
+        EXPECT_FLOAT_EQ(v.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(v.getW(), -1.0);
     }
 
     {
         const Vector4d v = Vector4d(1., 2., 3., 4.) - 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
-        EXPECT_DOUBLE_EQ(v.getW(), -1.0);
+        EXPECT_FLOAT_EQ(v.getX(), -4.0);
+        EXPECT_FLOAT_EQ(v.getY(), -3.0);
+        EXPECT_FLOAT_EQ(v.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(v.getW(), -1.0);
     }
 }
 
-TEST(TestVector4d, mulScalarOperator)
+TEST(TestVector4f, mulScalarOperator)
 {
 
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
         v *= 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getW(), 4.0);
     }
 
     {
         const Vector4d v = Vector4d(1., 2., 3., 4.) * 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getW(), 4.0);
     }
 
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
         v *= 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 40.0);
+        EXPECT_FLOAT_EQ(v.getX(), 10.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 30.0);
+        EXPECT_FLOAT_EQ(v.getW(), 40.0);
     }
 
     {
         const Vector4d v = Vector4d(1., 2., 3., 4.) * 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 40.0);
+        EXPECT_FLOAT_EQ(v.getX(), 10.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 30.0);
+        EXPECT_FLOAT_EQ(v.getW(), 40.0);
     }
 }
 
-TEST(TestVector4d, divScalarOperator)
+TEST(TestVector4f, divScalarOperator)
 {
 
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
         v /= 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getW(), 4.0);
     }
 
     {
         const Vector4d v = Vector4d(1., 2., 3., 4.) / 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 4.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getW(), 4.0);
     }
 
     {
         Vector4d v = Vector4d(1., 2., 3., 4.);
         v /= 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.4);
+        EXPECT_FLOAT_EQ(v.getX(), 0.1);
+        EXPECT_FLOAT_EQ(v.getY(), 0.2);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.3);
+        EXPECT_FLOAT_EQ(v.getW(), 0.4);
     }
 
     {
         const Vector4d v = Vector4d(1., 2., 3., 4.) / 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.4);
+        EXPECT_FLOAT_EQ(v.getX(), 0.1);
+        EXPECT_FLOAT_EQ(v.getY(), 0.2);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.3);
+        EXPECT_FLOAT_EQ(v.getW(), 0.4);
     }
 }
 
-TEST(TestVector4d, CmpOperator)
+TEST(TestVector4f, CmpOperator)
 {
     {
         const Vector4d v1 = Vector4d::unitX();
@@ -282,13 +282,13 @@ TEST(TestVector4d, CmpOperator)
         EXPECT_TRUE(v1 != v2);
     }
 
-    constexpr double DoubleEpsilonHalf = 0.5 * DoubleEpsilon;
-    constexpr double DoubleEpsilon2 = 2.0 * DoubleEpsilon;
+    constexpr float FloatEpsilonHalf = 0.5 * FloatEpsilon;
+    constexpr float FloatEpsilon2 = 2.0 * FloatEpsilon;
 
     {
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
-        const Vector4d v2(1.0 - DoubleEpsilonHalf, 2.0 - DoubleEpsilonHalf, 3.0 - DoubleEpsilonHalf,
-                          4.0 - DoubleEpsilonHalf);
+        const Vector4d v2(1.0 - FloatEpsilonHalf, 2.0 - FloatEpsilonHalf, 3.0 - FloatEpsilonHalf,
+                          4.0 - FloatEpsilonHalf);
 
         EXPECT_TRUE(v1 == v2);
         EXPECT_FALSE(v1 != v2);
@@ -296,96 +296,96 @@ TEST(TestVector4d, CmpOperator)
 
     {
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
-        const Vector4d v2(1.0 - DoubleEpsilon2, 2.0 - DoubleEpsilon2, 3.0 - DoubleEpsilon2, 4.0 - DoubleEpsilon2);
+        const Vector4d v2(1.0 - FloatEpsilon2, 2.0 - FloatEpsilon2, 3.0 - FloatEpsilon2, 4.0 - FloatEpsilon2);
 
         EXPECT_TRUE(v1 != v2);
         EXPECT_FALSE(v1 == v2);
     }
 }
 
-TEST(TestVector4d, NegateOperator)
+TEST(TestVector4f, NegateOperator)
 {
     // all positive
     {
         const Vector4d v = -Vector4d(1., 2., 3., 4.);
 
-        EXPECT_DOUBLE_EQ(v.getX(), -1.);
-        EXPECT_DOUBLE_EQ(v.getY(), -2.);
-        EXPECT_DOUBLE_EQ(v.getZ(), -3.);
-        EXPECT_DOUBLE_EQ(v.getW(), -4.);
+        EXPECT_FLOAT_EQ(v.getX(), -1.);
+        EXPECT_FLOAT_EQ(v.getY(), -2.);
+        EXPECT_FLOAT_EQ(v.getZ(), -3.);
+        EXPECT_FLOAT_EQ(v.getW(), -4.);
     }
 
     // all negative
     {
         const Vector4d v = -Vector4d(-1., -2., -3., -4.);
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.);
-        EXPECT_DOUBLE_EQ(v.getW(), 4.);
+        EXPECT_FLOAT_EQ(v.getX(), 1.);
+        EXPECT_FLOAT_EQ(v.getY(), 2.);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.);
+        EXPECT_FLOAT_EQ(v.getW(), 4.);
     }
 
     // all randome values
     {
         const Vector4d v = -Vector4d(-1.25, 14.04, 45.0, -820.0);
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.25);
-        EXPECT_DOUBLE_EQ(v.getY(), -14.04);
-        EXPECT_DOUBLE_EQ(v.getZ(), -45.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 820.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.25);
+        EXPECT_FLOAT_EQ(v.getY(), -14.04);
+        EXPECT_FLOAT_EQ(v.getZ(), -45.0);
+        EXPECT_FLOAT_EQ(v.getW(), 820.0);
     }
 }
 
-TEST(TestVector4d, dot)
+TEST(TestVector4f, dot)
 {
     {
         const Vector4d v1 = Vector4d::unitX();
         const Vector4d v2 = Vector4d::unitZ();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitX();
         const Vector4d v2 = Vector4d::unitW();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitY();
         const Vector4d v2 = Vector4d::unitW();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitZ();
         const Vector4d v2 = Vector4d::unitX();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitW();
         const Vector4d v2 = Vector4d::unitY();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitX();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v1), 1.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v1), 1.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitY();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v1), 1.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v1), 1.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitZ();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v1), 1.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v1), 1.0);
     }
 
     {
         const Vector4d v1 = Vector4d::unitW();
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v1), 1.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v1), 1.0);
     }
 
     {
@@ -393,99 +393,99 @@ TEST(TestVector4d, dot)
         const Vector4d v2(5.0, 6.0, 7.0, 8.0);
 
         // 1*5 + 2*6 + 3*7 + 4*8 = 70
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), 70.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), 70.0);
     }
 
     {
         const Vector4d v1(1.0, -2.0, 3.0, -4.0);
         const Vector4d v2(-5.0, 6.0, -7.0, 8.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), -70.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), -70.0);
     }
 
     {
         const Vector4d zero(0.0, 0.0, 0.0, 0.0);
         const Vector4d v(1.0, 2.0, 3.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::dot(zero, v), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(zero, v), 0.0);
     }
 
     {
         const Vector4d v1(4.0, -2.0, 6.0, 10.0);
         const Vector4d v2(5.0, 2.0, 3.0, -4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v1, v2), -6.0);
-        EXPECT_DOUBLE_EQ(Vector4d::dot(v2, v1), -6.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v1, v2), -6.0);
+        EXPECT_FLOAT_EQ(Vector4d::dot(v2, v1), -6.0);
     }
 }
 
-TEST(TestVector4d, lengthSquare)
+TEST(TestVector4f, lengthSquare)
 {
     // unit vector lengthSquare by definition is 1
     {
         const Vector4d v1 = Vector4d::unitX();
-        EXPECT_DOUBLE_EQ(v1.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v1.lengthSquare(), 1.0);
 
         const Vector4d v2 = Vector4d::unitY();
-        EXPECT_DOUBLE_EQ(v2.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v2.lengthSquare(), 1.0);
 
         const Vector4d v3 = Vector4d::unitZ();
-        EXPECT_DOUBLE_EQ(v3.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v3.lengthSquare(), 1.0);
 
         const Vector4d v4 = Vector4d::unitW();
-        EXPECT_DOUBLE_EQ(v4.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v4.lengthSquare(), 1.0);
     }
     {
         const Vector4d v1 = Vector4d(-1.0, 0.0, 0.0, 0.0);
-        EXPECT_DOUBLE_EQ(v1.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v1.lengthSquare(), 1.0);
     }
 
     {
         const Vector4d v1 = Vector4d(-1.0, -2.0, 4.0, 8.0);
-        EXPECT_DOUBLE_EQ(v1.lengthSquare(), 85.0);
+        EXPECT_FLOAT_EQ(v1.lengthSquare(), 85.0);
     }
 }
 
-TEST(TestVector4d, length)
+TEST(TestVector4f, length)
 {
     // unit vector length by definition is 1
     {
         const Vector4d v1 = Vector4d::unitX();
-        EXPECT_DOUBLE_EQ(v1.length(), 1.0);
+        EXPECT_FLOAT_EQ(v1.length(), 1.0);
 
         const Vector4d v2 = Vector4d::unitY();
-        EXPECT_DOUBLE_EQ(v2.length(), 1.0);
+        EXPECT_FLOAT_EQ(v2.length(), 1.0);
 
         const Vector4d v3 = Vector4d::unitZ();
-        EXPECT_DOUBLE_EQ(v3.length(), 1.0);
+        EXPECT_FLOAT_EQ(v3.length(), 1.0);
 
         const Vector4d v4 = Vector4d::unitW();
-        EXPECT_DOUBLE_EQ(v4.length(), 1.0);
+        EXPECT_FLOAT_EQ(v4.length(), 1.0);
     }
 
     // Same arbitrary vector
     //
     {
         const Vector4d v1 = Vector4d(-1.0, -2.0, 4.0, 8.0);
-        EXPECT_DOUBLE_EQ(v1.length(), std::sqrt(85.0));
-        EXPECT_DOUBLE_EQ(v1.length(), std::sqrt(v1.lengthSquare()));
+        EXPECT_FLOAT_EQ(v1.length(), std::sqrt(85.0));
+        EXPECT_FLOAT_EQ(v1.length(), std::sqrt(v1.lengthSquare()));
     }
 
     // test negative value
     {
         const Vector4d v1 = Vector4d(-1.0, 0.0, 0.0, 0.0);
-        EXPECT_DOUBLE_EQ(v1.length(), 1.0);
+        EXPECT_FLOAT_EQ(v1.length(), 1.0);
     }
 }
 
-TEST(TestVector4d, distanceSquare)
+TEST(TestVector4f, distanceSquare)
 {
     // unit vector
     {
         const Vector4d v1 = Vector4d::unitX();
         const Vector4d v2 = Vector4d::unitX();
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 0.0);
     }
 
     // Same arbitrary vector
@@ -493,7 +493,7 @@ TEST(TestVector4d, distanceSquare)
         const Vector4d v1(10.0, 20.0, -12.0, -44.0);
         const Vector4d v2(10.0, 20.0, -12.0, -44.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 0.0);
     }
 
     // Difference only on X
@@ -501,7 +501,7 @@ TEST(TestVector4d, distanceSquare)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(4.0, 2.0, 3.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 9.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 9.0);
     }
 
     // Difference only on Y
@@ -509,7 +509,7 @@ TEST(TestVector4d, distanceSquare)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(1.0, 6.0, 3.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 16.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 16.0);
     }
 
     // Difference only on Z
@@ -517,7 +517,7 @@ TEST(TestVector4d, distanceSquare)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(1.0, 2.0, 8.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 25.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 25.0);
     }
 
     // Difference only on W
@@ -525,7 +525,7 @@ TEST(TestVector4d, distanceSquare)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(1.0, 2.0, 3.0, 10.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 36.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 36.0);
     }
 
     // Difference on every component
@@ -536,7 +536,7 @@ TEST(TestVector4d, distanceSquare)
         // (-2)^2 + (-4)^2 + 4^2 + 4^2
         // = 4 + 16 + 16 + 16
         // = 52
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 52.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 52.0);
     }
 
     // Negative and positive values
@@ -547,7 +547,7 @@ TEST(TestVector4d, distanceSquare)
         // 2^2 + 4^2 + 6^2 + 8^2
         // = 4 + 16 + 36 + 64
         // = 120
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), 120.0);
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), 120.0);
     }
 
     // Symmetry
@@ -555,7 +555,7 @@ TEST(TestVector4d, distanceSquare)
         const Vector4d v1(2.0, -3.0, 5.0, 7.0);
         const Vector4d v2(-4.0, 8.0, 1.0, -2.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), Vector4d::distanceSquare(v2, v1));
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), Vector4d::distanceSquare(v2, v1));
     }
 
     // distanceSquare(a, b) == (a - b).lengthSquare()
@@ -565,18 +565,18 @@ TEST(TestVector4d, distanceSquare)
 
         const Vector4d difference = v1 - v2;
 
-        EXPECT_DOUBLE_EQ(Vector4d::distanceSquare(v1, v2), difference.lengthSquare());
+        EXPECT_FLOAT_EQ(Vector4d::distanceSquare(v1, v2), difference.lengthSquare());
     }
 }
 
-TEST(TestVector4d, distance)
+TEST(TestVector4f, distance)
 {
     // unit vector
     {
         const Vector4d v1 = Vector4d::unitX();
         const Vector4d v2 = Vector4d::unitX();
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), 0.0);
     }
 
     // Same arbitrary vector
@@ -584,7 +584,7 @@ TEST(TestVector4d, distance)
         const Vector4d v1(10.0, 20.0, -12.0, -44.0);
         const Vector4d v2(10.0, 20.0, -12.0, -44.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), 0.0);
     }
 
     // Difference only on X
@@ -592,7 +592,7 @@ TEST(TestVector4d, distance)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(4.0, 2.0, 3.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), 3.0);
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), 3.0);
     }
 
     // Difference only on Y
@@ -600,7 +600,7 @@ TEST(TestVector4d, distance)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(1.0, 6.0, 3.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), 4.0);
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), 4.0);
     }
 
     // Difference only on Z
@@ -608,7 +608,7 @@ TEST(TestVector4d, distance)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(1.0, 2.0, 8.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), 5.0);
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), 5.0);
     }
 
     // Difference only on W
@@ -616,7 +616,7 @@ TEST(TestVector4d, distance)
         const Vector4d v1(1.0, 2.0, 3.0, 4.0);
         const Vector4d v2(1.0, 2.0, 3.0, 10.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), 6.0);
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), 6.0);
     }
 
     // Difference on every component
@@ -627,7 +627,7 @@ TEST(TestVector4d, distance)
         // (-2)^2 + (-4)^2 + 4^2 + 4^2
         // = 4 + 16 + 16 + 16
         // = 52
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), std::sqrt(52.0));
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), std::sqrt(52.0));
     }
 
     // Negative and positive values
@@ -638,7 +638,7 @@ TEST(TestVector4d, distance)
         // 2^2 + 4^2 + 6^2 + 8^2
         // = 4 + 16 + 36 + 64
         // = 120
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), std::sqrt(120.0));
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), std::sqrt(120.0));
     }
 
     // Symmetry
@@ -646,7 +646,7 @@ TEST(TestVector4d, distance)
         const Vector4d v1(2.0, -3.0, 5.0, 7.0);
         const Vector4d v2(-4.0, 8.0, 1.0, -2.0);
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), Vector4d::distance(v2, v1));
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), Vector4d::distance(v2, v1));
     }
 
     // distance(a, b) == (a - b).length()
@@ -656,35 +656,35 @@ TEST(TestVector4d, distance)
 
         const Vector4d difference = v1 - v2;
 
-        EXPECT_DOUBLE_EQ(Vector4d::distance(v1, v2), difference.length());
+        EXPECT_FLOAT_EQ(Vector4d::distance(v1, v2), difference.length());
     }
 }
 
-TEST(TestVector4d, getNormalize)
+TEST(TestVector4f, getNormalize)
 {
     {
         const Vector4d v(3.0, 4.0, 0.0, 0.0);
         const Vector4d normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getW(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
 
         // getNormalize() must not modify the original vector.
-        EXPECT_DOUBLE_EQ(v.getX(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 4.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 3.0);
+        EXPECT_FLOAT_EQ(v.getY(), 4.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getW(), 0.0);
     }
 
     {
         const Vector4d v(-1.0, -2.0, 4.0, 8.0);
         const Vector4d normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -692,11 +692,11 @@ TEST(TestVector4d, getNormalize)
         const Vector4d v = Vector4d::unitX();
         const Vector4d normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getW(), 0.0, FloatEpsilon);
     }
 
     // Zero vector.
@@ -704,26 +704,26 @@ TEST(TestVector4d, getNormalize)
         const Vector4d v(0.0, 0.0, 0.0, 0.0);
         const Vector4d normalized = v.getNormalize();
 
-        EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getW(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getX(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getY(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getW(), 0.0);
     }
 }
 
-TEST(TestVector4d, normalize)
+TEST(TestVector4f, normalize)
 {
     {
         Vector4d v(3.0, 4.0, 0.0, 0.0);
 
         v.normalize();
 
-        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getW(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(v.getW(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     {
@@ -731,7 +731,7 @@ TEST(TestVector4d, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -740,8 +740,8 @@ TEST(TestVector4d, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
     }
 
     // Zero vector should remain zero.
@@ -750,10 +750,10 @@ TEST(TestVector4d, normalize)
 
         v.normalize();
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 0.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getW(), 0.0);
     }
 
     // normalize() should return *this.
@@ -766,31 +766,31 @@ TEST(TestVector4d, normalize)
     }
 }
 
-TEST(TestVector4d, getNormalizeFast)
+TEST(TestVector4f, getNormalizeFast)
 {
     {
         const Vector4d v(3.0, 4.0, 0.0, 0.0);
         const Vector4d normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getW(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
 
         // getNormalizeFast() must not modify the original vector.
-        EXPECT_DOUBLE_EQ(v.getX(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 4.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 3.0);
+        EXPECT_FLOAT_EQ(v.getY(), 4.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getW(), 0.0);
     }
 
     {
         const Vector4d v(-1.0, -2.0, 4.0, 8.0);
         const Vector4d normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -798,11 +798,11 @@ TEST(TestVector4d, getNormalizeFast)
         const Vector4d v = Vector4d::unitX();
         const Vector4d normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getW(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getZ(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getW(), 0.0, FloatEpsilon);
     }
 
     // Zero vector.
@@ -810,26 +810,26 @@ TEST(TestVector4d, getNormalizeFast)
         const Vector4d v(0.0, 0.0, 0.0, 0.0);
         const Vector4d normalized = v.getNormalizeFast();
 
-        EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getW(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getX(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getY(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getW(), 0.0);
     }
 }
 
-TEST(TestVector4d, normalizeFast)
+TEST(TestVector4f, normalizeFast)
 {
     {
         Vector4d v(3.0, 4.0, 0.0, 0.0);
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 0.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getW(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, FloatEpsilon);
+        EXPECT_NEAR(v.getZ(), 0.0, FloatEpsilon);
+        EXPECT_NEAR(v.getW(), 0.0, FloatEpsilon);
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     {
@@ -837,7 +837,7 @@ TEST(TestVector4d, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalizeFastd.
@@ -846,8 +846,8 @@ TEST(TestVector4d, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
     }
 
     // Zero vector should remain zero.
@@ -856,10 +856,10 @@ TEST(TestVector4d, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 0.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getW(), 0.0);
     }
 
     // normalizeFast() should return *this.
@@ -872,7 +872,7 @@ TEST(TestVector4d, normalizeFast)
     }
 }
 
-TEST(TestVector4d, isHomogeneous)
+TEST(TestVector4f, isHomogeneous)
 {
     // Zero with w equal 1
     {
@@ -899,7 +899,7 @@ TEST(TestVector4d, isHomogeneous)
     }
 }
 
-TEST(TestVector4d, min)
+TEST(TestVector4f, min)
 {
     {
         const Vector4d v0(1.0, 2.0, 3.0, 4.0);
@@ -907,10 +907,10 @@ TEST(TestVector4d, min)
 
         const Vector4d result = Vector4d::min(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getW(), 4.0);
     }
 
     { // Minimum comes from different vectors
@@ -919,10 +919,10 @@ TEST(TestVector4d, min)
 
         const Vector4d result = Vector4d::min(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getY(), -4.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), -3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), -20.0);
+        EXPECT_FLOAT_EQ(result.getX(), 2.0);
+        EXPECT_FLOAT_EQ(result.getY(), -4.0);
+        EXPECT_FLOAT_EQ(result.getZ(), -3.0);
+        EXPECT_FLOAT_EQ(result.getW(), -20.0);
     }
 
     { // Equal components
@@ -931,14 +931,14 @@ TEST(TestVector4d, min)
 
         const Vector4d result = Vector4d::min(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), -2.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 8.0);
+        EXPECT_FLOAT_EQ(result.getX(), 5.0);
+        EXPECT_FLOAT_EQ(result.getY(), 3.0);
+        EXPECT_FLOAT_EQ(result.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(result.getW(), 8.0);
     }
 }
 
-TEST(TestVector4dd, max)
+TEST(TestVector4fd, max)
 {
     {
         const Vector4d v0(1.0, 2.0, 3.0, 4.0);
@@ -946,10 +946,10 @@ TEST(TestVector4dd, max)
 
         const Vector4d result = Vector4d::max(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 6.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 7.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 8.0);
+        EXPECT_FLOAT_EQ(result.getX(), 5.0);
+        EXPECT_FLOAT_EQ(result.getY(), 6.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 7.0);
+        EXPECT_FLOAT_EQ(result.getW(), 8.0);
     }
 
     { // Maximum comes from different vectors
@@ -958,10 +958,10 @@ TEST(TestVector4dd, max)
 
         const Vector4d result = Vector4d::max(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 8.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 12.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 15.0);
-        EXPECT_DOUBLE_EQ(result.getW(), -10.0);
+        EXPECT_FLOAT_EQ(result.getX(), 8.0);
+        EXPECT_FLOAT_EQ(result.getY(), 12.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 15.0);
+        EXPECT_FLOAT_EQ(result.getW(), -10.0);
     }
 
     { // Equal components
@@ -970,71 +970,71 @@ TEST(TestVector4dd, max)
 
         const Vector4d result = Vector4d::max(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), -2.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 8.0);
+        EXPECT_FLOAT_EQ(result.getX(), 5.0);
+        EXPECT_FLOAT_EQ(result.getY(), 3.0);
+        EXPECT_FLOAT_EQ(result.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(result.getW(), 8.0);
     }
 }
 
-TEST(TestVector4d, abs)
+TEST(TestVector4f, abs)
 {
     // Full Positive
     {
         const Vector4d result = Vector4d(1.0, 2.0, 3.0, 4.0).abs();
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getW(), 4.0);
     }
 
     // X negative
     {
         const Vector4d result = Vector4d(-1.0, 2.0, 3.0, 4.0).abs();
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getW(), 4.0);
     }
 
     // Y negative
     {
         const Vector4d result = Vector4d(1.0, 2.0, 3.0, 4.0).abs();
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getW(), 4.0);
     }
 
     // Z negative
     {
         const Vector4d result = Vector4d(1.0, 2.0, -3.0, 4.0).abs();
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getW(), 4.0);
     }
 
     // W negative
     {
         const Vector4d result = Vector4d(1.0, 2.0, 3.0, -4.0).abs();
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getW(), 4.0);
     }
 
     // X,Y,Z,W negative
     {
         const Vector4d result = Vector4d(-1.0, -2.0, -3.0, -4.0).abs();
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getW(), 4.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getW(), 4.0);
     }
 }
 
-TEST(TestVector4d, IsFinite)
+TEST(TestVector4f, IsFinite)
 {
     {
         const Vector4d v = Vector4d(1.0, 2.0, 3.0, 4.0);
@@ -1067,7 +1067,7 @@ TEST(TestVector4d, IsFinite)
 #endif
 }
 
-TEST(TestVector4d, permutationVector4)
+TEST(TestVector4f, permutationVector4)
 {
     const Vector4d v(1.0, 2.0, 3.0, 4.0);
 
@@ -1107,7 +1107,7 @@ TEST(TestVector4d, permutationVector4)
     test(v.wzyx(), v.getW(), v.getZ(), v.getY(), v.getX());
 }
 
-TEST(TestVector4d, permutationVector3)
+TEST(TestVector4f, permutationVector3)
 {
     const Vector4d v(1.0, 2.0, 3.0, 4.0);
 
@@ -1128,7 +1128,7 @@ TEST(TestVector4d, permutationVector3)
     test(v.zyx(), v.getZ(), v.getY(), v.getX());
 }
 
-TEST(TestVector4d, permutationVector2d)
+TEST(TestVector4f, permutationVector2d)
 {
     const Vector4d v(1.0, 2.0, 3.0, 4.0);
 

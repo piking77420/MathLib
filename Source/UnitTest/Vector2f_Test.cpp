@@ -243,8 +243,8 @@ TEST(TestVector2f, CmpOperator)
         EXPECT_TRUE(v1 != v2);
     }
 
-    constexpr double FloatEpsilonHalf = 0.5 * FloatEpsilon;
-    constexpr double FloatEpsilon2 = 2.0 * FloatEpsilon;
+    constexpr float FloatEpsilonHalf = 0.5 * FloatEpsilon;
+    constexpr float FloatEpsilon2 = 2.0 * FloatEpsilon;
 
     {
         const Vector2f v1(1.0, 2.0);
@@ -549,10 +549,10 @@ TEST(TestVector2f, getNormalize)
         const Vector2f v(3.0, 4.0);
         const Vector2f normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.8, FloatEpsilon);
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
 
         // getNormalize() must not modify the original vector.
         EXPECT_FLOAT_EQ(v.getX(), 3.0);
@@ -563,7 +563,7 @@ TEST(TestVector2f, getNormalize)
         const Vector2f v(-1.0, -2.0);
         const Vector2f normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -571,8 +571,8 @@ TEST(TestVector2f, getNormalize)
         const Vector2f v = Vector2f::unitX();
         const Vector2f normalized = v.getNormalize();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getX(), 1.0, FloatEpsilon);
     }
 
     // Zero vector.
@@ -592,10 +592,10 @@ TEST(TestVector2f, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, FloatEpsilon);
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     {
@@ -603,7 +603,7 @@ TEST(TestVector2f, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -612,8 +612,8 @@ TEST(TestVector2f, normalize)
 
         v.normalize();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
     }
 
     // Zero vector should remain zero.
@@ -642,10 +642,10 @@ TEST(TestVector2f, getNormalizeFast)
         const Vector2f v(3.0, 4.0);
         const Vector2f normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
+        EXPECT_NEAR(normalized.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.8, FloatEpsilon);
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
 
         // getNormalizeFast() must not modify the original vector.
         EXPECT_FLOAT_EQ(v.getX(), 3.0);
@@ -656,7 +656,7 @@ TEST(TestVector2f, getNormalizeFast)
         const Vector2f v(-1.0, -2.0);
         const Vector2f normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalized.
@@ -664,9 +664,9 @@ TEST(TestVector2f, getNormalizeFast)
         const Vector2f v = Vector2f::unitX();
         const Vector2f normalized = v.getNormalizeFast();
 
-        EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(normalized.getY(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(normalized.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getX(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(normalized.getY(), 0.0, FloatEpsilon);
     }
 
     // Zero vector.
@@ -686,10 +686,10 @@ TEST(TestVector2f, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
+        EXPECT_NEAR(v.getX(), 0.6, FloatEpsilon);
+        EXPECT_NEAR(v.getY(), 0.8, FloatEpsilon);
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     {
@@ -697,7 +697,7 @@ TEST(TestVector2f, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
     }
 
     // Already normalizeFastd.
@@ -706,8 +706,8 @@ TEST(TestVector2f, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(v.length(), 1.0, FloatEpsilon);
+        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
     }
 
     // Zero vector should remain zero.
@@ -737,7 +737,7 @@ TEST(TestVector2f, cross)
 
         const double cross = Vector2f::cross(v0, v0);
 
-        EXPECT_NEAR(cross, 0.0, DoubleEpsilon);
+        EXPECT_NEAR(cross, 0.0, FloatEpsilon);
     }
 
     { // Perpendicular CCW => 1.0
@@ -746,7 +746,7 @@ TEST(TestVector2f, cross)
 
         const double cross = Vector2f::cross(v0, v1);
 
-        EXPECT_NEAR(cross, 1.0, DoubleEpsilon);
+        EXPECT_NEAR(cross, 1.0, FloatEpsilon);
     }
 
     { // Perpendicular => cross magnitude equals product of magnitudes
@@ -755,7 +755,7 @@ TEST(TestVector2f, cross)
 
         const double cross = Vector2f::cross(v0, v1);
 
-        EXPECT_NEAR(cross, v0.length() * v1.length(), DoubleEpsilon);
+        EXPECT_NEAR(cross, v0.length() * v1.length(), FloatEpsilon);
     }
 }
 
