@@ -2,7 +2,7 @@
 #define MATH_LIB_MATRIX4X4D_H
 
 #include <cstring>
-#include <Vector3d.hpp>
+#include <Vector3.hpp>
 #include <Vector4d.hpp>
 #include <AVX.hpp>
 

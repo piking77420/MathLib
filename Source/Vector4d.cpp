@@ -1,7 +1,7 @@
 #include <array>
-#include <Matrix3x3d.hpp>
+#include <Matrix3x3.hpp>
 #include <Vector4d.hpp>
-#include <Vector3d.hpp>
+#include <Vector3.hpp>
 #include <Vector2.hpp>
 
 namespace MathLib

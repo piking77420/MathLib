@@ -10,37 +10,37 @@
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 using namespace MathLib;
 
-TEST(TestVector3d, Constructor)
+TEST(TestVector3f, Constructor)
 {
     const Vector3d v = Vector3d(1., 2., 3.);
 
-    EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-    EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+    EXPECT_FLOAT_EQ(v.getX(), 1.0);
+    EXPECT_FLOAT_EQ(v.getY(), 2.0);
+    EXPECT_FLOAT_EQ(v.getZ(), 3.0);
 }
 
-TEST(TestVector3d, Setter)
+TEST(TestVector3f, Setter)
 {
     Vector3d v{};
     v.setX(1.);
     v.setY(2.);
     v.setZ(3.);
 
-    EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-    EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-    EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+    EXPECT_FLOAT_EQ(v.getX(), 1.0);
+    EXPECT_FLOAT_EQ(v.getY(), 2.0);
+    EXPECT_FLOAT_EQ(v.getZ(), 3.0);
 }
 
-TEST(TestVector3d, addVectorOperator)
+TEST(TestVector3f, addVectorOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
         const Vector3d v1 = Vector3d(4., 5., 6.);
         v += v1;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
+        EXPECT_FLOAT_EQ(v.getX(), 5.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 9.0);
     }
 
     {
@@ -48,13 +48,13 @@ TEST(TestVector3d, addVectorOperator)
         const Vector3d v2 = Vector3d(4., 5., 6.);
         const Vector3d v = v1 + v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
+        EXPECT_FLOAT_EQ(v.getX(), 5.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 9.0);
     }
 }
 
-TEST(TestVector3d, subVectorOperator)
+TEST(TestVector3f, subVectorOperator)
 {
     {
         Vector3d v(1.0, 2.0, 3.0);
@@ -62,9 +62,9 @@ TEST(TestVector3d, subVectorOperator)
 
         v -= v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
+        EXPECT_FLOAT_EQ(v.getX(), -7.0);
+        EXPECT_FLOAT_EQ(v.getY(), -8.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 1.0);
     }
 
     {
@@ -73,13 +73,13 @@ TEST(TestVector3d, subVectorOperator)
 
         const Vector3d v = v1 - v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -7.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -8.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
+        EXPECT_FLOAT_EQ(v.getX(), -7.0);
+        EXPECT_FLOAT_EQ(v.getY(), -8.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 1.0);
     }
 }
 
-TEST(TestVector3d, mulVectorOperator)
+TEST(TestVector3f, mulVectorOperator)
 {
     {
         Vector3d v(1.0, 2.0, 3.0);
@@ -87,9 +87,9 @@ TEST(TestVector3d, mulVectorOperator)
 
         v *= v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+        EXPECT_FLOAT_EQ(v.getX(), 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 6.0);
     }
 
     {
@@ -98,13 +98,13 @@ TEST(TestVector3d, mulVectorOperator)
 
         const Vector3d v = v1 * v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+        EXPECT_FLOAT_EQ(v.getX(), 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 6.0);
     }
 }
 
-TEST(TestVector3d, divVectorOperator)
+TEST(TestVector3f, divVectorOperator)
 {
     {
         Vector3d v(1.0, 2.0, 3.0);
@@ -112,9 +112,9 @@ TEST(TestVector3d, divVectorOperator)
 
         v /= v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.20);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.20);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0 / 2.0);
     }
 
     {
@@ -123,129 +123,129 @@ TEST(TestVector3d, divVectorOperator)
 
         const Vector3d v = v1 / v2;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.20);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.20);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0 / 2.0);
     }
 }
 
-TEST(TestVector3d, addScalarOperator)
+TEST(TestVector3f, addScalarOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
         v += 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
+        EXPECT_FLOAT_EQ(v.getX(), 6.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 8.0);
     }
 
     {
         const Vector3d v = Vector3d(1., 2., 3.) + 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 6.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 7.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
+        EXPECT_FLOAT_EQ(v.getX(), 6.0);
+        EXPECT_FLOAT_EQ(v.getY(), 7.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 8.0);
     }
 }
 
-TEST(TestVector3d, subScalarOperator)
+TEST(TestVector3f, subScalarOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
         v -= 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(v.getX(), -4.0);
+        EXPECT_FLOAT_EQ(v.getY(), -3.0);
+        EXPECT_FLOAT_EQ(v.getZ(), -2.0);
     }
 
     {
         const Vector3d v = Vector3d(1., 2., 3.) - 5.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), -4.0);
-        EXPECT_DOUBLE_EQ(v.getY(), -3.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(v.getX(), -4.0);
+        EXPECT_FLOAT_EQ(v.getY(), -3.0);
+        EXPECT_FLOAT_EQ(v.getZ(), -2.0);
     }
 }
 
-TEST(TestVector3d, mulScalarOperator)
+TEST(TestVector3f, mulScalarOperator)
 {
 
     {
         Vector3d v = Vector3d(1., 2., 3.);
         v *= 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
     }
 
     {
         const Vector3d v = Vector3d(1., 2., 3.) * 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
     }
 
     {
         Vector3d v = Vector3d(1., 2., 3.);
         v *= 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
+        EXPECT_FLOAT_EQ(v.getX(), 10.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 30.0);
     }
 
     {
         const Vector3d v = Vector3d(1., 2., 3.) * 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 10.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
+        EXPECT_FLOAT_EQ(v.getX(), 10.0);
+        EXPECT_FLOAT_EQ(v.getY(), 20.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 30.0);
     }
 }
 
-TEST(TestVector3d, divScalarOperator)
+TEST(TestVector3f, divScalarOperator)
 {
 
     {
         Vector3d v = Vector3d(1., 2., 3.);
         v /= 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
     }
 
     {
         const Vector3d v = Vector3d(1., 2., 3.) / 1.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.0);
+        EXPECT_FLOAT_EQ(v.getY(), 2.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.0);
     }
 
     {
         Vector3d v = Vector3d(1., 2., 3.);
         v /= 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
+        EXPECT_FLOAT_EQ(v.getX(), 0.1);
+        EXPECT_FLOAT_EQ(v.getY(), 0.2);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.3);
     }
 
     {
         const Vector3d v = Vector3d(1., 2., 3.) / 10.0;
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.1);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
+        EXPECT_FLOAT_EQ(v.getX(), 0.1);
+        EXPECT_FLOAT_EQ(v.getY(), 0.2);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.3);
     }
 }
 
-TEST(TestVector3d, cmpOperator)
+TEST(TestVector3f, cmpOperator)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
@@ -276,75 +276,75 @@ TEST(TestVector3d, cmpOperator)
     }
 }
 
-TEST(TestVector3d, negateOperator)
+TEST(TestVector3f, negateOperator)
 {
     // all positive
     {
         const Vector3d v = -Vector3d(1., 2., 3.);
 
-        EXPECT_DOUBLE_EQ(v.getX(), -1.);
-        EXPECT_DOUBLE_EQ(v.getY(), -2.);
-        EXPECT_DOUBLE_EQ(v.getZ(), -3.);
+        EXPECT_FLOAT_EQ(v.getX(), -1.);
+        EXPECT_FLOAT_EQ(v.getY(), -2.);
+        EXPECT_FLOAT_EQ(v.getZ(), -3.);
     }
 
     // all negative
     {
         const Vector3d v = -Vector3d(-1., -2., -3.);
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.);
-        EXPECT_DOUBLE_EQ(v.getY(), 2.);
-        EXPECT_DOUBLE_EQ(v.getZ(), 3.);
+        EXPECT_FLOAT_EQ(v.getX(), 1.);
+        EXPECT_FLOAT_EQ(v.getY(), 2.);
+        EXPECT_FLOAT_EQ(v.getZ(), 3.);
     }
 
     // all randome values
     {
         const Vector3d v = -Vector3d(-1.25, 14.04, 45.0);
 
-        EXPECT_DOUBLE_EQ(v.getX(), 1.25);
-        EXPECT_DOUBLE_EQ(v.getY(), -14.04);
-        EXPECT_DOUBLE_EQ(v.getZ(), -45.0);
+        EXPECT_FLOAT_EQ(v.getX(), 1.25);
+        EXPECT_FLOAT_EQ(v.getY(), -14.04);
+        EXPECT_FLOAT_EQ(v.getZ(), -45.0);
     }
 }
 
-TEST(TestVector3d, dot)
+TEST(TestVector3f, dot)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
         const Vector3d v2 = Vector3d::unitY();
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector3d v1 = Vector3d::unitY();
         const Vector3d v2 = Vector3d::unitZ();
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector3d v1 = Vector3d::unitX();
         const Vector3d v2 = Vector3d::unitZ();
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector3d v1 = Vector3d::unitZ();
         const Vector3d v2 = Vector3d::unitX();
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v2), 0.0);
     }
 
     {
         const Vector3d v1 = Vector3d::unitX();
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v1), 1.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v1), 1.0);
     }
 
     {
         const Vector3d v1 = Vector3d::unitY();
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v1), 1.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v1), 1.0);
     }
 
     {
         const Vector3d v1 = Vector3d::unitZ();
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v1), 1.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v1), 1.0);
     }
 
     {
@@ -353,7 +353,7 @@ TEST(TestVector3d, dot)
 
         // 1*5 + 2*6 + 3*7 =
         // 5 + 12 + 21 = 38
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v2), 38.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v2), 38.0);
     }
 
     {
@@ -362,14 +362,14 @@ TEST(TestVector3d, dot)
 
         // 1*-5 + -2*6 + 3*-7 =
         // -5 + -12 + -21 = -38
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v2), -38.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v2), -38.0);
     }
 
     {
         const Vector3d zero(0.0, 0.0, 0.0);
         const Vector3d v(1.0, 2.0, 3.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::dot(zero, v), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::dot(zero, v), 0.0);
     }
 
     {
@@ -377,20 +377,20 @@ TEST(TestVector3d, dot)
         const Vector3d v2(5.0, 2.0, 3.0);
         // 4*5 + -2*2 + 6*3 =
         // 20 + -4 + 18 = 39
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v1, v2), 34);
-        EXPECT_DOUBLE_EQ(Vector3d::dot(v2, v1), 34);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v1, v2), 34);
+        EXPECT_FLOAT_EQ(Vector3d::dot(v2, v1), 34);
     }
 }
 
-TEST(TestVector3d, cross)
+TEST(TestVector3f, cross)
 {
     // Cross self
     {
         const Vector3d x = Vector3d::unitX();
         const Vector3d result = Vector3d::cross(x, x);
-        EXPECT_DOUBLE_EQ(result.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(result.getX(), 0.0);
+        EXPECT_FLOAT_EQ(result.getY(), 0.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 0.0);
     }
 
     // Check cross product magnitude
@@ -401,11 +401,11 @@ TEST(TestVector3d, cross)
         const Vector3d result = Vector3d::cross(a, b);
 
         // a cross b = (0, 0, 12)
-        EXPECT_DOUBLE_EQ(result.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 12.0);
+        EXPECT_FLOAT_EQ(result.getX(), 0.0);
+        EXPECT_FLOAT_EQ(result.getY(), 0.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 12.0);
 
-        EXPECT_DOUBLE_EQ(result.length(), a.length() * b.length());
+        EXPECT_FLOAT_EQ(result.length(), a.length() * b.length());
     }
 
     // x cross y = z , y cross x = -z
@@ -416,13 +416,13 @@ TEST(TestVector3d, cross)
         const Vector3d z = Vector3d::cross(x, y);
         const Vector3d minusZ = Vector3d::cross(y, x);
 
-        EXPECT_DOUBLE_EQ(z.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(z.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(z.getZ(), 1.0);
+        EXPECT_FLOAT_EQ(z.getX(), 0.0);
+        EXPECT_FLOAT_EQ(z.getY(), 0.0);
+        EXPECT_FLOAT_EQ(z.getZ(), 1.0);
 
-        EXPECT_DOUBLE_EQ(minusZ.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(minusZ.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(minusZ.getZ(), -1.0);
+        EXPECT_FLOAT_EQ(minusZ.getX(), 0.0);
+        EXPECT_FLOAT_EQ(minusZ.getY(), 0.0);
+        EXPECT_FLOAT_EQ(minusZ.getZ(), -1.0);
     }
 
     // x cross z = -y, z cross x = y
@@ -433,13 +433,13 @@ TEST(TestVector3d, cross)
         const Vector3d minusY = Vector3d::cross(x, z);
         const Vector3d y = Vector3d::cross(z, x);
 
-        EXPECT_DOUBLE_EQ(minusY.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(minusY.getY(), -1.0);
-        EXPECT_DOUBLE_EQ(minusY.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(minusY.getX(), 0.0);
+        EXPECT_FLOAT_EQ(minusY.getY(), -1.0);
+        EXPECT_FLOAT_EQ(minusY.getZ(), 0.0);
 
-        EXPECT_DOUBLE_EQ(y.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(y.getY(), 1.0);
-        EXPECT_DOUBLE_EQ(y.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(y.getX(), 0.0);
+        EXPECT_FLOAT_EQ(y.getY(), 1.0);
+        EXPECT_FLOAT_EQ(y.getZ(), 0.0);
     }
 
     // y cross z = x, z cross y = -x
@@ -450,13 +450,13 @@ TEST(TestVector3d, cross)
         const Vector3d x = Vector3d::cross(y, z);
         const Vector3d minusX = Vector3d::cross(z, y);
 
-        EXPECT_DOUBLE_EQ(x.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(x.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(x.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(x.getX(), 1.0);
+        EXPECT_FLOAT_EQ(x.getY(), 0.0);
+        EXPECT_FLOAT_EQ(x.getZ(), 0.0);
 
-        EXPECT_DOUBLE_EQ(minusX.getX(), -1.0);
-        EXPECT_DOUBLE_EQ(minusX.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(minusX.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(minusX.getX(), -1.0);
+        EXPECT_FLOAT_EQ(minusX.getY(), 0.0);
+        EXPECT_FLOAT_EQ(minusX.getZ(), 0.0);
     }
     // random
     {
@@ -464,13 +464,13 @@ TEST(TestVector3d, cross)
         const Vector3d b = Vector3d(-1.0, 4.0, 2.0);
 
         const Vector3d result = Vector3d::cross(a, b);
-        EXPECT_DOUBLE_EQ(result.getX(), -24.0);
-        EXPECT_DOUBLE_EQ(result.getY(), -11.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 10.0);
+        EXPECT_FLOAT_EQ(result.getX(), -24.0);
+        EXPECT_FLOAT_EQ(result.getY(), -11.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 10.0);
     }
 }
 
-TEST(TestVector3d, mix)
+TEST(TestVector3f, mix)
 {
     {
         const Vector3d a(1.0, 2.0, 3.0);
@@ -479,72 +479,72 @@ TEST(TestVector3d, mix)
 
         const double result = Vector3d::mix(a, b, c);
 
-        EXPECT_DOUBLE_EQ(result, -3.0);
+        EXPECT_FLOAT_EQ(result, -3.0);
     }
 }
 
-TEST(TestVector3d, lengthSquare)
+TEST(TestVector3f, lengthSquare)
 {
     // unit vector lengthSquare by definition is 1
     {
         const Vector3d v1 = Vector3d::unitX();
-        EXPECT_DOUBLE_EQ(v1.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v1.lengthSquare(), 1.0);
 
         const Vector3d v2 = Vector3d::unitY();
-        EXPECT_DOUBLE_EQ(v2.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v2.lengthSquare(), 1.0);
 
         const Vector3d v3 = Vector3d::unitZ();
-        EXPECT_DOUBLE_EQ(v3.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v3.lengthSquare(), 1.0);
     }
     {
         const Vector3d v1 = Vector3d(-1.0, 0.0, 0.0);
-        EXPECT_DOUBLE_EQ(v1.lengthSquare(), 1.0);
+        EXPECT_FLOAT_EQ(v1.lengthSquare(), 1.0);
     }
 
     {
         const Vector3d v1 = Vector3d(-1.0, -2.0, 4.0);
-        EXPECT_DOUBLE_EQ(v1.lengthSquare(), 21.0);
+        EXPECT_FLOAT_EQ(v1.lengthSquare(), 21.0);
     }
 }
 
-TEST(TestVector3d, length)
+TEST(TestVector3f, length)
 {
     // Unit vector length by definition is 1
     {
         const Vector3d v1 = Vector3d::unitX();
-        EXPECT_DOUBLE_EQ(v1.length(), 1.0);
+        EXPECT_FLOAT_EQ(v1.length(), 1.0);
 
         const Vector3d v2 = Vector3d::unitY();
-        EXPECT_DOUBLE_EQ(v2.length(), 1.0);
+        EXPECT_FLOAT_EQ(v2.length(), 1.0);
 
         const Vector3d v3 = Vector3d::unitZ();
-        EXPECT_DOUBLE_EQ(v3.length(), 1.0);
+        EXPECT_FLOAT_EQ(v3.length(), 1.0);
     }
 
     // Arbitrary vector
     {
         const Vector3d v1(-1.0, -2.0, 4.0);
 
-        EXPECT_DOUBLE_EQ(v1.length(), std::sqrt(21.0));
-        EXPECT_DOUBLE_EQ(v1.length(), std::sqrt(v1.lengthSquare()));
+        EXPECT_FLOAT_EQ(v1.length(), std::sqrt(21.0));
+        EXPECT_FLOAT_EQ(v1.length(), std::sqrt(v1.lengthSquare()));
     }
 
     // Negative component
     {
         const Vector3d v1(-1.0, 0.0, 0.0);
 
-        EXPECT_DOUBLE_EQ(v1.length(), 1.0);
+        EXPECT_FLOAT_EQ(v1.length(), 1.0);
     }
 }
 
-TEST(TestVector3d, distanceSquare)
+TEST(TestVector3f, distanceSquare)
 {
     // Unit vector
     {
         const Vector3d v1 = Vector3d::unitX();
         const Vector3d v2 = Vector3d::unitX();
 
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), 0.0);
     }
 
     // Same arbitrary vector
@@ -552,7 +552,7 @@ TEST(TestVector3d, distanceSquare)
         const Vector3d v1(10.0, 20.0, -12.0);
         const Vector3d v2(10.0, 20.0, -12.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), 0.0);
     }
 
     // Difference only on X
@@ -560,7 +560,7 @@ TEST(TestVector3d, distanceSquare)
         const Vector3d v1(1.0, 2.0, 3.0);
         const Vector3d v2(4.0, 2.0, 3.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), 9.0);
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), 9.0);
     }
 
     // Difference only on Y
@@ -568,7 +568,7 @@ TEST(TestVector3d, distanceSquare)
         const Vector3d v1(1.0, 2.0, 3.0);
         const Vector3d v2(1.0, 6.0, 3.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), 16.0);
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), 16.0);
     }
 
     // Difference only on Z
@@ -576,7 +576,7 @@ TEST(TestVector3d, distanceSquare)
         const Vector3d v1(1.0, 2.0, 3.0);
         const Vector3d v2(1.0, 2.0, 8.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), 25.0);
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), 25.0);
     }
 
     // Difference on every component
@@ -587,7 +587,7 @@ TEST(TestVector3d, distanceSquare)
         // (-2)^2 + (-4)^2 + 4^2
         // = 4 + 16 + 16
         // = 36
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), 36.0);
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), 36.0);
     }
 
     // Negative and positive values
@@ -598,7 +598,7 @@ TEST(TestVector3d, distanceSquare)
         // (-2)^2 + (-4)^2 + (-6)^2
         // = 4 + 16 + 36
         // = 56
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), 56.0);
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), 56.0);
     }
 
     // Symmetry
@@ -606,7 +606,7 @@ TEST(TestVector3d, distanceSquare)
         const Vector3d v1(2.0, -3.0, 5.0);
         const Vector3d v2(-4.0, 8.0, 1.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), Vector3d::distanceSquare(v2, v1));
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), Vector3d::distanceSquare(v2, v1));
     }
 
     // distanceSquare(a, b) == (a - b).lengthSquare()
@@ -616,18 +616,18 @@ TEST(TestVector3d, distanceSquare)
 
         const Vector3d difference = v1 - v2;
 
-        EXPECT_DOUBLE_EQ(Vector3d::distanceSquare(v1, v2), difference.lengthSquare());
+        EXPECT_FLOAT_EQ(Vector3d::distanceSquare(v1, v2), difference.lengthSquare());
     }
 }
 
-TEST(TestVector3d, distance)
+TEST(TestVector3f, distance)
 {
     // Unit vector
     {
         const Vector3d v1 = Vector3d::unitX();
         const Vector3d v2 = Vector3d::unitX();
 
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), 0.0);
     }
 
     // Same arbitrary vector
@@ -635,7 +635,7 @@ TEST(TestVector3d, distance)
         const Vector3d v1(10.0, 20.0, -12.0);
         const Vector3d v2(10.0, 20.0, -12.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), 0.0);
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), 0.0);
     }
 
     // Difference only on X
@@ -643,7 +643,7 @@ TEST(TestVector3d, distance)
         const Vector3d v1(1.0, 2.0, 3.0);
         const Vector3d v2(4.0, 2.0, 3.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), 3.0);
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), 3.0);
     }
 
     // Difference only on Y
@@ -651,7 +651,7 @@ TEST(TestVector3d, distance)
         const Vector3d v1(1.0, 2.0, 3.0);
         const Vector3d v2(1.0, 6.0, 3.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), 4.0);
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), 4.0);
     }
 
     // Difference only on Z
@@ -659,7 +659,7 @@ TEST(TestVector3d, distance)
         const Vector3d v1(1.0, 2.0, 3.0);
         const Vector3d v2(1.0, 2.0, 8.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), 5.0);
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), 5.0);
     }
 
     // Difference on every component
@@ -670,7 +670,7 @@ TEST(TestVector3d, distance)
         // (-2)^2 + (-4)^2 + 4^2
         // = 4 + 16 + 16
         // = 36
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), 6.0);
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), 6.0);
     }
 
     // Negative and positive values
@@ -681,7 +681,7 @@ TEST(TestVector3d, distance)
         // (-2)^2 + (-4)^2 + (-6)^2
         // = 4 + 16 + 36
         // = 56
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), std::sqrt(56.0));
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), std::sqrt(56.0));
     }
 
     // Symmetry
@@ -689,7 +689,7 @@ TEST(TestVector3d, distance)
         const Vector3d v1(2.0, -3.0, 5.0);
         const Vector3d v2(-4.0, 8.0, 1.0);
 
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), Vector3d::distance(v2, v1));
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), Vector3d::distance(v2, v1));
     }
 
     // distance(a, b) == (a - b).length()
@@ -699,7 +699,7 @@ TEST(TestVector3d, distance)
 
         const Vector3d difference = v1 - v2;
 
-        EXPECT_DOUBLE_EQ(Vector3d::distance(v1, v2), difference.length());
+        EXPECT_FLOAT_EQ(Vector3d::distance(v1, v2), difference.length());
     }
 
     // distance(a, b)^2 == distanceSquare(a, b)
@@ -709,11 +709,11 @@ TEST(TestVector3d, distance)
 
         const double distance = Vector3d::distance(v1, v2);
 
-        EXPECT_DOUBLE_EQ(distance * distance, Vector3d::distanceSquare(v1, v2));
+        EXPECT_FLOAT_EQ(distance * distance, Vector3d::distanceSquare(v1, v2));
     }
 }
 
-TEST(TestVector3d, getNormalize)
+TEST(TestVector3f, getNormalize)
 {
     {
         const Vector3d v(3.0, 4.0, 0.0);
@@ -726,9 +726,9 @@ TEST(TestVector3d, getNormalize)
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
 
         // getNormalize() must not modify the original vector.
-        EXPECT_DOUBLE_EQ(v.getX(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 4.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 3.0);
+        EXPECT_FLOAT_EQ(v.getY(), 4.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
     }
 
     {
@@ -754,13 +754,13 @@ TEST(TestVector3d, getNormalize)
         const Vector3d v(0.0, 0.0, 0.0);
         const Vector3d normalized = v.getNormalize();
 
-        EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getX(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getY(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getZ(), 0.0);
     }
 }
 
-TEST(TestVector3d, normalize)
+TEST(TestVector3f, normalize)
 {
     {
         Vector3d v(3.0, 4.0, 0.0);
@@ -800,9 +800,9 @@ TEST(TestVector3d, normalize)
 
         v.normalize();
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 0.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
     }
 
     // normalize() should return *this.
@@ -815,7 +815,7 @@ TEST(TestVector3d, normalize)
     }
 }
 
-TEST(TestVector3d, getNormalizeFast)
+TEST(TestVector3f, getNormalizeFast)
 {
     {
         const Vector3d v(3.0, 4.0, 0.0);
@@ -828,9 +828,9 @@ TEST(TestVector3d, getNormalizeFast)
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
 
         // getNormalizeFast() must not modify the original vector.
-        EXPECT_DOUBLE_EQ(v.getX(), 3.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 4.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 3.0);
+        EXPECT_FLOAT_EQ(v.getY(), 4.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
     }
 
     {
@@ -856,13 +856,13 @@ TEST(TestVector3d, getNormalizeFast)
         const Vector3d v(0.0, 0.0, 0.0);
         const Vector3d normalized = v.getNormalizeFast();
 
-        EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(normalized.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getX(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getY(), 0.0);
+        EXPECT_FLOAT_EQ(normalized.getZ(), 0.0);
     }
 }
 
-TEST(TestVector3d, normalizeFast)
+TEST(TestVector3f, normalizeFast)
 {
     {
         Vector3d v(3.0, 4.0, 0.0);
@@ -902,9 +902,9 @@ TEST(TestVector3d, normalizeFast)
 
         v.normalizeFast();
 
-        EXPECT_DOUBLE_EQ(v.getX(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getY(), 0.0);
-        EXPECT_DOUBLE_EQ(v.getZ(), 0.0);
+        EXPECT_FLOAT_EQ(v.getX(), 0.0);
+        EXPECT_FLOAT_EQ(v.getY(), 0.0);
+        EXPECT_FLOAT_EQ(v.getZ(), 0.0);
     }
 
     // normalizeFast() should return *this.
@@ -917,7 +917,7 @@ TEST(TestVector3d, normalizeFast)
     }
 }
 
-TEST(TestVector3d, min)
+TEST(TestVector3f, min)
 {
     {
         const Vector3d v0(1.0, 2.0, 3.0);
@@ -925,9 +925,9 @@ TEST(TestVector3d, min)
 
         const Vector3d result = Vector3d::min(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 1.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 3.0);
+        EXPECT_FLOAT_EQ(result.getX(), 1.0);
+        EXPECT_FLOAT_EQ(result.getY(), 2.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 3.0);
     }
 
     { // Minimum comes from different vectors
@@ -936,9 +936,9 @@ TEST(TestVector3d, min)
 
         const Vector3d result = Vector3d::min(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 2.0);
-        EXPECT_DOUBLE_EQ(result.getY(), -4.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), -3.0);
+        EXPECT_FLOAT_EQ(result.getX(), 2.0);
+        EXPECT_FLOAT_EQ(result.getY(), -4.0);
+        EXPECT_FLOAT_EQ(result.getZ(), -3.0);
     }
 
     { // Equal components
@@ -947,13 +947,13 @@ TEST(TestVector3d, min)
 
         const Vector3d result = Vector3d::min(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(result.getX(), 5.0);
+        EXPECT_FLOAT_EQ(result.getY(), 3.0);
+        EXPECT_FLOAT_EQ(result.getZ(), -2.0);
     }
 }
 
-TEST(TestVector3dd, max)
+TEST(TestVector3fd, max)
 {
     {
         const Vector3d v0(1.0, 2.0, 3.0);
@@ -961,9 +961,9 @@ TEST(TestVector3dd, max)
 
         const Vector3d result = Vector3d::max(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 6.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 7.0);
+        EXPECT_FLOAT_EQ(result.getX(), 5.0);
+        EXPECT_FLOAT_EQ(result.getY(), 6.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 7.0);
     }
 
     { // Maximum comes from different vectors
@@ -972,9 +972,9 @@ TEST(TestVector3dd, max)
 
         const Vector3d result = Vector3d::max(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 8.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 12.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), 15.0);
+        EXPECT_FLOAT_EQ(result.getX(), 8.0);
+        EXPECT_FLOAT_EQ(result.getY(), 12.0);
+        EXPECT_FLOAT_EQ(result.getZ(), 15.0);
     }
 
     { // Equal components
@@ -983,13 +983,13 @@ TEST(TestVector3dd, max)
 
         const Vector3d result = Vector3d::max(v0, v1);
 
-        EXPECT_DOUBLE_EQ(result.getX(), 5.0);
-        EXPECT_DOUBLE_EQ(result.getY(), 3.0);
-        EXPECT_DOUBLE_EQ(result.getZ(), -2.0);
+        EXPECT_FLOAT_EQ(result.getX(), 5.0);
+        EXPECT_FLOAT_EQ(result.getY(), 3.0);
+        EXPECT_FLOAT_EQ(result.getZ(), -2.0);
     }
 }
 
-TEST(TestVector3d, IsFinite)
+TEST(TestVector3f, IsFinite)
 {
     {
         const Vector3d v = Vector3d(1., 2., 3.);

@@ -21,9 +21,6 @@ namespace MathLib
     class Vector3;
 
     template<>
-    class Vector3<double>;
-
-    template<>
     class alignas(VECTOR4D_ALIGNEMENT) Vector4<double>
     {
     public:

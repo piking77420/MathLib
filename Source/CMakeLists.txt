@@ -10,15 +10,12 @@ set(MATHLIB_SOURCES
     CpuInstructionSet.cpp
     CpuInstructionSet.hpp
     MathLibHeader.hpp
-    Matrix2x2.cpp
     Matrix2x2.hpp
-    Matrix3x3d.cpp
-    Matrix3x3d.hpp
+    Matrix3x3.hpp
     Matrix4x4d.cpp
     Matrix4x4d.hpp
     Vector2.hpp
-    Vector3d.cpp
-    Vector3d.hpp
+    Vector3.hpp
     Vector4d.cpp
     Vector4d.hpp)
 

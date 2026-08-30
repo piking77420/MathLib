@@ -30,6 +30,7 @@ set(TEST_SOURCES
     SimdExtension_Test.cpp
     Vector2f_Test.cpp
     Vector2d_Test.cpp
+    Vector3f_Test.cpp
     Vector3d_Test.cpp
     Vector4d_Test.cpp)
 
