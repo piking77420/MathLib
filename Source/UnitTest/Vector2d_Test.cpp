@@ -5,7 +5,7 @@
 #include <span>
 
 #include <MathLibHeader.hpp>
-#include <Vector2d.hpp>
+#include <Vector2.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -263,7 +263,7 @@ TEST(TestVector2d, CmpOperator)
     }
 }
 
-TEST(TestVector2, NegateOperator)
+TEST(TestVector2d, NegateOperator)
 {
     // all positive
     {
@@ -876,7 +876,7 @@ TEST(TestVector2d, abs)
     }
 }
 
-TEST(TestVector2, IsFinite)
+TEST(TestVector2d, IsFinite)
 {
     {
         const Vector2d v = Vector2d(1., 2.);

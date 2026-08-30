@@ -1,8 +1,9 @@
 #include <Vector3d.hpp>
-#include <Vector2d.hpp>
+#include <Vector2.hpp>
 
 namespace MathLib
 {
+    /*
     Vector2<double> Vector3<double>::xy() const noexcept
     {
         return static_cast<Vector2d>(*this);
@@ -36,5 +37,5 @@ namespace MathLib
     Vector3<double>::operator Vector2<double>() const noexcept
     {
         return Vector2d(getX(), getY());
-    }
+    }*/
 } // namespace MathLib

@@ -21,9 +21,6 @@ namespace MathLib
     class Vector2;
 
     template<>
-    class Vector2<double>;
-
-    template<>
     class Vector3<double>
     {
     public:
@@ -386,7 +383,7 @@ namespace MathLib
         {
             return Vector3(getZ(), getY(), getX());
         }
-
+        /*
         [[nodiscard]] Vector2<double> xy() const noexcept;
 
         [[nodiscard]] Vector2<double> xz() const noexcept;
@@ -400,7 +397,7 @@ namespace MathLib
         [[nodiscard]] Vector2<double> zy() const noexcept;
 
         explicit operator Vector2<double>() const noexcept;
-
+        */
     private:
         std::array<double, 3> m_data;
     };

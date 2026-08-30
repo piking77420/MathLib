@@ -6,10 +6,10 @@
 #include <BenchmarkHeader.hpp>
 #include <HardwareAlignedVector.hpp>
 #include <MathLibHeader.hpp>
-#include <Matrix2x2d.hpp>
+#include <Matrix2x2.hpp>
 #include <Matrix3x3d.hpp>
 #include <Matrix4x4d.hpp>
-#include <Vector2d.hpp>
+#include <Vector2.hpp>
 #include <Vector3d.hpp>
 #include <Vector4d.hpp>
 
@@ -92,11 +92,11 @@ namespace MathLib::Benchmark
     };
 
     template<>
-    struct MakeRandom<Vector2d>
+    struct MakeRandom<Vector2<double>>
     {
-        static Vector2d operator()(MathLib::Benchmark::RandomNumber& randomNumber)
+        static Vector2<double> operator()(MathLib::Benchmark::RandomNumber& randomNumber)
         {
-            return Vector2d(randomNumber.real(Min, Max), randomNumber.real(Min, Max));
+            return Vector2<double>(randomNumber.real(Min, Max), randomNumber.real(Min, Max));
         }
     };
 

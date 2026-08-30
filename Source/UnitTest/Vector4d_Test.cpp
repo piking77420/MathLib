@@ -7,7 +7,7 @@
 #include <MathLibHeader.hpp>
 #include <Vector4d.hpp>
 #include <Vector3d.hpp>
-#include <Vector2d.hpp>
+#include <Vector2.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 

@@ -10,6 +10,7 @@
 #include <span>
 #include <MathLibHeader.hpp>
 #include <AVX.hpp>
+#include <Vector2.hpp>
 
 namespace MathLib
 {
@@ -21,12 +22,6 @@ namespace MathLib
 
     template<>
     class Vector3<double>;
-
-    template<typename T>
-    class Vector2;
-
-    template<>
-    class Vector2<double>;
 
     template<>
     class alignas(VECTOR4D_ALIGNEMENT) Vector4<double>

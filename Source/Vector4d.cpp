@@ -2,7 +2,7 @@
 #include <Matrix3x3d.hpp>
 #include <Vector4d.hpp>
 #include <Vector3d.hpp>
-#include <Vector2d.hpp>
+#include <Vector2.hpp>
 
 namespace MathLib
 {

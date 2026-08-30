@@ -28,6 +28,7 @@ set(TEST_SOURCES
     Matrix3x3d_Test.cpp
     Matrix4x4d_Test.cpp
     SimdExtension_Test.cpp
+    Vector2f_Test.cpp
     Vector2d_Test.cpp
     Vector3d_Test.cpp
     Vector4d_Test.cpp)
