@@ -30,7 +30,9 @@ jobs:
             build_type: Release
             configure_args: >-
               -DCMAKE_CXX_COMPILER=g++
-              DMATHLIB_SIMD_EXT=AVX2
+              -DMATHLIB_SIMD_EXT=AVX2
+              -DMATHLIB_USE_INTRINSIC=ON
+              -DMATHLIB_USE_FMA=ON
 
 
           # ============================================================
@@ -48,7 +50,9 @@ jobs:
             build_type: Release
             configure_args: >-
               -DCMAKE_CXX_COMPILER=clang++
-              DMATHLIB_SIMD_EXT=AVX2
+              -DMATHLIB_SIMD_EXT=AVX2
+              -DMATHLIB_USE_INTRINSIC=ON
+              -DMATHLIB_USE_FMA=ON
 
 
           # ============================================================
@@ -67,6 +71,8 @@ jobs:
             configure_args: >-
               -DCMAKE_CXX_COMPILER=g++
               -DMATHLIB_SIMD_EXT=NEON
+              -DMATHLIB_USE_INTRINSIC=ON
+              -DMATHLIB_USE_FMA=ON
 
 
           # ============================================================
@@ -85,7 +91,8 @@ jobs:
             configure_args: >-
               -DCMAKE_CXX_COMPILER=clang++
               -DMATHLIB_SIMD_EXT=NEON
-
+              -DMATHLIB_USE_INTRINSIC=ON
+              -DMATHLIB_USE_FMA=ON
 
           # ============================================================
           # Windows x64 MSVC
@@ -105,6 +112,9 @@ jobs:
               -G "Visual Studio 18 2026"
               -A x64
               -DCMAKE_CXX_FLAGS=/arch:AVX2
+              -DMATHLIB_SIMD_EXT=AVX2
+              -DMATHLIB_USE_INTRINSIC=ON
+              -DMATHLIB_USE_FMA=ON
 
 
           # ============================================================
@@ -127,6 +137,9 @@ jobs:
               -A x64
               -T ClangCL
               -DCMAKE_CXX_FLAGS=/arch:AVX2
+              -DMATHLIB_SIMD_EXT=AVX2
+              -DMATHLIB_USE_INTRINSIC=ON
+              -DMATHLIB_USE_FMA=ON
 
     runs-on: ${{ matrix.os }}
 
