@@ -9,6 +9,9 @@
 #include <ostream>
 #include <span>
 #include <MathLibHeader.hpp>
+
+#define VECTOR4F_ALIGNEMENT 16
+#define VECTOR4D_ALIGNEMENT 32
 #include <AVX.hpp>
 #include <NEON.hpp>
 #include <SSE.hpp>
@@ -16,15 +19,15 @@
 namespace MathLib
 {
     template<typename T>
-        requires(std::is_floating_point_v<T>)
+    requires(std::is_floating_point_v<T>)
     class Vector2;
 
     template<typename T>
-        requires(std::is_floating_point_v<T>)
+    requires(std::is_floating_point_v<T>)
     class Vector3;
 
     template<typename T>
-        requires(std::is_floating_point_v<T>)
+    requires(std::is_floating_point_v<T>)
     class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Vector4 // TODO is align or not
     {
     public:

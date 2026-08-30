@@ -9,11 +9,10 @@ namespace MathLib
     // Matrix elements are stored in row-major order
     // Mathematical operations use a column-vector convention
     template<typename T>
+    requires(std::is_floating_point_v<T>)
     class Matrix2x2
     {
     public:
-        static_assert(std::is_floating_point_v<T>);
-
         using _VectorType = Vector2<T>;
 
         explicit Matrix2x2() = default;

@@ -5,12 +5,15 @@
 #include <Vector3.hpp>
 #include <Vector4.hpp>
 #include <AVX.hpp>
+#include <NEON.hpp>
+#include <SSE.hpp>
 
 namespace MathLib
 {
     // Matrix elements are stored in row-major order
     // Mathematical operations use a column-vector convention
     template<typename T>
+    requires(std::is_floating_point_v<T>)
     class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Matrix4x4
     {
     public:

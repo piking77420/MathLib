@@ -7,12 +7,6 @@
 #include <BenchmarkHeader.hpp>
 #include <BenchmarkMaker.hpp>
 #include <MathLibHeader.hpp>
-#include <Matrix2x2.hpp>
-#include <Matrix3x3.hpp>
-#include <Matrix4x4.hpp>
-#include <Vector2.hpp>
-#include <Vector3.hpp>
-#include <Vector4.hpp>
 
 using namespace MathLib;
 using namespace MathLib::Benchmark;

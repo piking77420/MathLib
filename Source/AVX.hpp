@@ -3,8 +3,6 @@
 
 #include <MathLibHeader.hpp>
 
-#define VECTOR4D_ALIGNEMENT 32
-
 #if defined(SIMD_AVX)
 
 #include <immintrin.h>

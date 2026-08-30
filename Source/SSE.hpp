@@ -3,8 +3,6 @@
 
 #include <MathLibHeader.hpp>
 
-#define VECTOR4F_ALIGNEMENT 16
-
 #if defined(SIMD_SSE2)
 
 #include <immintrin.h>

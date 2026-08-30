@@ -10,6 +10,7 @@ namespace MathLib
     // Matrix elements are stored in row-major order
     // Mathematical operations use a column-vector convention
     template<typename T>
+    requires(std::is_floating_point_v<T>)
     class Matrix3x3
     {
     public:

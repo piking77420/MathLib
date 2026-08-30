@@ -45,3 +45,4 @@ ConstructorInitializerIndentWidth: 4
 ## Templates
 SpaceAfterTemplateKeyword: false
 AlwaysBreakTemplateDeclarations: Yes
+IndentRequiresClause: false

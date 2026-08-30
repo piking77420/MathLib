@@ -3,9 +3,6 @@
 
 #include <MathLibHeader.hpp>
 
-#define VECTOR4F_ALIGNEMENT 16
-#define VECTOR4D_ALIGNEMENT 32
-
 #if defined(SIMD_NEON)
 
 #include <arm_neon.h>
