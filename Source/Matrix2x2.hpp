@@ -14,6 +14,7 @@ namespace MathLib
     {
     public:
         using _VectorType = Vector2<T>;
+        using _ValueType = typename _VectorType::_ValueType;
 
         explicit Matrix2x2() = default;
 

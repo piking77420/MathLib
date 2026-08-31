@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <numbers>
+
 #include <MathLibHeader.hpp>
-#include <Matrix4x4.hpp>
+#include <MatrixTransformation.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -1105,4 +1107,32 @@ TEST(TestMatrix4x4d, cmpOperator)
     }
 }
 
+TEST(TestMatrix4x4d, trsEulerAngles)
+{
+    const Vector3d translation(1.0, 2.0, 3.0);
+    const Vector3d rotation(0.0, std::numbers::pi * 0.5, -std::numbers::pi * 0.5);
+    const Vector3d scale(3.0, 2.0, 1.0);
+
+    const Matrix4x4d m = MathLib::trs<Matrix4x4d>(translation, rotation, scale);
+
+    EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM12(), 2.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM14(), 1.0, DoubleEpsilon);
+
+    EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM23(), -1.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM24(), 2.0, DoubleEpsilon);
+
+    EXPECT_NEAR(m.getM31(), -3.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM34(), 3.0, DoubleEpsilon);
+
+    EXPECT_NEAR(m.getM41(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM42(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM43(), 0.0, DoubleEpsilon);
+    EXPECT_NEAR(m.getM44(), 1.0, DoubleEpsilon);
+}
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

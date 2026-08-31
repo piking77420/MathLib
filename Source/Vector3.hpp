@@ -23,6 +23,8 @@ namespace MathLib
     class Vector3
     {
     public:
+        using _ValueType = T;
+
         explicit Vector3() = default;
 
         ~Vector3() = default;

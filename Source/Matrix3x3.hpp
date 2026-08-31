@@ -15,6 +15,7 @@ namespace MathLib
     {
     public:
         using _VectorType = Vector3<T>;
+        using _ValueType = typename _VectorType::_ValueType;
 
         explicit Matrix3x3() = default;
 

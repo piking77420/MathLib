@@ -8,6 +8,11 @@
 namespace MathLib
 {
     template<typename T>
+    concept MatrixSq = std::is_same_v<T, Matrix2x2<float>> || std::is_same_v<T, Matrix3x3<float>> ||
+                       std::is_same_v<T, Matrix4x4<float>> || std::is_same_v<T, Matrix2x2<double>> ||
+                       std::is_same_v<T, Matrix3x3<double>> || std::is_same_v<T, Matrix4x4<double>>;
+
+    template<typename T>
     requires(std::is_floating_point_v<T>)
     [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix2x2<T> rotation(T angle)
     {
@@ -31,248 +36,221 @@ namespace MathLib
         return Matrix2x2<T>(scale.getX(), 0.0, 0.0, scale.getY());
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> rotationX(T angle)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE M rotationX(typename M::_ValueType angle)
     {
-        const T c = std::cos(angle);
-        const T s = std::sin(angle);
-        // clang-format off
-        return Matrix3x3<T>(1, 0, 0, 0, c, -s, 0, s, c);
-        // clang-format on
+        const typename M::_ValueType c = std::cos(angle);
+        const typename M::_ValueType s = std::sin(angle);
+
+        if constexpr (std::is_same_v<M, Matrix3x3<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(1, 0, 0, 
+                     0, c, -s, 
+                     0, s, c);
+            // clang-format on
+        }
+        else if constexpr (std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return  M(1, 0, 0, 0,
+                      0, c, -s, 0,
+                      0, s, c, 0, 
+                      0, 0, 0, 1);
+            // clang-format on
+        }
+        else
+        {
+            static_assert(false);
+        }
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> rotationY(T angle)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE M rotationY(typename M::_ValueType angle)
     {
-        const T c = std::cos(angle);
-        const T s = std::sin(angle);
+        const typename M::_ValueType c = std::cos(angle);
+        const typename M::_ValueType s = std::sin(angle);
 
-        // clang-format off
-            return Matrix3x3<T>(
-                c, 0, s, 
-                0, 1, 0, 
-                -s, 0, c);
-        // clang-format on
+        if constexpr (std::is_same_v<M, Matrix3x3<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(c, 0, s,
+                     0, 1, 0,
+                    -s, 0, c);
+            // clang-format on
+        }
+        else if constexpr (std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(c, 0, s, 0,
+                     0, 1, 0, 0,
+                    -s, 0, c, 0,
+                     0, 0, 0, 1);
+            // clang-format on
+        }
+        else
+        {
+            static_assert(false);
+        }
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> rotationZ(T angle)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE M rotationZ(typename M::_ValueType angle)
     {
-        const T c = std::cos(angle);
-        const T s = std::sin(angle);
+        const typename M::_ValueType c = std::cos(angle);
+        const typename M::_ValueType s = std::sin(angle);
 
-        // clang-format off
-            return Matrix3x3<T>(
-                c, -s, 0, 
-                s, c, 0, 
-                0, 0, 1);
-        // clang-format on
+        if constexpr (std::is_same_v<M, Matrix3x3<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(c, -s, 0,
+                     s,  c, 0,
+                     0,  0, 1);
+            // clang-format on
+        }
+        else if constexpr (std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(c, -s, 0, 0,
+                     s,  c, 0, 0,
+                     0,  0, 1, 0,
+                     0,  0, 0, 1);
+            // clang-format on
+        }
+        else
+        {
+            static_assert(false);
+        }
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> rotationXYZ(T angleX, T angleY, T angleZ)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M rotationXYZ(typename M::_ValueType cX, typename M::_ValueType sX,
+                                                             typename M::_ValueType cY, typename M::_ValueType sY,
+                                                             typename M::_ValueType cZ, typename M::_ValueType sZ)
     {
-        const T cX = std::cos(angleX);
-        const T sX = std::sin(angleX);
-
-        const T cY = std::cos(angleY);
-        const T sY = std::sin(angleY);
-
-        const T cZ = std::cos(angleZ);
-        const T sZ = std::sin(angleZ);
-
         // Rz * Ry * Rx
+        if constexpr (std::is_same_v<M, Matrix3x3<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(
+                cZ * cY, cZ * sY * sX - sZ * cX, cZ * sY * cX + sZ * sX, 
+                sZ * cY, sZ * sY * sX + cZ * cX, sZ * sY * cX - cZ * sX,
+                -sY, cY * sX, cY * cX
+            );
+            // clang-format on
+        }
+        else if constexpr (std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(
+                cZ * cY, cZ * sY * sX - sZ * cX, cZ * sY * cX + sZ * sX, 0,
+                sZ * cY, sZ * sY * sX + cZ * cX, sZ * sY * cX - cZ * sX, 0,
+                -sY    , cY * sX               , cY * cX               , 0,
+                0      ,0                      ,0                      , 1
+            );
+            // clang-format on
+        }
+        else
+        {
+            static_assert(false);
+        }
+    }
+
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M
+    rotationXYZ(typename M::_ValueType angleX, typename M::_ValueType angleY, typename M::_ValueType angleZ)
+    {
+        const typename M::_ValueType cX = std::cos(angleX);
+        const typename M::_ValueType sX = std::sin(angleX);
+
+        const typename M::_ValueType cY = std::cos(angleY);
+        const typename M::_ValueType sY = std::sin(angleY);
+
+        const typename M::_ValueType cZ = std::cos(angleZ);
+        const typename M::_ValueType sZ = std::sin(angleZ);
 
         // clang-format off
-        return rotationXYZ(cX, sX, cY, sY, cZ, sZ);
+        return rotationXYZ<M>(cX, sX, cY, sY, cZ, sZ);
         // clang-format on
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> rotationXYZ(T cX, T sX, T cY, T sY, T cZ, T sZ)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M rotationXYZ(const Vector3<typename M::_ValueType>& angles)
     {
-        // Rz * Ry * Rx
         // clang-format off
-        return Matrix3x3<T>(
-            cZ * cY,  cZ * sY * sX - sZ * cX,  cZ * sY * cX + sZ * sX,
-            sZ * cY,  sZ * sY * sX + cZ * cX,  sZ * sY * cX - cZ * sX,
-                -sY,  cY * sX               ,  cY * cX
-        );
+        return rotationXYZ<M>(angles.getX(), angles.getY(), angles.getZ());
         // clang-format on
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> scale(T scaleX, T scaleY, T scaleZ)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M scale(typename M::_ValueType scaleX, typename M::_ValueType scaleY,
+                                                       typename M::_ValueType scaleZ)
     {
-        // clang-format off
-            return Matrix3x3<T>(
+        if constexpr (std::is_same_v<M, Matrix3x3<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(
                 scaleX, 0, 0,
                 0, scaleY, 0, 
                 0, 0, scaleZ);
-        // clang-format on
+            // clang-format on
+        }
+        else if constexpr (std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(
+                scaleX, 0     , 0        , 0,
+                0     , scaleY, 0        , 0,
+                0     , 0     , scaleZ   , 0,
+                0     , 0     , 0        , 1
+            );
+            // clang-format on
+        }
+        else
+        {
+            static_assert(false);
+        }
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> translation(T tX, T tY)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M scale(const Vector3<typename M::_ValueType>& scaleVector)
     {
-        // clang-format off
-            return Matrix3x3<T>(
+        return scale<M>(scaleVector.getX(), scaleVector.getY(), scaleVector.getZ());
+    }
+
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M translation(typename M::_ValueType tX, typename M::_ValueType tY)
+    {
+        if constexpr (std::is_same_v<M, Matrix3x3<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(
                 0, 0, tX,
                 0, 0, tY, 
                 0, 0, 1);
-        // clang-format on
+            // clang-format on
+        }
+        else if constexpr (std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+        {
+            // clang-format off
+            return M(
+                0 , 0 , 0 , tX,
+                0 , 0 , 0 , tY,
+                0 , 0 , 0 , 0,
+                0 , 0 , 0 , 1
+            );
+            // clang-format on
+        }
+        else
+        {
+            static_assert(false);
+        }
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix3x3<T> translation(const Vector2<T>& tXY)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M translation(const Vector2<typename M::_ValueType>& tXY)
     {
-        return translation(tXY.getX(), tXY.getY());
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> rotationX(T angle)
-    {
-        const T c = std::cos(angle);
-        const T s = std::sin(angle);
-
-        // clang-format off
-        return Matrix4x4<T>(
-            1, 0,  0, 0,
-            0, c, -s, 0,
-            0, s,  c, 0,
-            0, 0,  0, 1
-        );
-        // clang-format on
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> rotationY(T angle)
-    {
-        const T c = std::cos(angle);
-        const T s = std::sin(angle);
-
-        // clang-format off
-        return Matrix4x4<T>(
-             c, 0, s, 0,
-             0, 1, 0, 0,
-            -s, 0, c, 0,
-             0, 0, 0, 1
-        );
-        // clang-format on
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> rotationZ(T angle)
-    {
-        const T c = std::cos(angle);
-        const T s = std::sin(angle);
-
-        // clang-format off
-        return Matrix4x4<T>(
-            c, -s, 0, 0,
-            s,  c, 0, 0,
-            0,  0, 1, 0,
-            0,  0, 0, 1
-        );
-        // clang-format on
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> rotationXYZ(T angleX, T angleY, T angleZ)
-    {
-        const T cX = std::cos(angleX);
-        const T sX = std::sin(angleX);
-
-        const T cY = std::cos(angleY);
-        const T sY = std::sin(angleY);
-
-        const T cZ = std::cos(angleZ);
-        const T sZ = std::sin(angleZ);
-
-        return rotationXYZ(cX, sX, cY, sY, cZ, sZ);
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> rotationXYZ(T cX, T sX, T cY, T sY, T cZ, T sZ)
-    {
-        // Rz * Ry * Rx
-        // clang-format off
-        return Matrix4x4<T>(
-            cZ * cY, cZ * sY * sX - sZ * cX, cZ * sY * cX + sZ * sX, 0,
-            sZ * cY, sZ * sY * sX + cZ * cX, sZ * sY * cX - cZ * sX, 0,
-            -sY    , cY * sX               , cY * cX               , 0,
-            0      ,0                      ,0                      , 1
-        );
-        // clang-format on
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> scale(T scaleX, T scaleY, T scaleZ)
-    {
-        // clang-format off
-        return Matrix4x4<T>(
-            scaleX,      0,      0, 0,
-                 0, scaleY,      0, 0,
-                 0,      0, scaleZ, 0,
-                 0,      0,      0, 1
-        );
-        // clang-format on
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> scale(const Vector3<T>& scale)
-    {
-        // clang-format off
-        return Matrix4x4<T>(
-            scale.getX(),      0      ,      0      , 0,
-                 0      , scale.getY(),      0      , 0,
-                 0      ,      0      , scale.getZ(), 0,
-                 0      ,      0      ,      0      , 1
-        );
-        // clang-format on
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> translation(T tX, T tY, T tZ)
-    {
-        // clang-format off
-        return Matrix4x4<T>(
-                 0,      0,      0,     tX,
-                 0,      0,      0,     tY,
-                 0,      0,      0,     tZ,
-                 0,      0,      0,     1
-        );
-        // clang-format on
-    }
-
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> translation(const Vector3<T>& translation)
-    {
-        // clang-format off
-        return Matrix4x4<T>(
-                 0,      0,      0,     translation.getX(),
-                 0,      0,      0,     translation.getY(),
-                 0,      0,      0,     translation.getZ(),
-                 0,      0,      0,     1
-        );
-        // clang-format on
+        return translation<M>(tXY.getX(), tXY.getY());
     }
 
     enum class RotationMatrixOrder
@@ -286,32 +264,56 @@ namespace MathLib
         ZYX,
     };
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T> trsXYZ(T tX, T tY, T tZ, T cX, T sX, T cY, T sY, T cZ, T sZ,
-                                                                   T scaleX, T scaleY, T scaleZ)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M
+    trsXYZ(typename M::_ValueType tX, typename M::_ValueType tY, typename M::_ValueType tZ, typename M::_ValueType cX,
+           typename M::_ValueType sX, typename M::_ValueType cY, typename M::_ValueType sY, typename M::_ValueType cZ,
+           typename M::_ValueType sZ, typename M::_ValueType scaleX, typename M::_ValueType scaleY,
+           typename M::_ValueType scaleZ)
     {
-        // Rz * Ry * Rx
-        // clang-format off
-        return Matrix4x4<T>(
-            (cZ * cY) * scaleX, cZ * sY * sX - sZ * cX, cZ * sY * cX + sZ * sX, tX,
-            sZ * cY, (sZ * sY * sX + cZ * cX) * scaleY, sZ * sY * cX - cZ * sX, tY,
-            -sY    , cY * sX               , (cY * cX) * scaleZ               , tZ,
-            0      ,0                      ,0                                 , 1
-        );
-        // clang-format on;
+        if constexpr (std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+        {
+            // Rz * Ry * Rx
+            // M = T * R * S
+
+            // clang-format off
+            return M(
+                 cZ * cY               * scaleX,
+                (cZ * sY * sX - sZ * cX) * scaleY,
+                (cZ * sY * cX + sZ * sX) * scaleZ,
+                 tX,
+
+                 sZ * cY               * scaleX,
+                (sZ * sY * sX + cZ * cX) * scaleY,
+                (sZ * sY * cX - cZ * sX) * scaleZ,
+                 tY,
+
+                -sY                    * scaleX,
+                 cY * sX               * scaleY,
+                 cY * cX               * scaleZ,
+                 tZ,
+
+                 0, 0, 0, 1
+            );
+            // clang-format on
+        }
+        else
+        {
+            static_assert(false);
+        }
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T>
-    trs(T tX, T tY, T tZ, T cX, T sX, T cY, T sY, T cZ, T sZ, T scaleX, T scaleY, T scaleZ,
-        RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M
+    trs(typename M::_ValueType tX, typename M::_ValueType tY, typename M::_ValueType tZ, typename M::_ValueType cX,
+        typename M::_ValueType sX, typename M::_ValueType cY, typename M::_ValueType sY, typename M::_ValueType cZ,
+        typename M::_ValueType sZ, typename M::_ValueType scaleX, typename M::_ValueType scaleY,
+        typename M::_ValueType scaleZ, RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
     {
         switch (rotationOrder)
         {
         case MathLib::RotationMatrixOrder::XYZ:
-            return trsXYZ(tX, tY, tZ, cX, sX, cY, sY, cZ, sZ, scaleX, scaleY, scaleZ);
+            return trsXYZ<M>(tX, tY, tZ, cX, sX, cY, sY, cZ, sZ, scaleX, scaleY, scaleZ);
         case MathLib::RotationMatrixOrder::XZY:
             break;
         case MathLib::RotationMatrixOrder::YXZ:
@@ -326,24 +328,34 @@ namespace MathLib
             break;
         }
 
-        return Matrix4x4<T>::identity();
+        return M::identity();
     }
 
-    template<typename T>
-    requires(std::is_floating_point_v<T>)
-    [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix4x4<T>
-    trs(T tX, T tY, T tZ, T angleX, T angleY, T angleZ, T scaleX, T scaleY, T scaleZ,
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M
+    trs(typename M::_ValueType tX, typename M::_ValueType tY, typename M::_ValueType tZ, typename M::_ValueType angleX,
+        typename M::_ValueType angleY, typename M::_ValueType angleZ, typename M::_ValueType scaleX,
+        typename M::_ValueType scaleY, typename M::_ValueType scaleZ,
         RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
     {
-        const T cX = std::cos(angleX);
-        const T sX = std::sin(angleX);
+        const typename M::_ValueType cX = std::cos(angleX);
+        const typename M::_ValueType sX = std::sin(angleX);
 
-        const T cY = std::cos(angleY);
-        const T sY = std::sin(angleY);
+        const typename M::_ValueType cY = std::cos(angleY);
+        const typename M::_ValueType sY = std::sin(angleY);
 
-        const T cZ = std::cos(angleZ);
-        const T sZ = std::sin(angleZ);
-        return trs(tX, tY, tZ, cX, sX, cY, sY, cZ, sZ, scaleX, scaleY, scaleZ, rotationOrder);
+        const typename M::_ValueType cZ = std::cos(angleZ);
+        const typename M::_ValueType sZ = std::sin(angleZ);
+        return trs<M>(tX, tY, tZ, cX, sX, cY, sY, cZ, sZ, scaleX, scaleY, scaleZ, rotationOrder);
+    }
+
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M
+    trs(const Vector3<typename M::_ValueType>& translation, const Vector3<typename M::_ValueType>& eulerAngles,
+        const Vector3<typename M::_ValueType>& scale, RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
+    {
+        return trs<M>(translation.getX(), translation.getY(), translation.getZ(), eulerAngles.getX(),
+                      eulerAngles.getY(), eulerAngles.getZ(), scale.getX(), scale.getY(), scale.getZ(), rotationOrder);
     }
 
 } // namespace MathLib

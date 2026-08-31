@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <numbers>
+
 #include <MathLibHeader.hpp>
-#include <Matrix3x3.hpp>
+#include <MatrixTransformation.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -678,6 +680,77 @@ TEST(TestMatrix3x3f, cmpOperator)
 
         EXPECT_TRUE(m1 != m2);
         EXPECT_FALSE(m1 == m2);
+    }
+}
+
+TEST(TestMatrix3x3f, rotationX)
+{
+    {
+        const float angle = 0.0;
+        const Matrix3x3f m = MathLib::rotationX<Matrix3x3f>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        const float angle = std::numbers::pi;
+        const Matrix3x3f m = MathLib::rotationX<Matrix3x3f>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), -1.0, DoubleEpsilon);
+    }
+
+    {
+        const float angle = std::numbers::pi * 0.5;
+        const Matrix3x3f m = MathLib::rotationX<Matrix3x3f>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), -1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+    }
+
+    {
+        const float angle = -std::numbers::pi * 0.5;
+        const Matrix3x3f m = MathLib::rotationX<Matrix3x3f>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
     }
 }
 
