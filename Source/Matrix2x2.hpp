@@ -33,7 +33,7 @@ namespace MathLib
         {
         }
 
-        [[nodiscard]] static Matrix2x2 zero() noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix2x2 zero() noexcept
         {
             // clang-format off
             return Matrix2x2(0.0, 0.0,
@@ -41,7 +41,7 @@ namespace MathLib
             // clang-format on
         }
 
-        [[nodiscard]] static Matrix2x2 identity() noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Matrix2x2 identity() noexcept
         {
             // clang-format off
             return Matrix2x2(1.0, 0.0,
@@ -69,31 +69,31 @@ namespace MathLib
             return m_data[1].getY();
         }
 
-        Matrix2x2& setM11(T getM11) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& setM11(T getM11) noexcept
         {
             m_data[0].setX(getM11);
             return *this;
         }
 
-        Matrix2x2& setM12(T getM12) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& setM12(T getM12) noexcept
         {
             m_data[0].setY(getM12);
             return *this;
         }
 
-        Matrix2x2& setM21(T getM21) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& setM21(T getM21) noexcept
         {
             m_data[1].setX(getM21);
             return *this;
         }
 
-        Matrix2x2& setM22(T getM22) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& setM22(T getM22) noexcept
         {
             m_data[1].setY(getM22);
             return *this;
         }
 
-        Matrix2x2& transpose() noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& transpose() noexcept
         {
             const T trmp = m_data[0].getY();
             m_data[0].setY(m_data[1].getX());
@@ -101,13 +101,13 @@ namespace MathLib
             return *this;
         }
 
-        Matrix2x2 getTranspose() const noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2 getTranspose() const noexcept
         {
             Matrix2x2 m = (*this);
             return m.transpose();
         }
 
-        T determinant() const noexcept
+        MATH_LIB_FORCE_INLINE T determinant() const noexcept
         {
             const T a = m_data[0].getX();
             const T b = m_data[0].getY();
@@ -117,7 +117,7 @@ namespace MathLib
             return a * d - b * c;
         }
 
-        Matrix2x2& inverse() noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& inverse() noexcept
         {
             const T a = m_data[0].getX();
             const T b = m_data[0].getY();
@@ -141,102 +141,102 @@ namespace MathLib
             return *this;
         }
 
-        Matrix2x2 getInverse() const noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2 getInverse() const noexcept
         {
             Matrix2x2 m = *this;
             return m.inverse();
         }
 
-        Matrix2x2& operator+=(const T value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& operator+=(const T value) noexcept
         {
             m_data[0] += value;
             m_data[1] += value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator+(T scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix2x2 operator+(T scalar) const
         {
             Matrix2x2 result = *this;
             result += scalar;
             return result;
         }
 
-        Matrix2x2& operator-=(const T value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& operator-=(const T value) noexcept
         {
             m_data[0] -= value;
             m_data[1] -= value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator-(T scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix2x2 operator-(T scalar) const
         {
             Matrix2x2 result = *this;
             result -= scalar;
             return result;
         }
 
-        Matrix2x2& operator*=(const T value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& operator*=(const T value) noexcept
         {
             m_data[0] *= value;
             m_data[1] *= value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator*(T scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix2x2 operator*(T scalar) const
         {
             Matrix2x2 result = *this;
             result *= scalar;
             return result;
         }
 
-        Matrix2x2& operator/=(const T value) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& operator/=(const T value) noexcept
         {
             m_data[0] /= value;
             m_data[1] /= value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator/(T scalar) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix2x2 operator/(T scalar) const
         {
             Matrix2x2 result = *this;
             result /= scalar;
             return result;
         }
 
-        Matrix2x2& operator+=(const Matrix2x2& rhs) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& operator+=(const Matrix2x2& rhs) noexcept
         {
             m_data[0] += rhs.m_data[0];
             m_data[1] += rhs.m_data[1];
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator+(const Matrix2x2& rhs) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix2x2 operator+(const Matrix2x2& rhs) const
         {
             Matrix2x2 result = *this;
             result += rhs;
             return result;
         }
 
-        Matrix2x2& operator-=(const Matrix2x2& rhs) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& operator-=(const Matrix2x2& rhs) noexcept
         {
             m_data[0] -= rhs.m_data[0];
             m_data[1] -= rhs.m_data[1];
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator-(const Matrix2x2& rhs) const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix2x2 operator-(const Matrix2x2& rhs) const
         {
             Matrix2x2 result = *this;
             result -= rhs;
             return result;
         }
 
-        [[nodiscard]] Vector2<T> operator*(const Vector2<T>& rhs) const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Vector2<T> operator*(const Vector2<T>& rhs) const noexcept
         {
             return Vector2<T>(Vector2<T>::dot(m_data[0], rhs), Vector2<T>::dot(m_data[1], rhs));
         }
 
-        Matrix2x2& operator*=(Matrix2x2 rhs) noexcept
+        MATH_LIB_FORCE_INLINE Matrix2x2& operator*=(Matrix2x2 rhs) noexcept
         {
             // because the matrix is row layout and we want to only do an dot product
             // we transopse the other matrix to make the base row * coloms multiplication
@@ -255,19 +255,19 @@ namespace MathLib
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator*(const Matrix2x2& rhs) const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE Matrix2x2 operator*(const Matrix2x2& rhs) const noexcept
         {
             Matrix2x2 m = *this;
             m *= rhs;
             return m;
         }
 
-        bool operator==(const Matrix2x2& rhs) const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE bool operator==(const Matrix2x2& rhs) const noexcept
         {
             return m_data[0] == rhs.m_data[0] && m_data[1] == rhs.m_data[1];
         }
 
-        bool operator!=(const Matrix2x2& rhs) const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE bool operator!=(const Matrix2x2& rhs) const noexcept
         {
             return !this->operator==(rhs);
         }
