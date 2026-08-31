@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <numbers>
+
 #include <MathLibHeader.hpp>
-#include <Matrix3x3.hpp>
+#include <MatrixTransformation.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -679,6 +681,28 @@ TEST(TestMatrix3x3d, cmpOperator)
         EXPECT_TRUE(m1 != m2);
         EXPECT_FALSE(m1 == m2);
     }
+}
+
+TEST(TestMatrix3x3d, translation)
+{
+    const Vector2d t = Vector2d(1.0, 2.0);
+    auto test = [](const Matrix3x3d& m)
+    {
+        EXPECT_DOUBLE_EQ(m.getM11(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM12(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM13(), 1.0);
+
+        EXPECT_DOUBLE_EQ(m.getM21(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM22(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM23(), 2.0);
+
+        EXPECT_DOUBLE_EQ(m.getM31(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM32(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM33(), 1.0);
+    };
+
+    test(translation(t.getX(), t.getY()));
+    test(translation(t));
 }
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
