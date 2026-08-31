@@ -1,13 +1,8 @@
 #include <gtest/gtest.h>
-
-#include <cmath>
-#include <array>
-#include <span>
-
 #include <MathLibHeader.hpp>
-#include <Vector4d.hpp>
-#include <Vector3d.hpp>
-#include <Vector2d.hpp>
+#include <Vector4.hpp>
+#include <Vector3.hpp>
+#include <Vector2.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -899,7 +894,7 @@ TEST(TestVector4d, isHomogeneous)
     }
 }
 
-TEST(TestVector4dd, min)
+TEST(TestVector4d, min)
 {
     {
         const Vector4d v0(1.0, 2.0, 3.0, 4.0);

@@ -1,16 +1,11 @@
 #include <gtest/gtest.h>
-
-#include <cmath>
-#include <array>
-#include <span>
-
 #include <MathLibHeader.hpp>
-#include <Vector3d.hpp>
+#include <Vector3.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 using namespace MathLib;
 
-TEST(TestVector3, Constructor)
+TEST(TestVector3d, Constructor)
 {
     const Vector3d v = Vector3d(1., 2., 3.);
 
@@ -19,7 +14,7 @@ TEST(TestVector3, Constructor)
     EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
 }
 
-TEST(TestVector3, Setter)
+TEST(TestVector3d, Setter)
 {
     Vector3d v{};
     v.setX(1.);
@@ -31,7 +26,7 @@ TEST(TestVector3, Setter)
     EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
 }
 
-TEST(TestVector3, addVectorOperator)
+TEST(TestVector3d, addVectorOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
@@ -54,7 +49,7 @@ TEST(TestVector3, addVectorOperator)
     }
 }
 
-TEST(TestVector3, subVectorOperator)
+TEST(TestVector3d, subVectorOperator)
 {
     {
         Vector3d v(1.0, 2.0, 3.0);
@@ -79,7 +74,7 @@ TEST(TestVector3, subVectorOperator)
     }
 }
 
-TEST(TestVector3, mulVectorOperator)
+TEST(TestVector3d, mulVectorOperator)
 {
     {
         Vector3d v(1.0, 2.0, 3.0);
@@ -104,7 +99,7 @@ TEST(TestVector3, mulVectorOperator)
     }
 }
 
-TEST(TestVector3, divVectorOperator)
+TEST(TestVector3d, divVectorOperator)
 {
     {
         Vector3d v(1.0, 2.0, 3.0);
@@ -129,7 +124,7 @@ TEST(TestVector3, divVectorOperator)
     }
 }
 
-TEST(TestVector3, addScalarOperator)
+TEST(TestVector3d, addScalarOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
@@ -149,7 +144,7 @@ TEST(TestVector3, addScalarOperator)
     }
 }
 
-TEST(TestVector3, subScalarOperator)
+TEST(TestVector3d, subScalarOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
@@ -169,7 +164,7 @@ TEST(TestVector3, subScalarOperator)
     }
 }
 
-TEST(TestVector3, mulScalarOperator)
+TEST(TestVector3d, mulScalarOperator)
 {
 
     {
@@ -207,7 +202,7 @@ TEST(TestVector3, mulScalarOperator)
     }
 }
 
-TEST(TestVector3, divScalarOperator)
+TEST(TestVector3d, divScalarOperator)
 {
 
     {
@@ -245,7 +240,7 @@ TEST(TestVector3, divScalarOperator)
     }
 }
 
-TEST(TestVector3, cmpOperator)
+TEST(TestVector3d, cmpOperator)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
@@ -276,7 +271,7 @@ TEST(TestVector3, cmpOperator)
     }
 }
 
-TEST(TestVector3, negateOperator)
+TEST(TestVector3d, negateOperator)
 {
     // all positive
     {
@@ -306,7 +301,7 @@ TEST(TestVector3, negateOperator)
     }
 }
 
-TEST(TestVector3, dot)
+TEST(TestVector3d, dot)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
@@ -382,7 +377,7 @@ TEST(TestVector3, dot)
     }
 }
 
-TEST(TestVector3, cross)
+TEST(TestVector3d, cross)
 {
     // Cross self
     {
@@ -470,7 +465,7 @@ TEST(TestVector3, cross)
     }
 }
 
-TEST(TestVector3, mix)
+TEST(TestVector3d, mix)
 {
     {
         const Vector3d a(1.0, 2.0, 3.0);
@@ -483,7 +478,7 @@ TEST(TestVector3, mix)
     }
 }
 
-TEST(TestVector3, lengthSquare)
+TEST(TestVector3d, lengthSquare)
 {
     // unit vector lengthSquare by definition is 1
     {
@@ -507,7 +502,7 @@ TEST(TestVector3, lengthSquare)
     }
 }
 
-TEST(TestVector3, length)
+TEST(TestVector3d, length)
 {
     // Unit vector length by definition is 1
     {
@@ -537,7 +532,7 @@ TEST(TestVector3, length)
     }
 }
 
-TEST(TestVector3, distanceSquare)
+TEST(TestVector3d, distanceSquare)
 {
     // Unit vector
     {
@@ -620,7 +615,7 @@ TEST(TestVector3, distanceSquare)
     }
 }
 
-TEST(TestVector3, distance)
+TEST(TestVector3d, distance)
 {
     // Unit vector
     {
@@ -713,7 +708,7 @@ TEST(TestVector3, distance)
     }
 }
 
-TEST(TestVector3, getNormalize)
+TEST(TestVector3d, getNormalize)
 {
     {
         const Vector3d v(3.0, 4.0, 0.0);
@@ -760,7 +755,7 @@ TEST(TestVector3, getNormalize)
     }
 }
 
-TEST(TestVector3, normalize)
+TEST(TestVector3d, normalize)
 {
     {
         Vector3d v(3.0, 4.0, 0.0);
@@ -815,7 +810,7 @@ TEST(TestVector3, normalize)
     }
 }
 
-TEST(TestVector3, getNormalizeFast)
+TEST(TestVector3d, getNormalizeFast)
 {
     {
         const Vector3d v(3.0, 4.0, 0.0);
@@ -862,7 +857,7 @@ TEST(TestVector3, getNormalizeFast)
     }
 }
 
-TEST(TestVector3, normalizeFast)
+TEST(TestVector3d, normalizeFast)
 {
     {
         Vector3d v(3.0, 4.0, 0.0);
@@ -953,7 +948,7 @@ TEST(TestVector3d, min)
     }
 }
 
-TEST(TestVector3d, max)
+TEST(TestVector3dd, max)
 {
     {
         const Vector3d v0(1.0, 2.0, 3.0);
@@ -989,7 +984,7 @@ TEST(TestVector3d, max)
     }
 }
 
-TEST(TestVector3, IsFinite)
+TEST(TestVector3d, IsFinite)
 {
     {
         const Vector3d v = Vector3d(1., 2., 3.);

@@ -1,13 +1,13 @@
 #include <gtest/gtest.h>
 
 #include <MathLibHeader.hpp>
-#include <Matrix2x2d.hpp>
+#include <Matrix2x2.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
 using namespace MathLib;
 
-TEST(TestMatrixd2x2, constructor)
+TEST(TestMatrixd2x2d, constructor)
 {
     {
         const Matrix2x2d m(1.0, 2.0, 3.0, 4.0);
@@ -28,7 +28,7 @@ TEST(TestMatrixd2x2, constructor)
     }
 }
 
-TEST(TestMatrixd2x2, identity)
+TEST(TestMatrixd2x2d, identity)
 {
     const Matrix2x2d m = Matrix2x2d::identity();
     EXPECT_DOUBLE_EQ(m.getM11(), 1.0);
@@ -38,7 +38,7 @@ TEST(TestMatrixd2x2, identity)
     EXPECT_DOUBLE_EQ(m.getM22(), 1.0);
 }
 
-TEST(TestMatrixd2x2, setter)
+TEST(TestMatrixd2x2d, setter)
 {
     Matrix2x2d m = Matrix2x2d::zero();
     m.setM11(1.0) //
@@ -52,7 +52,7 @@ TEST(TestMatrixd2x2, setter)
     EXPECT_DOUBLE_EQ(m.getM22(), 4.0);
 }
 
-TEST(TestMatrixd2x2, transpose)
+TEST(TestMatrixd2x2d, transpose)
 {
     // transpose dont change diagonal
     {
@@ -75,7 +75,7 @@ TEST(TestMatrixd2x2, transpose)
     }
 }
 
-TEST(TestMatrixd2x2, getTranspose)
+TEST(TestMatrixd2x2d, getTranspose)
 {
     // transpose dont change diagonal
     {
@@ -98,7 +98,7 @@ TEST(TestMatrixd2x2, getTranspose)
     }
 }
 
-TEST(TestMatrixd2x2, determinant)
+TEST(TestMatrixd2x2d, determinant)
 {
     // determiant of identity => 1.0
     {
@@ -127,7 +127,7 @@ TEST(TestMatrixd2x2, determinant)
     }
 }
 
-TEST(TestMatrixd2x2, inverse)
+TEST(TestMatrixd2x2d, inverse)
 {
     // Inverse of identity => identity
     {
@@ -149,7 +149,7 @@ TEST(TestMatrixd2x2, inverse)
     }
 }
 
-TEST(TestMatrixd2x2, getInverse)
+TEST(TestMatrixd2x2d, getInverse)
 {
     // Inverse of identity => identity
     {
@@ -171,7 +171,7 @@ TEST(TestMatrixd2x2, getInverse)
     }
 }
 
-TEST(TestMatrixd2x2, addScalarOperator)
+TEST(TestMatrixd2x2d, addScalarOperator)
 {
     {
         Matrix2x2d m(1.0, 2.0, 3.0, 4.0);
@@ -193,7 +193,7 @@ TEST(TestMatrixd2x2, addScalarOperator)
     }
 }
 
-TEST(TestMatrixd2x2, subScalarOperator)
+TEST(TestMatrixd2x2d, subScalarOperator)
 {
     {
         Matrix2x2d m(1.0, 2.0, 3.0, 4.0);
@@ -215,7 +215,7 @@ TEST(TestMatrixd2x2, subScalarOperator)
     }
 }
 
-TEST(TestMatrixd2x2, mulScalarOperator)
+TEST(TestMatrixd2x2d, mulScalarOperator)
 {
     {
         Matrix2x2d m(1.0, 2.0, 3.0, 4.0);
@@ -237,7 +237,7 @@ TEST(TestMatrixd2x2, mulScalarOperator)
     }
 }
 
-TEST(TestMatrixd2x2, divScalarOperator)
+TEST(TestMatrixd2x2d, divScalarOperator)
 {
     {
         Matrix2x2d m(1.0, 2.0, 3.0, 4.0);
@@ -259,7 +259,7 @@ TEST(TestMatrixd2x2, divScalarOperator)
     }
 }
 
-TEST(TestMatrixd2x2, addMatrixOperator)
+TEST(TestMatrixd2x2d, addMatrixOperator)
 {
     {
         const Matrix2x2d m1(1.0, 2.0, 3.0, 4.0);
@@ -282,7 +282,7 @@ TEST(TestMatrixd2x2, addMatrixOperator)
     }
 }
 
-TEST(TestMatrixd2x2, subMatrixOperator)
+TEST(TestMatrixd2x2d, subMatrixOperator)
 {
     {
         Matrix2x2d m(1.0, 2.0, 3.0, 4.0);
@@ -305,7 +305,7 @@ TEST(TestMatrixd2x2, subMatrixOperator)
     }
 }
 
-TEST(TestMatrixd2x2, mulMatrixOperator)
+TEST(TestMatrixd2x2d, mulMatrixOperator)
 {
     {
         Matrix2x2d m(1.0, 2.0, 3.0, 4.0);
@@ -334,7 +334,7 @@ TEST(TestMatrixd2x2, mulMatrixOperator)
     }
 }
 
-TEST(TestMatrixd2x2, cmpOperator)
+TEST(TestMatrixd2x2d, cmpOperator)
 {
     {
         const Matrix2x2d m1 = Matrix2x2d(1.0, 2.0, 3.0, 4.0);

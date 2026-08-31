@@ -3,8 +3,6 @@
 
 #include <MathLibHeader.hpp>
 
-#define VECTOR4D_ALIGNEMENT 32
-
 #if defined(SIMD_AVX)
 
 #include <immintrin.h>
@@ -13,28 +11,29 @@ namespace MathLib::Simd
 {
     using VectorRegister4Double = __m256d;
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4DAligned(const double* ptr) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4Aligned(const double* ptr) noexcept
     {
         return _mm256_load_pd(ptr);
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4DUnaligned(const double* ptr) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4Unaligned(const double* ptr) noexcept
     {
         return _mm256_loadu_pd(ptr);
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4D(double x, double y, double z,
-                                                                           double w) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4(double x, double y, double z,
+                                                                          double w) noexcept
     {
         return _mm256_set_pd(w, z, y, x);
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4D(double value) noexcept
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4(double value) noexcept
     {
         return _mm256_set1_pd(value);
     }
 
-    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4DZero() noexcept
+    template<double>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double makeVector4Zero() noexcept
     {
         return _mm256_setzero_pd();
     }

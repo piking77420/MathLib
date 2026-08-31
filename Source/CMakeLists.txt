@@ -9,25 +9,15 @@ set(MATHLIB_SOURCES
     AVX.hpp
     CpuInstructionSet.cpp
     CpuInstructionSet.hpp
+    NEON.hpp
     MathLibHeader.hpp
-    Matrix2x2d.cpp
-    Matrix2x2d.hpp
-    Matrix3x3d.cpp
-    Matrix3x3d.hpp
-    Matrix4x4d.cpp
-    Matrix4x4d.hpp
-    Vector2.cpp
+    Matrix2x2.hpp
+    Matrix3x3.hpp
+    Matrix4x4.hpp
+    SSE.hpp
     Vector2.hpp
-    Vector2d.cpp
-    Vector2d.hpp
-    Vector3.cpp
     Vector3.hpp
-    Vector3d.cpp
-    Vector3d.hpp
-    Vector4.cpp
-    Vector4.hpp
-    Vector4d.cpp
-    Vector4d.hpp)
+    Vector4.hpp)
 
 add_library(
     ${PROJECT_NAME}
@@ -55,7 +45,7 @@ endif()
 
 if (CPU_X86_64 OR CPU_X86)
     if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND MATHLIB_USE_FMA)
-        target_compile_options(${target} PRIVATE -mfma)
+        target_compile_options(${PROJECT_NAME} PUBLIC -mfma)
     endif()
 endif()
 

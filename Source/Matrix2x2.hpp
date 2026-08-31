@@ -1,35 +1,34 @@
-#ifndef MATH_LIB_MATRIX2X2D_H
-#define MATH_LIB_MATRIX2X2D_H
+#ifndef MATH_LIB_MATRIX2X2_H
+#define MATH_LIB_MATRIX2X2_H
 
-#include <Vector2d.hpp>
+#include <array>
+#include <Vector2.hpp>
 
 namespace MathLib
 {
-    template<typename T>
-    class Matrix2x2;
-
     // Matrix elements are stored in row-major order
     // Mathematical operations use a column-vector convention
-    template<>
-    class Matrix2x2<double>
+    template<typename T>
+    requires(std::is_floating_point_v<T>)
+    class Matrix2x2
     {
     public:
-        using _VectorType = Vector2d;
+        using _VectorType = Vector2<T>;
 
         explicit Matrix2x2() = default;
 
         ~Matrix2x2() = default;
         // clang-format off
-        MATH_LIB_FORCE_INLINE explicit Matrix2x2(double getM11, double getM12,
-                                                 double getM21, double getM22)
-            : m_data{Vector2d(getM11, getM12), 
-                     Vector2d(getM21, getM22)}
+        MATH_LIB_FORCE_INLINE explicit Matrix2x2(T getM11, T getM12,
+                                                 T getM21, T getM22)
+            : m_data{Vector2<T>(getM11, getM12), 
+                     Vector2<T>(getM21, getM22)}
         {
 
         }
         // clang-format on
 
-        MATH_LIB_FORCE_INLINE explicit Matrix2x2(Vector2d row1, Vector2d row2)
+        MATH_LIB_FORCE_INLINE explicit Matrix2x2(Vector2<T> row1, Vector2<T> row2)
             : m_data{row1, row2}
         {
         }
@@ -50,45 +49,45 @@ namespace MathLib
             // clang-format on
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM11() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM11() const noexcept
         {
             return m_data[0].getX();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM12() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM12() const noexcept
         {
             return m_data[0].getY();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM21() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM21() const noexcept
         {
             return m_data[1].getX();
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE double getM22() const noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T getM22() const noexcept
         {
             return m_data[1].getY();
         }
 
-        Matrix2x2& setM11(double getM11) noexcept
+        Matrix2x2& setM11(T getM11) noexcept
         {
             m_data[0].setX(getM11);
             return *this;
         }
 
-        Matrix2x2& setM12(double getM12) noexcept
+        Matrix2x2& setM12(T getM12) noexcept
         {
             m_data[0].setY(getM12);
             return *this;
         }
 
-        Matrix2x2& setM21(double getM21) noexcept
+        Matrix2x2& setM21(T getM21) noexcept
         {
             m_data[1].setX(getM21);
             return *this;
         }
 
-        Matrix2x2& setM22(double getM22) noexcept
+        Matrix2x2& setM22(T getM22) noexcept
         {
             m_data[1].setY(getM22);
             return *this;
@@ -96,7 +95,7 @@ namespace MathLib
 
         Matrix2x2& transpose() noexcept
         {
-            const double trmp = m_data[0].getY();
+            const T trmp = m_data[0].getY();
             m_data[0].setY(m_data[1].getX());
             m_data[1].setX(trmp);
             return *this;
@@ -108,29 +107,29 @@ namespace MathLib
             return m.transpose();
         }
 
-        double determinant() const noexcept
+        T determinant() const noexcept
         {
-            const double a = m_data[0].getX();
-            const double b = m_data[0].getY();
-            const double c = m_data[1].getX();
-            const double d = m_data[1].getY();
+            const T a = m_data[0].getX();
+            const T b = m_data[0].getY();
+            const T c = m_data[1].getX();
+            const T d = m_data[1].getY();
 
             return a * d - b * c;
         }
 
         Matrix2x2& inverse() noexcept
         {
-            const double a = m_data[0].getX();
-            const double b = m_data[0].getY();
-            const double c = m_data[1].getX();
-            const double d = m_data[1].getY();
+            const T a = m_data[0].getX();
+            const T b = m_data[0].getY();
+            const T c = m_data[1].getX();
+            const T d = m_data[1].getY();
 
-            const double determinant = a * d - b * c;
+            const T determinant = a * d - b * c;
 
             if (fuzzyZero(determinant) || !std::isfinite(determinant))
                 return *this;
 
-            const double invDeterminant = 1.0 / determinant;
+            const T invDeterminant = 1.0 / determinant;
 
             // clang-format off
             *this = Matrix2x2(
@@ -148,56 +147,56 @@ namespace MathLib
             return m.inverse();
         }
 
-        Matrix2x2& operator+=(const double value) noexcept
+        Matrix2x2& operator+=(const T value) noexcept
         {
             m_data[0] += value;
             m_data[1] += value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator+(double scalar) const
+        [[nodiscard]] Matrix2x2 operator+(T scalar) const
         {
             Matrix2x2 result = *this;
             result += scalar;
             return result;
         }
 
-        Matrix2x2& operator-=(const double value) noexcept
+        Matrix2x2& operator-=(const T value) noexcept
         {
             m_data[0] -= value;
             m_data[1] -= value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator-(double scalar) const
+        [[nodiscard]] Matrix2x2 operator-(T scalar) const
         {
             Matrix2x2 result = *this;
             result -= scalar;
             return result;
         }
 
-        Matrix2x2& operator*=(const double value) noexcept
+        Matrix2x2& operator*=(const T value) noexcept
         {
             m_data[0] *= value;
             m_data[1] *= value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator*(double scalar) const
+        [[nodiscard]] Matrix2x2 operator*(T scalar) const
         {
             Matrix2x2 result = *this;
             result *= scalar;
             return result;
         }
 
-        Matrix2x2& operator/=(const double value) noexcept
+        Matrix2x2& operator/=(const T value) noexcept
         {
             m_data[0] /= value;
             m_data[1] /= value;
             return *this;
         }
 
-        [[nodiscard]] Matrix2x2 operator/(double scalar) const
+        [[nodiscard]] Matrix2x2 operator/(T scalar) const
         {
             Matrix2x2 result = *this;
             result /= scalar;
@@ -232,9 +231,9 @@ namespace MathLib
             return result;
         }
 
-        [[nodiscard]] Vector2d operator*(const Vector2d& rhs) const noexcept
+        [[nodiscard]] Vector2<T> operator*(const Vector2<T>& rhs) const noexcept
         {
-            return Vector2d(Vector2d::dot(m_data[0], rhs), Vector2d::dot(m_data[1], rhs));
+            return Vector2<T>(Vector2<T>::dot(m_data[0], rhs), Vector2<T>::dot(m_data[1], rhs));
         }
 
         Matrix2x2& operator*=(Matrix2x2 rhs) noexcept
@@ -244,14 +243,14 @@ namespace MathLib
             // an row * row multiplication
             rhs.transpose();
 
-            const double getM11 = Vector2d::dot(m_data[0], rhs.m_data[0]);
-            const double getM12 = Vector2d::dot(m_data[0], rhs.m_data[1]);
+            const T getM11 = Vector2<T>::dot(m_data[0], rhs.m_data[0]);
+            const T getM12 = Vector2<T>::dot(m_data[0], rhs.m_data[1]);
 
-            const double getM21 = Vector2d::dot(m_data[1], rhs.m_data[0]);
-            const double getM22 = Vector2d::dot(m_data[1], rhs.m_data[1]);
+            const T getM21 = Vector2<T>::dot(m_data[1], rhs.m_data[0]);
+            const T getM22 = Vector2<T>::dot(m_data[1], rhs.m_data[1]);
 
-            m_data[0] = Vector2d(getM11, getM12);
-            m_data[1] = Vector2d(getM21, getM22);
+            m_data[0] = Vector2<T>(getM11, getM12);
+            m_data[1] = Vector2<T>(getM21, getM22);
 
             return *this;
         }
@@ -274,10 +273,11 @@ namespace MathLib
         }
 
     private:
-        std::array<Vector2d, 2> m_data;
+        std::array<Vector2<T>, 2> m_data;
     };
 
+    using Matrix2x2f = Matrix2x2<float>;
     using Matrix2x2d = Matrix2x2<double>;
 } // namespace MathLib
 
-#endif // MATH_LIB_MATRIX2X2D_H
+#endif // MATH_LIB_MATRIX2X2_H

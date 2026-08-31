@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <MathLibHeader.hpp>
-#include <Matrix3x3d.hpp>
+#include <Matrix3x3.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
