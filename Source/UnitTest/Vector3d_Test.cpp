@@ -1,9 +1,4 @@
 #include <gtest/gtest.h>
-
-#include <cmath>
-#include <array>
-#include <span>
-
 #include <MathLibHeader.hpp>
 #include <Vector3.hpp>
 
