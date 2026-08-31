@@ -45,4 +45,5 @@ ConstructorInitializerIndentWidth: 4
 ## Templates
 SpaceAfterTemplateKeyword: false
 AlwaysBreakTemplateDeclarations: Yes
+RequiresClausePosition: OwnLine
 IndentRequiresClause: false
