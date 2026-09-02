@@ -1542,4 +1542,15 @@ TEST(TestMatrix4x4f, trsEulerAngles)
     EXPECT_NEAR(m.getM44(), 1.0f, FloatEpsilon);
 }
 
+TEST(TestMatrix4x4f, extractEulerXYZ)
+{
+    const Vector3f rotation(0.37, -0.81, 1.24);
+    const Matrix4x4f m = MathLib::rotationXYZ<Matrix4x4f>(rotation);
+    const Vector3f extractRotation = extractEulerXYZ(m);
+
+    EXPECT_FLOAT_EQ(rotation.getX(), extractRotation.getX());
+    EXPECT_FLOAT_EQ(rotation.getY(), extractRotation.getY());
+    EXPECT_FLOAT_EQ(rotation.getZ(), extractRotation.getZ());
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

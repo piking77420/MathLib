@@ -1029,4 +1029,15 @@ TEST(TestMatrix3x3d, scale)
     }
 }
 
+TEST(TestMatrix3x3d, extractEulerXYZ)
+{
+    const Vector3d rotation(0.37, -0.81, 1.24);
+    const Matrix3x3d m = MathLib::rotationXYZ<Matrix3x3d>(rotation);
+    const Vector3d extractRotation = extractEulerXYZ(m);
+
+    EXPECT_DOUBLE_EQ(rotation.getX(), extractRotation.getX());
+    EXPECT_DOUBLE_EQ(rotation.getY(), extractRotation.getY());
+    EXPECT_DOUBLE_EQ(rotation.getZ(), extractRotation.getZ());
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

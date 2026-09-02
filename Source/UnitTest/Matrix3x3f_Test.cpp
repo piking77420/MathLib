@@ -974,21 +974,32 @@ TEST(TestMatrix3x3f, translation)
     const Vector2f t = Vector2f(1.0, 2.0);
     auto test = [](const Matrix3x3f& m)
     {
-        EXPECT_DOUBLE_EQ(m.getM11(), 1.0);
-        EXPECT_DOUBLE_EQ(m.getM12(), 0.0);
-        EXPECT_DOUBLE_EQ(m.getM13(), 1.0);
+        EXPECT_FLOAT_EQ(m.getM11(), 1.0);
+        EXPECT_FLOAT_EQ(m.getM12(), 0.0);
+        EXPECT_FLOAT_EQ(m.getM13(), 1.0);
 
-        EXPECT_DOUBLE_EQ(m.getM21(), 0.0);
-        EXPECT_DOUBLE_EQ(m.getM22(), 1.0);
-        EXPECT_DOUBLE_EQ(m.getM23(), 2.0);
+        EXPECT_FLOAT_EQ(m.getM21(), 0.0);
+        EXPECT_FLOAT_EQ(m.getM22(), 1.0);
+        EXPECT_FLOAT_EQ(m.getM23(), 2.0);
 
-        EXPECT_DOUBLE_EQ(m.getM31(), 0.0);
-        EXPECT_DOUBLE_EQ(m.getM32(), 0.0);
-        EXPECT_DOUBLE_EQ(m.getM33(), 1.0);
+        EXPECT_FLOAT_EQ(m.getM31(), 0.0);
+        EXPECT_FLOAT_EQ(m.getM32(), 0.0);
+        EXPECT_FLOAT_EQ(m.getM33(), 1.0);
     };
 
     test(translation<Matrix3x3f>(t.getX(), t.getY()));
     test(translation<Matrix3x3f>(t));
+}
+
+TEST(TestMatrix3x3f, extractEulerXYZ)
+{
+    const Vector3f rotation(0.37, -0.81, 1.24);
+    const Matrix3x3f m = MathLib::rotationXYZ<Matrix3x3f>(rotation);
+    const Vector3f extractRotation = extractEulerXYZ(m);
+
+    EXPECT_FLOAT_EQ(rotation.getX(), extractRotation.getX());
+    EXPECT_FLOAT_EQ(rotation.getY(), extractRotation.getY());
+    EXPECT_FLOAT_EQ(rotation.getZ(), extractRotation.getZ());
 }
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

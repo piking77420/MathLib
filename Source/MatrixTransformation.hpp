@@ -160,14 +160,16 @@ namespace MathLib
     [[nodiscard]] MATH_LIB_FORCE_INLINE static M
     rotationXYZ(typename M::_ValueType angleX, typename M::_ValueType angleY, typename M::_ValueType angleZ)
     {
-        const typename M::_ValueType cX = std::cos(angleX);
-        const typename M::_ValueType sX = std::sin(angleX);
+        using T = typename M::_ValueType;
 
-        const typename M::_ValueType cY = std::cos(angleY);
-        const typename M::_ValueType sY = std::sin(angleY);
+        const T cX = std::cos(angleX);
+        const T sX = std::sin(angleX);
 
-        const typename M::_ValueType cZ = std::cos(angleZ);
-        const typename M::_ValueType sZ = std::sin(angleZ);
+        const T cY = std::cos(angleY);
+        const T sY = std::sin(angleY);
+
+        const T cZ = std::cos(angleZ);
+        const T sZ = std::sin(angleZ);
 
         // clang-format off
         return rotationXYZ<M>(cX, sX, cY, sY, cZ, sZ);
@@ -360,14 +362,16 @@ namespace MathLib
         typename M::_ValueType scaleY, typename M::_ValueType scaleZ,
         RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
     {
-        const typename M::_ValueType cX = std::cos(angleX);
-        const typename M::_ValueType sX = std::sin(angleX);
+        using T = typename M::_ValueType;
 
-        const typename M::_ValueType cY = std::cos(angleY);
-        const typename M::_ValueType sY = std::sin(angleY);
+        const T cX = std::cos(angleX);
+        const T sX = std::sin(angleX);
 
-        const typename M::_ValueType cZ = std::cos(angleZ);
-        const typename M::_ValueType sZ = std::sin(angleZ);
+        const T cY = std::cos(angleY);
+        const T sY = std::sin(angleY);
+
+        const T cZ = std::cos(angleZ);
+        const T sZ = std::sin(angleZ);
         return trs<M>(tX, tY, tZ, cX, sX, cY, sY, cZ, sZ, scaleX, scaleY, scaleZ, rotationOrder);
     }
 
@@ -378,6 +382,71 @@ namespace MathLib
     {
         return trs<M>(translation.getX(), translation.getY(), translation.getZ(), eulerAngles.getX(),
                       eulerAngles.getY(), eulerAngles.getZ(), scale.getX(), scale.getY(), scale.getZ(), rotationOrder);
+    }
+
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector3<typename M::_ValueType> extractEulerXYZ(const M& m) noexcept
+    {
+        using T = typename M::_ValueType;
+        static_assert(!std::is_same_v<M, Matrix2x2<T>>);
+
+        // rotationXYZ = Rz * Ry * Rx
+        //
+        // m31 = -sin(y)
+        // m32 = cos(y) * sin(x)
+        // m33 = cos(y) * cos(x)
+        //
+        // m21 = sin(z) * cos(y)
+        // m11 = cos(z) * cos(y)
+
+        const T sinY = std::clamp(-m.getM31(), T(-1), T(1));
+        const T y = std::asin(sinY);
+
+        const T cosY = std::cos(y);
+
+        T x;
+        T z;
+
+        if (std::abs(cosY) > std::numeric_limits<T>::epsilon())
+        {
+            x = std::atan2(m.getM32(), m.getM33());
+            z = std::atan2(m.getM21(), m.getM11());
+        }
+        else
+        {
+            // Gimbal lock: y = +/- pi/2.
+            // x and z are no longer independently recoverable.
+            // Choose z = 0 and recover x.
+            x = std::atan2(-m.getM23(), m.getM22());
+            z = T(0);
+        }
+
+        return Vector3<T>(x, y, z);
+    }
+
+    template<MatrixSq M>
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector3<typename M::_ValueType>
+    extractEulerXYZ(const M& m, RotationMatrixOrder rotationMatrixOrder) noexcept
+    {
+        switch (rotationMatrixOrder)
+        {
+        case MathLib::RotationMatrixOrder::XYZ:
+            return extractEulerXYZ(m);
+        case MathLib::RotationMatrixOrder::XZY:
+            break;
+        case MathLib::RotationMatrixOrder::YXZ:
+            break;
+        case MathLib::RotationMatrixOrder::YZX:
+            break;
+        case MathLib::RotationMatrixOrder::ZXY:
+            break;
+        case MathLib::RotationMatrixOrder::ZYX:
+            break;
+        default:
+            break;
+        }
+
+        return M::identity();
     }
 
 } // namespace MathLib

@@ -1541,4 +1541,16 @@ TEST(TestMatrix4x4d, trsEulerAngles)
     EXPECT_NEAR(m.getM43(), 0.0, DoubleEpsilon);
     EXPECT_NEAR(m.getM44(), 1.0, DoubleEpsilon);
 }
+
+TEST(TestMatrix4x4d, extractEulerXYZ)
+{
+    const Vector3d rotation(0.37, -0.81, 1.24);
+    const Matrix4x4d m = MathLib::rotationXYZ<Matrix4x4d>(rotation);
+    const Vector3d extractRotation = extractEulerXYZ(m);
+
+    EXPECT_DOUBLE_EQ(rotation.getX(), extractRotation.getX());
+    EXPECT_DOUBLE_EQ(rotation.getY(), extractRotation.getY());
+    EXPECT_DOUBLE_EQ(rotation.getZ(), extractRotation.getZ());
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
