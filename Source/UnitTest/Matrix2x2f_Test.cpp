@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <numbers>
+
 #include <MathLibHeader.hpp>
-#include <Matrix2x2.hpp>
+#include <MatrixTransformation.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -364,6 +366,77 @@ TEST(TestMatrixd2x2f, cmpOperator)
 
         EXPECT_TRUE(m1 != m2);
         EXPECT_FALSE(m1 == m2);
+    }
+}
+
+TEST(TestMatrixd2x2f, rotation)
+{
+    {
+        const float angle = 0.0;
+        const Matrix2x2f m = MathLib::rotation(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        const float angle = std::numbers::pi;
+        const Matrix2x2f m = MathLib::rotation(angle);
+
+        EXPECT_NEAR(m.getM11(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), -1.0, DoubleEpsilon);
+    }
+
+    {
+        const float angle = std::numbers::pi * 0.5;
+        const Matrix2x2f m = MathLib::rotation(angle);
+
+        EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), -1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+    }
+
+    {
+        const float angle = -std::numbers::pi * 0.5;
+        const Matrix2x2f m = MathLib::rotation(angle);
+
+        EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+    }
+}
+
+TEST(TestMatrixd2x2f, scale)
+{
+    const Vector2f scale(1.0, 2.0);
+    {
+        const Matrix2x2f m = MathLib::scale(scale.getX(), scale.getY());
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 2.0, DoubleEpsilon);
+    }
+
+    {
+        const Matrix2x2f m = MathLib::scale(scale);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 2.0, DoubleEpsilon);
     }
 }
 

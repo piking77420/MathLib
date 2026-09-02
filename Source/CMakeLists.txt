@@ -14,6 +14,7 @@ set(MATHLIB_SOURCES
     Matrix2x2.hpp
     Matrix3x3.hpp
     Matrix4x4.hpp
+    MatrixTransformation.hpp
     SSE.hpp
     Vector2.hpp
     Vector3.hpp

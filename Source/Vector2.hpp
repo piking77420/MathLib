@@ -18,6 +18,8 @@ namespace MathLib
     class Vector2
     {
     public:
+        using _ValueType = T;
+
         explicit Vector2() = default;
 
         ~Vector2() = default;

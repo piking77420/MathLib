@@ -18,6 +18,7 @@ namespace MathLib
     {
     public:
         using _VectorType = Vector4<T>;
+        using _ValueType = typename _VectorType::_ValueType;
 #if defined(MATH_LIB_INTRINSIC)
         using _VectorInstrinsic = Vector4<T>::_VectorInstrinsic;
 #endif

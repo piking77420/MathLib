@@ -31,6 +31,8 @@ namespace MathLib
     class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Vector4 // TODO is align or not
     {
     public:
+        using _ValueType = T;
+
 #if defined(MATH_LIB_INTRINSIC)
         using _VectorInstrinsic =
             std::conditional_t<std::is_same_v<T, float>, Simd::VectorRegister4Float, Simd::VectorRegister4Double>;

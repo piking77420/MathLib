@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <numbers>
+
 #include <MathLibHeader.hpp>
-#include <Matrix3x3.hpp>
+#include <MatrixTransformation.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -679,6 +681,363 @@ TEST(TestMatrix3x3d, cmpOperator)
         EXPECT_TRUE(m1 != m2);
         EXPECT_FALSE(m1 == m2);
     }
+}
+
+TEST(TestMatrix3x3d, translation)
+{
+    const Vector2d t = Vector2d(1.0, 2.0);
+    auto test = [](const Matrix3x3d& m)
+    {
+        EXPECT_DOUBLE_EQ(m.getM11(), 1.0);
+        EXPECT_DOUBLE_EQ(m.getM12(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM13(), 1.0);
+
+        EXPECT_DOUBLE_EQ(m.getM21(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM22(), 1.0);
+        EXPECT_DOUBLE_EQ(m.getM23(), 2.0);
+
+        EXPECT_DOUBLE_EQ(m.getM31(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM32(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM33(), 1.0);
+    };
+
+    test(translation<Matrix3x3d>(t.getX(), t.getY()));
+    test(translation<Matrix3x3d>(t));
+}
+
+TEST(TestMatrix3x3d, rotationX)
+{
+    {
+        const double angle = 0.0;
+        const Matrix3x3d m = MathLib::rotationX<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = std::numbers::pi;
+        const Matrix3x3d m = MathLib::rotationX<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), -1.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = std::numbers::pi * 0.5;
+        const Matrix3x3d m = MathLib::rotationX<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), -1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = -std::numbers::pi * 0.5;
+        const Matrix3x3d m = MathLib::rotationX<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+    }
+}
+
+TEST(TestMatrix3x3d, rotationY)
+{
+    {
+        const double angle = 0.0;
+        const Matrix3x3d m = MathLib::rotationY<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = std::numbers::pi;
+        const Matrix3x3d m = MathLib::rotationY<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), -1.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = std::numbers::pi * 0.5;
+        const Matrix3x3d m = MathLib::rotationY<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = -std::numbers::pi * 0.5;
+        const Matrix3x3d m = MathLib::rotationY<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), -1.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+    }
+}
+
+TEST(TestMatrix3x3d, rotationZ)
+{
+    {
+        const double angle = 0.0;
+        const Matrix3x3d m = MathLib::rotationZ<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = std::numbers::pi;
+        const Matrix3x3d m = MathLib::rotationZ<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = std::numbers::pi * 0.5;
+        const Matrix3x3d m = MathLib::rotationZ<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 1.0, DoubleEpsilon);
+    }
+
+    {
+        const double angle = -std::numbers::pi * 0.5;
+        const Matrix3x3d m = MathLib::rotationZ<Matrix3x3d>(angle);
+
+        EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM12(), 1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM21(), -1.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+        EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+        EXPECT_NEAR(m.getM33(), 1.0, DoubleEpsilon);
+    }
+}
+
+TEST(TestMatrix3x3d, rotationXYZ)
+{
+    const Vector3d rotation(0.0, std::numbers::pi * 0.5, -std::numbers::pi * 0.5);
+    {
+        {
+            const Matrix3x3d m = MathLib::rotationXYZ<Matrix3x3d>(rotation.getX(), rotation.getY(), rotation.getZ());
+
+            EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM12(), 1.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM23(), -1.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM31(), -1.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+        }
+
+        {
+            const Matrix3x3d m = MathLib::rotationXYZ<Matrix3x3d>(rotation);
+
+            EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM12(), 1.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM22(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM23(), -1.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM31(), -1.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM33(), 0.0, DoubleEpsilon);
+        }
+    }
+
+    {
+        const Vector3d rotation(0.37, -0.81, 1.24);
+        {
+            const Matrix3x3d m = MathLib::rotationXYZ<Matrix3x3d>(rotation.getX(), rotation.getY(), rotation.getZ());
+
+            EXPECT_NEAR(m.getM11(), 0.22394652914908608, DoubleEpsilon);
+            EXPECT_NEAR(m.getM12(), -0.96684879119784306, DoubleEpsilon);
+            EXPECT_NEAR(m.getM13(), 0.12268401298191708, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM21(), 0.65211658553129300, DoubleEpsilon);
+            EXPECT_NEAR(m.getM22(), 0.05510293639876843, DoubleEpsilon);
+            EXPECT_NEAR(m.getM23(), -0.75611350025987570, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM31(), 0.72428717437014260, DoubleEpsilon);
+            EXPECT_NEAR(m.getM32(), 0.24933327367101035, DoubleEpsilon);
+            EXPECT_NEAR(m.getM33(), 0.64283824379342260, DoubleEpsilon);
+        }
+
+        {
+            const Matrix3x3d m = MathLib::rotationXYZ<Matrix3x3d>(rotation);
+
+            EXPECT_NEAR(m.getM11(), 0.22394652914908608, DoubleEpsilon);
+            EXPECT_NEAR(m.getM12(), -0.96684879119784306, DoubleEpsilon);
+            EXPECT_NEAR(m.getM13(), 0.12268401298191708, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM21(), 0.65211658553129300, DoubleEpsilon);
+            EXPECT_NEAR(m.getM22(), 0.05510293639876843, DoubleEpsilon);
+            EXPECT_NEAR(m.getM23(), -0.75611350025987570, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM31(), 0.72428717437014260, DoubleEpsilon);
+            EXPECT_NEAR(m.getM32(), 0.24933327367101035, DoubleEpsilon);
+            EXPECT_NEAR(m.getM33(), 0.64283824379342260, DoubleEpsilon);
+        }
+    }
+}
+
+TEST(TestMatrix3x3d, scale)
+{
+    const Vector3d s(1.0, 2.0, 3.0);
+    {
+        {
+            const Matrix3x3d m = MathLib::scale<Matrix3x3d>(s.getX(), s.getY(), s.getZ());
+
+            EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM22(), 2.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM33(), 3.0, DoubleEpsilon);
+        }
+
+        {
+            const Matrix3x3d m = MathLib::scale<Matrix3x3d>(s);
+
+            EXPECT_NEAR(m.getM11(), 1.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM12(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM13(), 0.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM21(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM22(), 2.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM23(), 0.0, DoubleEpsilon);
+
+            EXPECT_NEAR(m.getM31(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM32(), 0.0, DoubleEpsilon);
+            EXPECT_NEAR(m.getM33(), 3.0, DoubleEpsilon);
+        }
+    }
+}
+
+TEST(TestMatrix3x3d, extractEulerXYZ)
+{
+    const Vector3d rotation(0.37, -0.81, 1.24);
+    const Matrix3x3d m = MathLib::rotationXYZ<Matrix3x3d>(rotation);
+    const Vector3d extractRotation = extractEulerXYZ(m);
+
+    EXPECT_DOUBLE_EQ(rotation.getX(), extractRotation.getX());
+    EXPECT_DOUBLE_EQ(rotation.getY(), extractRotation.getY());
+    EXPECT_DOUBLE_EQ(rotation.getZ(), extractRotation.getZ());
 }
 
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
