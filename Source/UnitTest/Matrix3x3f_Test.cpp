@@ -974,12 +974,12 @@ TEST(TestMatrix3x3f, translation)
     const Vector2f t = Vector2f(1.0, 2.0);
     auto test = [](const Matrix3x3f& m)
     {
-        EXPECT_DOUBLE_EQ(m.getM11(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM11(), 1.0);
         EXPECT_DOUBLE_EQ(m.getM12(), 0.0);
         EXPECT_DOUBLE_EQ(m.getM13(), 1.0);
 
         EXPECT_DOUBLE_EQ(m.getM21(), 0.0);
-        EXPECT_DOUBLE_EQ(m.getM22(), 0.0);
+        EXPECT_DOUBLE_EQ(m.getM22(), 1.0);
         EXPECT_DOUBLE_EQ(m.getM23(), 2.0);
 
         EXPECT_DOUBLE_EQ(m.getM31(), 0.0);

@@ -234,9 +234,9 @@ namespace MathLib
         {
             // clang-format off
             return M(
-                0 , 0 , 0 , tX,
-                0 , 0 , 0 , tY,
-                0 , 0 , 0 , 0,
+                1 , 0 , 0 , tX,
+                0 , 1 , 0 , tY,
+                0 , 0 , 1 , 0,
                 0 , 0 , 0 , 1
             );
             // clang-format on
@@ -251,6 +251,28 @@ namespace MathLib
     [[nodiscard]] MATH_LIB_FORCE_INLINE static M translation(const Vector2<typename M::_ValueType>& tXY)
     {
         return translation<M>(tXY.getX(), tXY.getY());
+    }
+
+    template<MatrixSq M>
+    requires(std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M translation(typename M::_ValueType tX, typename M::_ValueType tY,
+                                                             typename M::_ValueType tZ)
+    {
+        // clang-format off
+            return M(
+                1 , 0 , 0 , tX,
+                0 , 1 , 0 , tY,
+                0 , 0 , 1 , tZ,
+                0 , 0 , 0 , 1
+            );
+        // clang-format on
+    }
+
+    template<MatrixSq M>
+    requires(std::is_same_v<M, Matrix4x4<typename M::_ValueType>>)
+    [[nodiscard]] MATH_LIB_FORCE_INLINE static M translation(const Vector3<typename M::_ValueType>& tXYZ)
+    {
+        return translation<M>(tXYZ.getX(), tXYZ.getY(), tXYZ.getZ());
     }
 
     enum class RotationMatrixOrder
