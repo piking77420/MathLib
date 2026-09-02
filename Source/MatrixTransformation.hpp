@@ -225,8 +225,8 @@ namespace MathLib
         {
             // clang-format off
             return M(
-                0, 0, tX,
-                0, 0, tY, 
+                1, 0, tX,
+                0, 1, tY, 
                 0, 0, 1);
             // clang-format on
         }
