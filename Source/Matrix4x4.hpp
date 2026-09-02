@@ -58,7 +58,7 @@ namespace MathLib
             return m_data[0].data();
         }
 
-        [[nodiscard]] static Matrix4x4 zero() noexcept
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE Matrix4x4 zero() noexcept
         {
             // clang-format off
             return Matrix4x4(0.0, 0.0, 0.0, 0.0,
@@ -68,7 +68,7 @@ namespace MathLib
             // clang-format on
         }
 
-        [[nodiscard]] static Matrix4x4 identity() noexcept
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE Matrix4x4 identity() noexcept
         {
             // clang-format off
             return Matrix4x4(1.0, 0.0, 0.0, 0.0,

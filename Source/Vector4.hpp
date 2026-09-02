@@ -477,7 +477,7 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE bool isFinite() const
         {
-            return std::isfinite(getX()) && std::isfinite(m_data[1]) && std::isfinite(m_data[2]) &&
+            return std::isfinite(m_data[0]) && std::isfinite(m_data[1]) && std::isfinite(m_data[2]) &&
                    std::isfinite(m_data[3]);
         }
 
