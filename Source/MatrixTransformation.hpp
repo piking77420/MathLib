@@ -278,17 +278,6 @@ namespace MathLib
         return translation<M>(tXYZ.getX(), tXYZ.getY(), tXYZ.getZ());
     }
 
-    enum class RotationMatrixOrder
-    {
-        // Tait-Bryan
-        XYZ,
-        XZY,
-        YXZ,
-        YZX,
-        ZXY,
-        ZYX,
-    };
-
     template<MatrixSq M>
     [[nodiscard]] MATH_LIB_FORCE_INLINE static M
     trsXYZ(typename M::_ValueType tX, typename M::_ValueType tY, typename M::_ValueType tZ, typename M::_ValueType cX,
@@ -333,21 +322,21 @@ namespace MathLib
     trs(typename M::_ValueType tX, typename M::_ValueType tY, typename M::_ValueType tZ, typename M::_ValueType cX,
         typename M::_ValueType sX, typename M::_ValueType cY, typename M::_ValueType sY, typename M::_ValueType cZ,
         typename M::_ValueType sZ, typename M::_ValueType scaleX, typename M::_ValueType scaleY,
-        typename M::_ValueType scaleZ, RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
+        typename M::_ValueType scaleZ, RotationOrder rotationOrder = RotationOrder::XYZ)
     {
         switch (rotationOrder)
         {
-        case MathLib::RotationMatrixOrder::XYZ:
+        case MathLib::RotationOrder::XYZ:
             return trsXYZ<M>(tX, tY, tZ, cX, sX, cY, sY, cZ, sZ, scaleX, scaleY, scaleZ);
-        case MathLib::RotationMatrixOrder::XZY:
+        case MathLib::RotationOrder::XZY:
             break;
-        case MathLib::RotationMatrixOrder::YXZ:
+        case MathLib::RotationOrder::YXZ:
             break;
-        case MathLib::RotationMatrixOrder::YZX:
+        case MathLib::RotationOrder::YZX:
             break;
-        case MathLib::RotationMatrixOrder::ZXY:
+        case MathLib::RotationOrder::ZXY:
             break;
-        case MathLib::RotationMatrixOrder::ZYX:
+        case MathLib::RotationOrder::ZYX:
             break;
         default:
             break;
@@ -361,7 +350,7 @@ namespace MathLib
     trs(typename M::_ValueType tX, typename M::_ValueType tY, typename M::_ValueType tZ, typename M::_ValueType angleX,
         typename M::_ValueType angleY, typename M::_ValueType angleZ, typename M::_ValueType scaleX,
         typename M::_ValueType scaleY, typename M::_ValueType scaleZ,
-        RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
+        RotationOrder rotationOrder = RotationOrder::XYZ)
     {
         using T = typename M::_ValueType;
 
@@ -379,7 +368,7 @@ namespace MathLib
     template<MatrixSq M>
     [[nodiscard]] MATH_LIB_FORCE_INLINE static M
     trs(const Vector3<typename M::_ValueType>& translation, const Vector3<typename M::_ValueType>& eulerAngles,
-        const Vector3<typename M::_ValueType>& scale, RotationMatrixOrder rotationOrder = RotationMatrixOrder::XYZ)
+        const Vector3<typename M::_ValueType>& scale, RotationOrder rotationOrder = RotationOrder::XYZ)
     {
         return trs<M>(translation.getX(), translation.getY(), translation.getZ(), eulerAngles.getX(),
                       eulerAngles.getY(), eulerAngles.getZ(), scale.getX(), scale.getY(), scale.getZ(), rotationOrder);
@@ -427,21 +416,21 @@ namespace MathLib
 
     template<MatrixSq M>
     [[nodiscard]] MATH_LIB_FORCE_INLINE static Vector3<typename M::_ValueType>
-    extractEulerXYZ(const M& m, RotationMatrixOrder rotationMatrixOrder) noexcept
+    extractEulerXYZ(const M& m, RotationOrder rotationMatrixOrder) noexcept
     {
         switch (rotationMatrixOrder)
         {
-        case MathLib::RotationMatrixOrder::XYZ:
+        case MathLib::RotationOrder::XYZ:
             return extractEulerXYZ(m);
-        case MathLib::RotationMatrixOrder::XZY:
+        case MathLib::RotationOrder::XZY:
             break;
-        case MathLib::RotationMatrixOrder::YXZ:
+        case MathLib::RotationOrder::YXZ:
             break;
-        case MathLib::RotationMatrixOrder::YZX:
+        case MathLib::RotationOrder::YZX:
             break;
-        case MathLib::RotationMatrixOrder::ZXY:
+        case MathLib::RotationOrder::ZXY:
             break;
-        case MathLib::RotationMatrixOrder::ZYX:
+        case MathLib::RotationOrder::ZYX:
             break;
         default:
             break;

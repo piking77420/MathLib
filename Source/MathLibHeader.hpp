@@ -153,6 +153,26 @@ namespace MathLib
         return std::abs(a - b) <= tolerance * std::max({1.0f, std::abs(a), std::abs(b)});
     }
 
+    enum class RotationOrder
+    {
+        // Rotation application order.
+        // Column-vector convention:
+        //
+        // XYZ -> Rz * Ry * Rx
+        // XZY -> Ry * Rz * Rx
+        // YXZ -> Rz * Rx * Ry
+        // YZX -> Rx * Rz * Ry
+        // ZXY -> Ry * Rx * Rz
+        // ZYX -> Rx * Ry * Rz
+
+        XYZ,
+        XZY,
+        YXZ,
+        YZX,
+        ZXY,
+        ZYX,
+    };
+
     template<std::size_t Alignment>
     [[nodiscard]] constexpr bool isAligned(const void* const ptr) noexcept
     {
