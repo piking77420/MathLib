@@ -65,7 +65,7 @@ namespace MathLib
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion identity() noexcept
         {
             // clang-format off
-            return Quaternion(T(1), T(0), T(0), T(0));
+            return Quaternion(_ValueType(0), _ValueType(0), _ValueType(0), _ValueType(1));
             // clang-format on
         }
 
