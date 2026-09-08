@@ -116,6 +116,23 @@ namespace MathLib
     constexpr double SquareDoubleEpsilon = DoubleEpsilon * DoubleEpsilon;
     constexpr float SquareFloatEpsilon = FloatEpsilon * FloatEpsilon;
 
+    template<typename T>
+    struct Epsilon;
+
+    template<>
+    struct Epsilon<float>
+    {
+        static constexpr float Value = FloatEpsilon;
+        static constexpr float Square = SquareFloatEpsilon;
+    };
+
+    template<>
+    struct Epsilon<double>
+    {
+        static constexpr double Value = DoubleEpsilon;
+        static constexpr double Square = SquareDoubleEpsilon;
+    };
+
     [[nodiscard]] constexpr bool fuzzyZero(double value, double tolerance = DoubleEpsilon)
     {
         return std::abs(value) < tolerance;
