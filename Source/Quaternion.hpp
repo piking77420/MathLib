@@ -4,8 +4,10 @@
 #include <array>
 #include <cmath>
 #include <type_traits>
+#include <numbers>
 #include <span>
 #include <MathLibHeader.hpp>
+#include <Vector3.hpp>
 
 namespace MathLib
 {
@@ -23,6 +25,7 @@ namespace MathLib
 #endif
 
         using _ValueType = T;
+        using _Vector3 = Vector3<_ValueType>;
 
         explicit Quaternion() = default;
         ~Quaternion() = default;
@@ -67,6 +70,74 @@ namespace MathLib
             // clang-format off
             return Quaternion(_ValueType(0), _ValueType(0), _ValueType(0), _ValueType(1));
             // clang-format on
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion fromNormalizeAxisAngle(const _Vector3& axis,
+                                                                                     _ValueType angle) noexcept
+        {
+            const _ValueType halfAngle = angle * _ValueType(0.5);
+
+            const _ValueType sinHalfAngle = std::sin(halfAngle);
+            const _ValueType cosHalfAngle = std::cos(halfAngle);
+
+            return Quaternion(axis.getX() * sinHalfAngle, axis.getY() * sinHalfAngle, axis.getZ() * sinHalfAngle,
+                              cosHalfAngle);
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion fromAxisAngle(const _Vector3& axis,
+                                                                            _ValueType angle) noexcept
+        {
+            return fromNormalizeAxisAngle(axis.getNormalize(), angle);
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion
+        fromEulerAngles(_ValueType x, _ValueType y, _ValueType z,
+                        RotationOrder rotationOrder = RotationOrder::XYZ) noexcept
+        {
+            MATHLIB_ASSERT(rotationOrder == RotationOrder::XYZ && "Only handles XYZ rotation order");
+
+            const _ValueType xHalf = x * _ValueType(0.5);
+            const _ValueType yHalf = y * _ValueType(0.5);
+            const _ValueType zHalf = z * _ValueType(0.5);
+
+            const _ValueType cosHalfX = std::cos(xHalf);
+            const _ValueType sinHalfX = std::sin(xHalf);
+
+            const _ValueType cosHalfY = std::cos(yHalf);
+            const _ValueType sinHalfY = std::sin(yHalf);
+
+            const _ValueType cosHalfZ = std::cos(zHalf);
+            const _ValueType sinHalfZ = std::sin(zHalf);
+
+            const _ValueType qX = sinHalfX * cosHalfY * cosHalfZ - cosHalfX * sinHalfY * sinHalfZ;
+
+            const _ValueType qY = cosHalfX * sinHalfY * cosHalfZ + sinHalfX * cosHalfY * sinHalfZ;
+
+            const _ValueType qZ = cosHalfX * cosHalfY * sinHalfZ - sinHalfX * sinHalfY * cosHalfZ;
+
+            const _ValueType qW = cosHalfX * cosHalfY * cosHalfZ + sinHalfX * sinHalfY * sinHalfZ;
+
+            return Quaternion(qX, qY, qZ, qW);
+        }
+
+        std::array<_ValueType, 3> toEulerAngles() const
+        {
+            const _ValueType qX = getX();
+            const _ValueType qY = getY();
+            const _ValueType qZ = getZ();
+            const _ValueType qW = getW();
+
+            const _ValueType x =
+                std::atan2(_ValueType(2) * (qW * qX + qY * qZ), _ValueType(1) - _ValueType(2) * (qX * qX + qY * qY));
+
+            const _ValueType sinY = std::clamp(_ValueType(2) * (qW * qY - qZ * qX), _ValueType(-1), _ValueType(1));
+
+            const _ValueType y = std::atan2(sinY, std::sqrt(std::max(_ValueType(0), _ValueType(1) - sinY * sinY)));
+
+            const _ValueType z =
+                std::atan2(_ValueType(2) * (qW * qZ + qX * qY), _ValueType(1) - _ValueType(2) * (qY * qY + qZ * qZ));
+
+            return {x, y, z};
         }
 
         MATH_LIB_FORCE_INLINE _ValueType getX() const
