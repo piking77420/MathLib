@@ -8,6 +8,8 @@
 #include <span>
 #include <MathLibHeader.hpp>
 #include <Vector3.hpp>
+#include <Matrix3x3.hpp>
+#include <Matrix4x4.hpp>
 
 namespace MathLib
 {
@@ -37,7 +39,7 @@ namespace MathLib
         }
 
         MATH_LIB_FORCE_INLINE explicit Quaternion(const std::span<T, 3>& spanXYZ, _ValueType w)
-            : m_data({spanXYZ[1], spanXYZ[2], spanXYZ[3], w})
+            : m_data({spanXYZ[0], spanXYZ[1], spanXYZ[2], w})
         {
             ASSERT_IS_FINITE(*this);
         }
@@ -72,6 +74,18 @@ namespace MathLib
             // clang-format on
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static bool sameRotation(const Quaternion& rhs,
+                                                                     const Quaternion& lhs) const noexcept
+        {
+            return std::abs(dot(lhs, rhs)) >= _ValueType(1) - Epsilon<_ValueType>::Value;
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static _ValueType dot(const Quaternion& a, const Quaternion& b) noexcept
+        {
+            return a.m_data[0] * b.m_data[0] + a.m_data[1] * b.m_data[1] + a.m_data[2] * b.m_data[2] +
+                   a.m_data[3] * b.m_data[3];
+        }
+
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion fromNormalizeAxisAngle(const _Vector3& axis,
                                                                                      _ValueType angle) noexcept
         {
@@ -88,6 +102,126 @@ namespace MathLib
                                                                             _ValueType angle) noexcept
         {
             return fromNormalizeAxisAngle(axis.getNormalize(), angle);
+        }
+
+        template<bool Normalize = true>
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion lerpNormalize(const Quaternion& q0, const Quaternion& q1,
+                                                                            _ValueType t)
+        {
+            if constexpr (Normalize)
+            {
+                if (t < _ValueType(0))
+                    return q0.getNormalize();
+                if (t > _ValueType(1))
+                    return q1.getNormalize();
+            }
+            else
+            {
+                if (t < _ValueType(0))
+                    return q0;
+                if (t > _ValueType(1))
+                    return q1;
+            }
+
+            return lerpUnclamped<Normalize>(q0, q1, t);
+        }
+
+        template<bool Normalize = true>
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion lerpUnclamped(const Quaternion& q0, const Quaternion& q1,
+                                                                            _ValueType t)
+        {
+            const Quaternion a = q0;
+            const Quaternion b = dot(q0, q1) >= _ValueType(0.0) ? q1 : -q1;
+            const Quaternion r = (a * (_ValueType(1) - t) + b * t);
+            if constexpr (Normalize)
+            {
+                return r.getNormalize();
+            }
+            else
+            {
+                return r;
+            }
+        }
+
+        template<bool Normalize = true, _ValueType ShortCutLow = _ValueType(0.0),
+                 _ValueType ShortCutHigh = _ValueType(0.9995)>
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion slerpUnclamped(const Quaternion& a, const Quaternion& b,
+                                                                             _ValueType t)
+        {
+            _ValueType dot = Quaternion::dot(a, b);
+            Quaternion<T> bCopy = b;
+
+            if (dot < ShortCutLow)
+            {
+                dot = -dot;
+                bCopy = -bCopy;
+            }
+
+            if (dot > ShortCutHigh)
+            {
+                return lerpUnclamped(a, bCopy, t);
+            }
+
+            _ValueType theta = std::acos(dot);
+            _ValueType sinTheta = std::sin(theta);
+
+            _ValueType w1 = std::sin((1.0 - t) * theta) / sinTheta;
+            _ValueType w2 = std::sin(t * theta) / sinTheta;
+
+            Quaternion result = a * w1 + bCopy * w2;
+            if constexpr (Normalize)
+            {
+                return result.normalize();
+            }
+            else
+            {
+                return result;
+            }
+        }
+
+        template<bool Normalize = true, _ValueType ShortCutLow = _ValueType(0.0),
+                 _ValueType ShortCutHigh = _ValueType(0.9995)>
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion slerp(const Quaternion& a, const Quaternion& b,
+                                                                    _ValueType t)
+        {
+            if constexpr (Normalize)
+            {
+                if (t >= _ValueType(1.0))
+                    return b.normalize();
+                else if (t <= 0)
+                    return a.normalize();
+                else
+                    slerpUnclamped<Normalize, ShortCutLow, ShortCutHigh>(a, b, t);
+            }
+            else
+            {
+                if (t >= _ValueType(1.0))
+                    return b;
+                else if (t <= 0)
+                    return a;
+                else
+                    slerpUnclamped<Normalize, ShortCutLow, ShortCutHigh>(a, b, t);
+            }
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static std::array<_ValueType, 3> toEulerAngles(const Quaternion& q) const
+        {
+            const _ValueType qX = q.getX();
+            const _ValueType qY = q.getY();
+            const _ValueType qZ = q.getZ();
+            const _ValueType qW = q.getW();
+
+            const _ValueType x =
+                std::atan2(_ValueType(2) * (qW * qX + qY * qZ), _ValueType(1) - _ValueType(2) * (qX * qX + qY * qY));
+
+            const _ValueType sinY = std::clamp(_ValueType(2) * (qW * qY - qZ * qX), _ValueType(-1), _ValueType(1));
+
+            const _ValueType y = std::atan2(sinY, std::sqrt(std::max(_ValueType(0), _ValueType(1) - sinY * sinY)));
+
+            const _ValueType z =
+                std::atan2(_ValueType(2) * (qW * qZ + qX * qY), _ValueType(1) - _ValueType(2) * (qY * qY + qZ * qZ));
+
+            return {x, y, z};
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion
@@ -120,24 +254,20 @@ namespace MathLib
             return Quaternion(qX, qY, qZ, qW);
         }
 
-        std::array<_ValueType, 3> toEulerAngles() const
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static _Vector3 rotate(const Quaternion& q,
+                                                                   const _Vector3& v) const noexcept
         {
-            const _ValueType qX = getX();
-            const _ValueType qY = getY();
-            const _ValueType qZ = getZ();
-            const _ValueType qW = getW();
+            const _Vector3 qv(q.getX(), q.getY(), q.getZ());
 
-            const _ValueType x =
-                std::atan2(_ValueType(2) * (qW * qX + qY * qZ), _ValueType(1) - _ValueType(2) * (qX * qX + qY * qY));
+            const _Vector3 t = _ValueType(2) * _Vector3::cross(qv, v);
 
-            const _ValueType sinY = std::clamp(_ValueType(2) * (qW * qY - qZ * qX), _ValueType(-1), _ValueType(1));
+            return v + q.getW() * t + cross(qv, t);
+        }
 
-            const _ValueType y = std::atan2(sinY, std::sqrt(std::max(_ValueType(0), _ValueType(1) - sinY * sinY)));
-
-            const _ValueType z =
-                std::atan2(_ValueType(2) * (qW * qZ + qX * qY), _ValueType(1) - _ValueType(2) * (qY * qY + qZ * qZ));
-
-            return {x, y, z};
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static _Vector3 inverseRotate(const Quaternion& q,
+                                                                          const _Vector3& v) const noexcept
+        {
+            return rotate(q.getConjugate(), v);
         }
 
         MATH_LIB_FORCE_INLINE _ValueType getX() const
@@ -192,6 +322,7 @@ namespace MathLib
             m_data[1] += rhs.m_data[1];
             m_data[2] += rhs.m_data[2];
             m_data[3] += rhs.m_data[3];
+            return *this;
         }
 
         MATH_LIB_FORCE_INLINE Quaternion& operator-=(const Quaternion& rhs) noexcept
@@ -200,6 +331,7 @@ namespace MathLib
             m_data[1] -= rhs.m_data[1];
             m_data[2] -= rhs.m_data[2];
             m_data[3] -= rhs.m_data[3];
+            return *this;
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE friend Quaternion operator+(Quaternion lhs, const Quaternion& rhs) noexcept
@@ -220,6 +352,7 @@ namespace MathLib
             m_data[1] *= scalar;
             m_data[2] *= scalar;
             m_data[3] *= scalar;
+            return *this;
         }
 
         MATH_LIB_FORCE_INLINE Quaternion& operator/=(_ValueType scalar) noexcept
@@ -228,6 +361,7 @@ namespace MathLib
             m_data[1] /= scalar;
             m_data[2] /= scalar;
             m_data[3] /= scalar;
+            return *this;
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE friend Quaternion operator*(Quaternion lhs, _ValueType scalar) noexcept
@@ -284,10 +418,14 @@ namespace MathLib
             return !(*this == other);
         }
 
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static _ValueType dot(const Quaternion& a, const Quaternion& b) noexcept
+        [[nodiscard]] MATH_LIB_FORCE_INLINE bool isNormalized() const noexcept
         {
-            return a.m_data[0] * b.m_data[0] + a.m_data[1] * b.m_data[1] + a.m_data[2] * b.m_data[2] +
-                   a.m_data[3] * b.m_data[3];
+            return fuzzyZero(lengthSquare() - _ValueType(1));
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE _ValueType dot(const Quaternion& rhs) const noexcept
+        {
+            return dot(*this, rhs);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE _ValueType lengthSquare() const
@@ -325,6 +463,7 @@ namespace MathLib
             m_data[0] = -m_data[0];
             m_data[1] = -m_data[1];
             m_data[2] = -m_data[2];
+            return *this;
         }
 
         MATH_LIB_FORCE_INLINE Quaternion getConjugate() const
@@ -354,6 +493,16 @@ namespace MathLib
         {
             Quaternion q = *this;
             return q.inverse();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static _Vector3 rotate(const _Vector3& v) const noexcept
+        {
+            return rotate(*this, v);
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static _Vector3 inverseRotate(const _Vector3& v) const noexcept
+        {
+            return inverseRotate(*this, v);
         }
 
     private:
