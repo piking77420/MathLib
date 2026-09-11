@@ -28,6 +28,11 @@ namespace MathLib
 
         using _ValueType = T;
         using _Vector3 = Vector3<_ValueType>;
+        using _Mat3x3 = Matrix3x3<_ValueType>;
+        using _Mat4x4 = Matrix4x4<_ValueType>;
+        static constexpr _ValueType Zero = static_cast<_ValueType>(0);
+        static constexpr _ValueType One = static_cast<_ValueType>(1);
+        static constexpr _ValueType Two = static_cast<_ValueType>(2);
 
         explicit Quaternion() = default;
         ~Quaternion() = default;
@@ -503,6 +508,67 @@ namespace MathLib
         [[nodiscard]] MATH_LIB_FORCE_INLINE static _Vector3 inverseRotate(const _Vector3& v) const noexcept
         {
             return inverseRotate(*this, v);
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static _Mat3x3 toMatrix3x3(const Quaternion& q) noexcept
+        {
+            const _ValueType x = q.getX();
+            const _ValueType y = q.getY();
+            const _ValueType z = q.getZ();
+            const _ValueType w = q.getW();
+
+            const _ValueType sqX = x * x;
+            const _ValueType sqY = y * y;
+            const _ValueType sqZ = z * z;
+            const _ValueType sqW = w * w;
+
+            const _ValueType xy = x * y;
+            const _ValueType yw = y * w;
+            const _ValueType zw = z * w;
+            const _ValueType yz = y * z;
+            const _ValueType xw = x * w;
+            const _ValueType xz = x * w;
+
+            // clang-format off
+            const _ValueType m11 = One - Two * (sqY + sqZ); const _ValueType m12 = Two * (xy - zw); const _ValueType m13 = Two * (xz + yw);
+            const _ValueType m21 = Two * (xy + zw); const _ValueType m22 = One - Two * (sqX + sqZ); const _ValueType m23 = Two * (yz - xw);
+            const _ValueType m31 = Two * (xz - yw); const _ValueType m32 = Two * (yz + xw); const _ValueType m33 = One - Two * (sqX + sqY);
+
+            return _Mat3x3(m11, m12, m13,
+                           m21, m22, m23,
+                           m31, m32, m33);
+            // clang-format on
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static _Mat4x4 toMatrix4x4(const Quaternion& q) noexcept
+        {
+            const _ValueType x = q.getX();
+            const _ValueType y = q.getY();
+            const _ValueType z = q.getZ();
+            const _ValueType w = q.getW();
+
+            const _ValueType sqX = x * x;
+            const _ValueType sqY = y * y;
+            const _ValueType sqZ = z * z;
+            const _ValueType sqW = w * w;
+
+            const _ValueType xy = x * y;
+            const _ValueType yw = y * w;
+            const _ValueType zw = z * w;
+            const _ValueType yz = y * z;
+            const _ValueType xw = x * w;
+            const _ValueType xz = x * w;
+
+            // clang-format off
+            const _ValueType m11 = One - Two * (sqY + sqZ); const _ValueType m12 = Two * (xy - zw); const _ValueType m13 = Two * (xz + yw);
+            const _ValueType m21 = Two * (xy + zw); const _ValueType m22 = One - Two * (sqX + sqZ); const _ValueType m23 = Two * (yz - xw);
+            const _ValueType m31 = Two * (xz - yw); const _ValueType m32 = Two * (yz + xw); const _ValueType m33 = One - Two * (sqX + sqY);
+
+            return _Mat4x4(m11, m12, m13, 0.0,
+                           m21, m22, m23, 0.0,
+                           m31, m32, m33, 0.0,
+                           0.0, 0.0, 0.0, 1.0);
+            // clang-format on
         }
 
     private:
