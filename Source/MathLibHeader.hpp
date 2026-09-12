@@ -108,6 +108,21 @@
 
 #define ASSERT_IS_FINITE(x) MATHLIB_ASSERT((x).isFinite());
 
+#if defined(__clang__)
+#define MATH_ASSUME(x) __builtin_assume(x)
+#elif defined(_MSC_VER)
+#define MATH_ASSUME(x) __assume(x)
+#elif defined(__GNUC__)
+#define MATH_ASSUME(x)                                                                                                 \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (!(x))                                                                                                      \
+            __builtin_unreachable();                                                                                   \
+    } while (false)
+#else
+#define MATH_ASSUME(x) ((void)0)
+#endif
+
 namespace MathLib
 {
     constexpr double DoubleEpsilon = 0.0001;
@@ -115,6 +130,25 @@ namespace MathLib
 
     constexpr double SquareDoubleEpsilon = DoubleEpsilon * DoubleEpsilon;
     constexpr float SquareFloatEpsilon = FloatEpsilon * FloatEpsilon;
+
+    template<typename T>
+    struct Epsilon;
+
+    template<>
+    struct Epsilon<float>
+    {
+        static constexpr float Value = FloatEpsilon;
+        static constexpr float Square = SquareFloatEpsilon;
+        static constexpr float Double = FloatEpsilon * FloatEpsilon;
+    };
+
+    template<>
+    struct Epsilon<double>
+    {
+        static constexpr double Value = DoubleEpsilon;
+        static constexpr double Square = SquareDoubleEpsilon;
+        static constexpr double Double = DoubleEpsilon * DoubleEpsilon;
+    };
 
     [[nodiscard]] constexpr bool fuzzyZero(double value, double tolerance = DoubleEpsilon)
     {
@@ -135,6 +169,26 @@ namespace MathLib
     {
         return std::abs(a - b) <= tolerance * std::max({1.0f, std::abs(a), std::abs(b)});
     }
+
+    enum class RotationOrder
+    {
+        // Rotation application order.
+        // Column-vector convention:
+        //
+        // XYZ -> Rz * Ry * Rx
+        // XZY -> Ry * Rz * Rx
+        // YXZ -> Rz * Rx * Ry
+        // YZX -> Rx * Rz * Ry
+        // ZXY -> Ry * Rx * Rz
+        // ZYX -> Rx * Ry * Rz
+
+        XYZ,
+        XZY,
+        YXZ,
+        YZX,
+        ZXY,
+        ZYX,
+    };
 
     template<std::size_t Alignment>
     [[nodiscard]] constexpr bool isAligned(const void* const ptr) noexcept

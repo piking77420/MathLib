@@ -10,6 +10,7 @@
 #include <span>
 #include <MathLibHeader.hpp>
 
+// TODO use meta programming for alignement
 #define VECTOR4F_ALIGNEMENT 16
 #define VECTOR4D_ALIGNEMENT 32
 #include <AVX.hpp>
@@ -89,6 +90,16 @@ namespace MathLib
         [[nodiscard]] MATH_LIB_FORCE_INLINE T getW() const noexcept
         {
             return m_data[3];
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const T& operator[](const size_t index) const
+        {
+            return m_data[index];
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T& operator[](const size_t index)
+        {
+            return m_data[index];
         }
 
         MATH_LIB_FORCE_INLINE void setX(T x) noexcept
@@ -335,40 +346,40 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 getNormalizeFast() const
         {
-            const T currentLength = length();
+            const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            const T invLength = 1.0 / currentLength;
+            const T invLength = 1.0 / std::sqrt(currentLengthSquare);
             return *this * invLength;
         }
 
         Vector4& normalize()
         {
-            const T currentLength = length();
+            const _ValueType currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            *this /= currentLength;
+            *this /= std::sqrt(currentLengthSquare);
             return *this;
         }
 
         Vector4& normalizeFast()
         {
-            const T currentLength = length();
+            const _ValueType currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            const T invLength = 1.0 / currentLength;
+            const _ValueType invLength = 1.0 / std::sqrt(currentLengthSquare);
             *this *= invLength;
             return *this;
         }
@@ -477,7 +488,7 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE bool isFinite() const
         {
-            return std::isfinite(getX()) && std::isfinite(m_data[1]) && std::isfinite(m_data[2]) &&
+            return std::isfinite(m_data[0]) && std::isfinite(m_data[1]) && std::isfinite(m_data[2]) &&
                    std::isfinite(m_data[3]);
         }
 

@@ -933,7 +933,7 @@ TEST(TestVector4f, min)
     }
 }
 
-TEST(TestVector4fd, max)
+TEST(TestVector4f, max)
 {
     {
         const Vector4f v0(1.0, 2.0, 3.0, 4.0);

@@ -58,7 +58,7 @@ namespace MathLib
             return m_data[0].data();
         }
 
-        [[nodiscard]] static Matrix4x4 zero() noexcept
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE Matrix4x4 zero() noexcept
         {
             // clang-format off
             return Matrix4x4(0.0, 0.0, 0.0, 0.0,
@@ -68,7 +68,7 @@ namespace MathLib
             // clang-format on
         }
 
-        [[nodiscard]] static Matrix4x4 identity() noexcept
+        [[nodiscard]] static MATH_LIB_FORCE_INLINE Matrix4x4 identity() noexcept
         {
             // clang-format off
             return Matrix4x4(1.0, 0.0, 0.0, 0.0,
@@ -156,6 +156,16 @@ namespace MathLib
         [[nodiscard]] MATH_LIB_FORCE_INLINE T getM44() const noexcept
         {
             return m_data[3].getW();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const _VectorType& operator[](const size_t index) const
+        {
+            return m_data[index];
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE _VectorType& operator[](const size_t index)
+        {
+            return m_data[index];
         }
 
         MATH_LIB_FORCE_INLINE Matrix4x4& setM11(T getM11) noexcept

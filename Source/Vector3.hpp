@@ -54,6 +54,16 @@ namespace MathLib
             return m_data[2];
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const T& operator[](const size_t index) const
+        {
+            return m_data[index];
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T& operator[](const size_t index)
+        {
+            return m_data[index];
+        }
+
         MATH_LIB_FORCE_INLINE void setX(T x) noexcept
         {
             m_data[0] = x;
@@ -259,52 +269,52 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector3 getNormalize() const
         {
-            const T currentLength = length();
+            const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            return *this / currentLength;
+            return *this / std::sqrt(currentLengthSquare);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector3 getNormalizeFast() const
         {
-            const T currentLength = length();
+            const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            const T invLength = 1.0 / currentLength;
+            const T invLength = 1.0 / std::sqrt(currentLengthSquare);
             return *this * invLength;
         }
 
         Vector3& normalize()
         {
-            const T currentLength = length();
+            const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            *this /= currentLength;
+            *this /= std::sqrt(currentLengthSquare);
             return *this;
         }
 
         Vector3& normalizeFast()
         {
-            const T currentLength = length();
+            const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            const T invLength = 1.0 / currentLength;
+            const T invLength = 1.0 / std::sqrt(currentLengthSquare);
             *this *= invLength;
             return *this;
         }

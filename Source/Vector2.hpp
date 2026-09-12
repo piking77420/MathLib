@@ -47,6 +47,16 @@ namespace MathLib
             return m_data[1];
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const T& operator[](const size_t index) const
+        {
+            return m_data[index];
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE T& operator[](const size_t index)
+        {
+            return m_data[index];
+        }
+
         MATH_LIB_FORCE_INLINE void setX(T x) noexcept
         {
             m_data[0] = x;
