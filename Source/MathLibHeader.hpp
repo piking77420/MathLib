@@ -139,6 +139,7 @@ namespace MathLib
     {
         static constexpr float Value = FloatEpsilon;
         static constexpr float Square = SquareFloatEpsilon;
+        static constexpr float Double = FloatEpsilon * FloatEpsilon;
     };
 
     template<>
@@ -146,6 +147,7 @@ namespace MathLib
     {
         static constexpr double Value = DoubleEpsilon;
         static constexpr double Square = SquareDoubleEpsilon;
+        static constexpr double Double = DoubleEpsilon * DoubleEpsilon;
     };
 
     [[nodiscard]] constexpr bool fuzzyZero(double value, double tolerance = DoubleEpsilon)
