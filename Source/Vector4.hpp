@@ -346,40 +346,40 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE Vector4 getNormalizeFast() const
         {
-            const T currentLength = length();
+            const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            const T invLength = 1.0 / currentLength;
+            const T invLength = 1.0 / std::sqrt(currentLengthSquare);
             return *this * invLength;
         }
 
         Vector4& normalize()
         {
-            const T currentLength = length();
+            const _ValueType currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            *this /= currentLength;
+            *this /= std::sqrt(currentLengthSquare);
             return *this;
         }
 
         Vector4& normalizeFast()
         {
-            const T currentLength = length();
+            const _ValueType currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLength))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
 
-            const T invLength = 1.0 / currentLength;
+            const _ValueType invLength = 1.0 / std::sqrt(currentLengthSquare);
             *this *= invLength;
             return *this;
         }

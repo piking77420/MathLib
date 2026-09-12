@@ -294,6 +294,72 @@ namespace MathLib
             return Two * std::acos(d);
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion fromToRotation(const _Vector3& from,
+                                                                             const _Vector3& to) noexcept
+        {
+            const _Vector3 fromN = from.getNormalize();
+            const _Vector3 toN = to.getNormalize();
+
+            const _ValueType d = _Vector3::dot(fromN, toN);
+
+            // Same direction.
+            if (d >= One - Epsilon<_ValueType>::Double)
+                return identity();
+
+            // Opposite direction: cross(from, to) is ~zero,
+            // so choose any axis perpendicular to from.
+            if (d <= -One + Epsilon<_ValueType>::Double)
+            {
+                _Vector3 axis = _Vector3::cross(_Vector3(One, Zero, Zero), fromN);
+
+                // from is almost parallel to X, use Y instead.
+                if (fuzzyZero(axis.lengthSquare()))
+                {
+                    axis = _Vector3::cross(_Vector3(Zero, One, Zero), fromN);
+                }
+
+                axis.normalize();
+
+                return fromNormalizeAxisAngle(axis, std::numbers::pi_v<_ValueType>);
+            }
+
+            const _Vector3 axis = _Vector3::cross(fromN, toN);
+
+            Quaternion q(axis.getX(), axis.getY(), axis.getZ(), One + d);
+
+            return q.getNormalize();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion
+        fromToRotationAssumeNormalize(const _Vector3& fromN, const _Vector3& toN) noexcept
+        {
+            const _ValueType d = _Vector3::dot(fromN, toN);
+
+            // Same direction.
+            if (d >= One - Epsilon<_ValueType>::Double)
+                return identity();
+
+            // Opposite direction: cross(from, to) is ~zero,
+            // so choose any axis perpendicular to from.
+            if (d <= -One + Epsilon<_ValueType>::Double)
+            {
+                _Vector3 axis = _Vector3::cross(_Vector3(One, Zero, Zero), fromN);
+
+                // from is almost parallel to X, use Y instead.
+                if (fuzzyZero(axis.lengthSquare()))
+                {
+                    axis = _Vector3::cross(_Vector3(Zero, One, Zero), fromN);
+                }
+
+                axis.normalize();
+
+                return fromNormalizeAxisAngle(axis, std::numbers::pi_v<_ValueType>);
+            }
+
+            const _Vector3 axis = _Vector3::cross(fromN, toN);
+            return Quaternion(axis.getX(), axis.getY(), axis.getZ(), One + d).getNormalize();
+        }
+
         MATH_LIB_FORCE_INLINE _ValueType getX() const
         {
             return m_data[0];

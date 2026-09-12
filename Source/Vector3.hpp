@@ -271,7 +271,7 @@ namespace MathLib
         {
             const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Square))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
@@ -283,7 +283,7 @@ namespace MathLib
         {
             const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Square))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
@@ -296,7 +296,7 @@ namespace MathLib
         {
             const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Square))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }
@@ -309,7 +309,7 @@ namespace MathLib
         {
             const T currentLengthSquare = lengthSquare();
 
-            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Square))
+            if (fuzzyZero(currentLengthSquare, Epsilon<_ValueType>::Double))
             {
                 return *this;
             }

@@ -1117,4 +1117,78 @@ TEST(TestQuaternionf, OppositeSignNotComponentEqual)
     EXPECT_TRUE(q != -q);
 }
 
+TEST(TestQuaternionf, FromToRotation)
+{
+    const Vector3f from{1.f, 0.f, 0.f};
+    const Vector3f to{0.f, 1.f, 0.f};
+
+    const Quaternionf q = Quaternionf::fromToRotation(from, to);
+
+    const Vector3f result = q.rotate(from);
+
+    EXPECT_NEAR(result.getX(), to.getX(), FloatEpsilon);
+    EXPECT_NEAR(result.getY(), to.getY(), FloatEpsilon);
+    EXPECT_NEAR(result.getZ(), to.getZ(), FloatEpsilon);
+
+    EXPECT_TRUE(q.isNormalized());
+}
+
+TEST(TestQuaternionf, FromToRotationSameDirection)
+{
+    const Vector3f from{0.f, 1.f, 0.f};
+
+    const Quaternionf q = Quaternionf::fromToRotation(from, from);
+
+    EXPECT_NEAR(q.getX(), 0.f, FloatEpsilon);
+    EXPECT_NEAR(q.getY(), 0.f, FloatEpsilon);
+    EXPECT_NEAR(q.getZ(), 0.f, FloatEpsilon);
+    EXPECT_NEAR(q.getW(), 1.f, FloatEpsilon);
+}
+
+TEST(TestQuaternionf, FromToRotationOppositeDirection)
+{
+    const Vector3f from{1.f, 0.f, 0.f};
+    const Vector3f to{-1.f, 0.f, 0.f};
+
+    const Quaternionf q = Quaternionf::fromToRotation(from, to);
+
+    const Vector3f result = q.rotate(from);
+
+    EXPECT_NEAR(result.getX(), -1.f, FloatEpsilon);
+    EXPECT_NEAR(result.getY(), 0.f, FloatEpsilon);
+    EXPECT_NEAR(result.getZ(), 0.f, FloatEpsilon);
+
+    EXPECT_TRUE(q.isNormalized());
+}
+
+TEST(TestQuaternionf, FromToRotationArbitrary)
+{
+    const Vector3f from{1.f, 2.f, 3.f};
+    const Vector3f to{-2.f, 4.f, 1.f};
+
+    const Quaternionf q = Quaternionf::fromToRotation(from, to);
+
+    const Vector3f result = q.rotate(from.getNormalize());
+
+    const Vector3f expected = to.getNormalize();
+
+    EXPECT_NEAR(result.getX(), expected.getX(), FloatEpsilon);
+    EXPECT_NEAR(result.getY(), expected.getY(), FloatEpsilon);
+    EXPECT_NEAR(result.getZ(), expected.getZ(), FloatEpsilon);
+}
+
+TEST(TestQuaternionf, FromToRotationAssumeNormalize)
+{
+    const Vector3f from{1.f, 2.f, 3.f};
+    const Vector3f to{-2.f, 4.f, 1.f};
+
+    const Quaternionf q = Quaternionf::fromToRotation(from, to);
+    const Quaternionf q2 = Quaternionf::fromToRotationAssumeNormalize(from.getNormalize(), to.getNormalize());
+
+    EXPECT_FLOAT_EQ(q.getX(), q2.getX());
+    EXPECT_FLOAT_EQ(q.getY(), q2.getY());
+    EXPECT_FLOAT_EQ(q.getZ(), q2.getZ());
+    EXPECT_FLOAT_EQ(q.getW(), q2.getW());
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
