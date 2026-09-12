@@ -108,6 +108,21 @@
 
 #define ASSERT_IS_FINITE(x) MATHLIB_ASSERT((x).isFinite());
 
+#if defined(__clang__)
+#define MATH_ASSUME(x) __builtin_assume(x)
+#elif defined(_MSC_VER)
+#define MATH_ASSUME(x) __assume(x)
+#elif defined(__GNUC__)
+#define MATH_ASSUME(x)                                                                                                 \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (!(x))                                                                                                      \
+            __builtin_unreachable();                                                                                   \
+    } while (false)
+#else
+#define MATH_ASSUME(x) ((void)0)
+#endif
+
 namespace MathLib
 {
     constexpr double DoubleEpsilon = 0.0001;
