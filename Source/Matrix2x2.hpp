@@ -70,6 +70,16 @@ namespace MathLib
             return m_data[1].getY();
         }
 
+        [[nodiscard]] MATH_LIB_FORCE_INLINE const _VectorType& operator[](const size_t index) const
+        {
+            return m_data[index];
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE _VectorType& operator[](const size_t index)
+        {
+            return m_data[index];
+        }
+
         MATH_LIB_FORCE_INLINE Matrix2x2& setM11(T getM11) noexcept
         {
             m_data[0].setX(getM11);
