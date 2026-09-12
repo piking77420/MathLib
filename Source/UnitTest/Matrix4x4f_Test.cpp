@@ -4,6 +4,7 @@
 
 #include <MathLibHeader.hpp>
 #include <MatrixTransformation.hpp>
+#include <Quaternion.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 

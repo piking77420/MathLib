@@ -1,10 +1,15 @@
 #include <gtest/gtest.h>
 
+#include <array>
 #include <span>
 #include <numbers>
+#include <cmath>
+#include <cstdlib>
 
 #include <MathLibHeader.hpp>
-#include <MatrixTransformation.hpp>
+#include <Quaternion.hpp>
+#include <Matrix3x3.hpp>
+#include <Matrix4x4.hpp>
 
 // Thanks chat-gpt to generate test tbh
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
@@ -90,7 +95,7 @@ TEST(TestQuaterniond, Data)
 {
     Quaterniond v{};
 
-    EXPECT_EQ(reinterpret_cast<double*>(&v), v.data());
+    EXPECT_TRUE(reinterpret_cast<double*>(&v) == v.data());
 }
 
 TEST(TestQuaterniond, Dot)
@@ -98,7 +103,7 @@ TEST(TestQuaterniond, Dot)
     const Quaterniond a{1., 2., 3., 4.};
     const Quaterniond b{5., 6., 7., 8.};
 
-    const float result = Quaterniond::dot(a, b);
+    const double result = Quaterniond::dot(a, b);
 
     EXPECT_DOUBLE_EQ(result, 70.);
 }
@@ -202,7 +207,7 @@ TEST(TestQuaterniond, FromNormalizeAxisAngle)
         const Quaterniond q =
             Quaterniond::fromNormalizeAxisAngle(Vector3d{0., 1., 0.}, std::numbers::pi_v<double> * 0.5f);
 
-        constexpr float sqrtHalf = std::numbers::sqrt2_v<double> * 0.5f;
+        constexpr double sqrtHalf = std::numbers::sqrt2_v<double> * 0.5f;
 
         EXPECT_NEAR(q.getX(), 0., Epsilon<double>::Value);
         EXPECT_NEAR(q.getY(), sqrtHalf, Epsilon<double>::Value);
@@ -217,7 +222,7 @@ TEST(TestQuaterniond, Normalize)
 
     q.normalize();
 
-    const float invLength = 1. / std::sqrt(30.);
+    const double invLength = 1. / std::sqrt(30.);
 
     EXPECT_NEAR(q.getX(), 1. * invLength, DoubleEpsilon);
     EXPECT_NEAR(q.getY(), 2. * invLength, DoubleEpsilon);
@@ -289,7 +294,7 @@ TEST(TestQuaterniond, Inverse)
 
     q.inverse();
 
-    constexpr float invLengthSquare = 1. / 30.;
+    constexpr double invLengthSquare = 1. / 30.;
 
     EXPECT_NEAR(q.getX(), -1. * invLengthSquare, DoubleEpsilon);
     EXPECT_NEAR(q.getY(), -2. * invLengthSquare, DoubleEpsilon);
@@ -303,7 +308,7 @@ TEST(TestQuaterniond, GetInverse)
 
     const Quaterniond inverse = q.getInverse();
 
-    constexpr float invLengthSquare = 1. / 30.;
+    constexpr double invLengthSquare = 1. / 30.;
 
     EXPECT_NEAR(inverse.getX(), -1. * invLengthSquare, DoubleEpsilon);
     EXPECT_NEAR(inverse.getY(), -2. * invLengthSquare, DoubleEpsilon);
@@ -582,7 +587,7 @@ TEST(TestQuaterniond, NlerpUnclampedNormalizesInputs)
 
     const Quaterniond q = Quaterniond::nlerpUnclamped(a, b, 0.5f);
 
-    constexpr float sqrtHalf = std::numbers::sqrt2_v<double> * 0.5f;
+    constexpr double sqrtHalf = std::numbers::sqrt2_v<double> * 0.5f;
 
     EXPECT_NEAR(q.getX(), 0., DoubleEpsilon);
     EXPECT_NEAR(q.getY(), sqrtHalf, DoubleEpsilon);
@@ -602,7 +607,7 @@ TEST(TestQuaterniond, NlerpUnclampedAssumeNormalize)
 
     const Quaterniond q = Quaterniond::nlerpUnclampedAssumeNormalize(a, b, 0.5f);
 
-    constexpr float sqrtHalf = std::numbers::sqrt2_v<double> * 0.5f;
+    constexpr double sqrtHalf = std::numbers::sqrt2_v<double> * 0.5f;
 
     EXPECT_NEAR(q.getX(), 0., DoubleEpsilon);
     EXPECT_NEAR(q.getY(), sqrtHalf, DoubleEpsilon);
@@ -779,9 +784,9 @@ TEST(TestQuaterniond, FromEulerAnglesRotationZ)
 
 TEST(TestQuaterniond, ToEulerAnglesRoundTrip)
 {
-    constexpr float x = 0.3f;
-    constexpr float y = 0.5f;
-    constexpr float z = -0.7f;
+    constexpr double x = 0.3f;
+    constexpr double y = 0.5f;
+    constexpr double z = -0.7f;
 
     const Quaterniond original = Quaterniond::fromEulerAngles(x, y, z);
 

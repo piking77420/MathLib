@@ -1,10 +1,15 @@
 #include <gtest/gtest.h>
 
+#include <array>
 #include <span>
 #include <numbers>
+#include <cmath>
+#include <cstdlib>
 
 #include <MathLibHeader.hpp>
-#include <MatrixTransformation.hpp>
+#include <Quaternion.hpp>
+#include <Matrix3x3.hpp>
+#include <Matrix4x4.hpp>
 
 // Thanks chat-gpt to generate test tbh
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
@@ -90,7 +95,7 @@ TEST(TestQuaternionf, Data)
 {
     Quaternionf v{};
 
-    EXPECT_EQ(reinterpret_cast<float*>(&v), v.data());
+    EXPECT_TRUE(reinterpret_cast<float*>(&v) == v.data());
 }
 
 TEST(TestQuaternionf, Dot)
@@ -98,7 +103,7 @@ TEST(TestQuaternionf, Dot)
     const Quaternionf a{1.f, 2.f, 3.f, 4.f};
     const Quaternionf b{5.f, 6.f, 7.f, 8.f};
 
-    const float result = Quaternionf::dot(a, b);
+    const double result = Quaternionf::dot(a, b);
 
     EXPECT_FLOAT_EQ(result, 70.f);
 }
