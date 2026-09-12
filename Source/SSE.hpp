@@ -121,6 +121,12 @@ namespace MathLib::Simd
 #endif // SIMD_SSE42
     }
 
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Float negate(const VectorRegister4Float& a) noexcept
+    {
+        const VectorRegister4Float signMask = makeVector4(-0.0f);
+        return _mm_xor_ps(a, signMask);
+    }
+
 } // namespace MathLib::Simd
 
 #endif // defined(SIMD_SSE2)

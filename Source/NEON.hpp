@@ -97,6 +97,11 @@ namespace MathLib::Simd
         return vaddvq_f32(vmulq_f32(a, b));
     }
 
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Float negate(const VectorRegister4Float& a) noexcept
+    {
+        return vnegq_f32(a);
+    }
+
     struct VectorRegister4Double
     {
         float64x2_t low;
@@ -194,6 +199,11 @@ namespace MathLib::Simd
         const float64x2_t sum = vaddq_f64(lowMul, highMul);
 
         return vaddvq_f64(sum);
+    }
+
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double negate(const VectorRegister4Double& a) noexcept
+    {
+        return VectorRegister4Double{vnegq_f64(a), vnegq_f64(b)};
     }
 
 } // namespace MathLib::Simd
