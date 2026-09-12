@@ -32,6 +32,7 @@ set(TEST_SOURCES
     Matrix4x4f_Test.cpp
     SimdExtension_Test.cpp
     Quaternionf_Test.cpp
+    Quaterniond_Test.cpp
     Vector2d_Test.cpp
     Vector2f_Test.cpp
     Vector3d_Test.cpp

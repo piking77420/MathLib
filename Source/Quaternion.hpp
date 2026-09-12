@@ -43,13 +43,13 @@ namespace MathLib
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE explicit Quaternion(const std::span<T, 3>& spanXYZ, _ValueType w)
+        MATH_LIB_FORCE_INLINE explicit Quaternion(const std::span<const T, 3>& spanXYZ, _ValueType w)
             : m_data({spanXYZ[0], spanXYZ[1], spanXYZ[2], w})
         {
             ASSERT_IS_FINITE(*this);
         }
 
-        MATH_LIB_FORCE_INLINE explicit Quaternion(const std::span<T, 4>& spanXYZ)
+        MATH_LIB_FORCE_INLINE explicit Quaternion(const std::span<const T, 4>& spanXYZ)
             : m_data({spanXYZ[0], spanXYZ[1], spanXYZ[2], spanXYZ[3]})
         {
             ASSERT_IS_FINITE(*this);
@@ -115,104 +115,110 @@ namespace MathLib
             return fromNormalizeAxisAngle(axis.getNormalize(), angle);
         }
 
-        template<bool Normalize = true>
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion lerpNormalize(const Quaternion& q0, const Quaternion& q1,
-                                                                            _ValueType t)
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion nlerp(const Quaternion& q0, const Quaternion& q1,
+                                                                    _ValueType t)
         {
-            if constexpr (Normalize)
-            {
-                if (t < _ValueType(0))
-                    return q0.getNormalize();
-                if (t > _ValueType(1))
-                    return q1.getNormalize();
-            }
-            else
-            {
-                if (t < _ValueType(0))
-                    return q0;
-                if (t > _ValueType(1))
-                    return q1;
-            }
+            if (t <= Zero)
+                return q0.getNormalize();
 
-            return lerpUnclamped<Normalize>(q0, q1, t);
+            if (t >= One)
+                return q1.getNormalize();
+
+            return nlerpUnclamped(q0, q1, t);
         }
 
-        template<bool Normalize = true>
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion lerpUnclamped(const Quaternion& q0, const Quaternion& q1,
-                                                                            _ValueType t)
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion nlerpAssumeNormalize(const Quaternion& q0,
+                                                                                   const Quaternion& q1, _ValueType t)
         {
-            const Quaternion a = q0;
-            const Quaternion b = dot(q0, q1) >= _ValueType(0.0) ? q1 : -q1;
-            const Quaternion r = (a * (_ValueType(1) - t) + b * t);
-            if constexpr (Normalize)
-            {
-                return r.getNormalize();
-            }
-            else
-            {
-                return r;
-            }
+            if (t <= Zero)
+                return q0;
+
+            if (t >= One)
+                return q1;
+
+            return nlerpUnclampedAssumeNormalize(q0, q1, t);
         }
 
-        template<bool Normalize = true, _ValueType ShortCutLow = _ValueType(0.0),
-                 _ValueType ShortCutHigh = _ValueType(0.9995)>
-        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion slerpUnclamped(const Quaternion& a, const Quaternion& b,
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion nlerpUnclamped(const Quaternion& q0, const Quaternion& q1,
                                                                              _ValueType t)
         {
-            _ValueType dot = Quaternion::dot(a, b);
-            Quaternion<T> bCopy = b;
+            const Quaternion a = q0.getNormalize();
+            const Quaternion bNormalized = q1.getNormalize();
 
-            if (dot < ShortCutLow)
+            const Quaternion b = dot(a, bNormalized) >= Zero ? bNormalized : -bNormalized;
+
+            return (a * (One - t) + b * t).getNormalize();
+        }
+
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion
+        nlerpUnclampedAssumeNormalize(const Quaternion& q0, const Quaternion& q1, _ValueType t)
+        {
+            const Quaternion b = dot(q0, q1) >= Zero ? q1 : -q1;
+
+            return (q0 * (One - t) + b * t).getNormalize();
+        }
+
+        template<_ValueType ShortCutHigh = _ValueType(0.9995)>
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion slerpNUnclamped(const Quaternion& a, const Quaternion& b,
+                                                                              _ValueType t)
+        {
+            return slerpUnclampedAssumeNormalize<ShortCutHigh>(a.getNormalize(), b.getNormalize(), t);
+        }
+
+        template<_ValueType ShortCutHigh = _ValueType(0.9995)>
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion
+        slerpUnclampedAssumeNormalize(const Quaternion& a, const Quaternion& b, _ValueType t)
+        {
+            static_assert(ShortCutHigh > Zero && ShortCutHigh < One);
+
+            _ValueType cosTheta = Quaternion::dot(a, b);
+            Quaternion bCopy = b;
+
+            if (cosTheta < Zero)
             {
-                dot = -dot;
+                cosTheta = -cosTheta;
                 bCopy = -bCopy;
             }
 
-            if (dot > ShortCutHigh)
-            {
-                return lerpUnclamped(a, bCopy, t);
-            }
+            cosTheta = std::clamp(cosTheta, Zero, One);
 
-            _ValueType theta = std::acos(dot);
-            _ValueType sinTheta = std::sin(theta);
+            if (cosTheta > ShortCutHigh)
+                return nlerpUnclampedAssumeNormalize(a, bCopy, t);
 
-            _ValueType w1 = std::sin((1.0 - t) * theta) / sinTheta;
-            _ValueType w2 = std::sin(t * theta) / sinTheta;
+            const _ValueType theta = std::acos(cosTheta);
+            const _ValueType sinTheta = std::sin(theta);
 
-            Quaternion result = a * w1 + bCopy * w2;
-            if constexpr (Normalize)
-            {
-                return result.normalize();
-            }
-            else
-            {
-                return result;
-            }
+            const _ValueType w0 = std::sin((One - t) * theta) / sinTheta;
+
+            const _ValueType w1 = std::sin(t * theta) / sinTheta;
+
+            return a * w0 + bCopy * w1;
         }
 
-        template<bool Normalize = true, _ValueType ShortCutLow = _ValueType(0.0),
-                 _ValueType ShortCutHigh = _ValueType(0.9995)>
+        template<_ValueType ShortCutHigh = _ValueType(0.9995)>
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion slerp(const Quaternion& a, const Quaternion& b,
                                                                     _ValueType t)
         {
-            if constexpr (Normalize)
-            {
-                if (t >= _ValueType(1.0))
-                    return b.normalize();
-                else if (t <= 0)
-                    return a.normalize();
-                else
-                    slerpUnclamped<Normalize, ShortCutLow, ShortCutHigh>(a, b, t);
-            }
-            else
-            {
-                if (t >= _ValueType(1.0))
-                    return b;
-                else if (t <= 0)
-                    return a;
-                else
-                    slerpUnclamped<Normalize, ShortCutLow, ShortCutHigh>(a, b, t);
-            }
+            if (t <= Zero)
+                return a.getNormalize();
+
+            if (t >= One)
+                return b.getNormalize();
+
+            return slerpNUnclamped<ShortCutHigh>(a, b, t);
+        }
+
+        template<_ValueType ShortCutHigh = _ValueType(0.9995)>
+        [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion slerpAssumeNormalize(const Quaternion& a,
+                                                                                   const Quaternion& b, _ValueType t)
+        {
+            if (t <= Zero)
+                return a;
+
+            if (t >= One)
+                return b;
+
+            return slerpUnclampedAssumeNormalize<ShortCutHigh>(a, b, t);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static std::array<_ValueType, 3> toEulerAngles(const Quaternion& q)
@@ -269,9 +275,9 @@ namespace MathLib
         {
             const _Vector3 qv(q.getX(), q.getY(), q.getZ());
 
-            const _Vector3 t = _ValueType(2) * _Vector3::cross(qv, v);
+            const _Vector3 t = _Vector3::cross(qv, v) * _ValueType(2);
 
-            return v + q.getW() * t + cross(qv, t);
+            return v + t * q.getW() + _Vector3::cross(qv, t);
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static _Vector3 inverseRotate(const Quaternion& q,
@@ -391,12 +397,6 @@ namespace MathLib
             m_data[2] /= scalar;
             m_data[3] /= scalar;
             return *this;
-        }
-
-        [[nodiscard]] friend MATH_LIB_FORCE_INLINE Quaternion operator/(_ValueType scalar, Quaternion rhs) noexcept
-        {
-            rhs /= scalar;
-            return rhs;
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE friend Quaternion operator*(Quaternion lhs, _ValueType scalar) noexcept
@@ -552,7 +552,7 @@ namespace MathLib
             const _ValueType zw = z * w;
             const _ValueType yz = y * z;
             const _ValueType xw = x * w;
-            const _ValueType xz = x * w;
+            const _ValueType xz = x * z;
 
             // clang-format off
             const _ValueType m11 = One - Two * (sqY + sqZ); const _ValueType m12 = Two * (xy - zw); const _ValueType m13 = Two * (xz + yw);
@@ -582,7 +582,7 @@ namespace MathLib
             const _ValueType zw = z * w;
             const _ValueType yz = y * z;
             const _ValueType xw = x * w;
-            const _ValueType xz = x * w;
+            const _ValueType xz = x * z;
 
             // clang-format off
             const _ValueType m11 = One - Two * (sqY + sqZ); const _ValueType m12 = Two * (xy - zw); const _ValueType m13 = Two * (xz + yw);
@@ -610,7 +610,7 @@ namespace MathLib
             const _ValueType m21 = m[2][1];
             const _ValueType m22 = m[2][2];
 
-            const _ValueType trace = m.getM11() + m.getM22() + m.getM22();
+            const _ValueType trace = m.getM11() + m.getM22() + m.getM33();
             _ValueType x;
             _ValueType y;
             _ValueType z;

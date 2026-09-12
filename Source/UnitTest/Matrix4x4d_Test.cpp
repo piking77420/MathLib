@@ -1519,7 +1519,7 @@ TEST(TestMatrix4x4d, trsEulerAngles)
     const Vector3d rotation(0.0, std::numbers::pi * 0.5, -std::numbers::pi * 0.5);
     const Vector3d scale(3.0, 2.0, 1.0);
 
-    const Matrix4x4d m = MathLib::trs<Matrix4x4d>(translation, rotation, scale);
+    const Matrix4x4d m = MathLib::trs(translation, rotation, scale);
 
     EXPECT_NEAR(m.getM11(), 0.0, DoubleEpsilon);
     EXPECT_NEAR(m.getM12(), 2.0, DoubleEpsilon);
@@ -1540,6 +1540,39 @@ TEST(TestMatrix4x4d, trsEulerAngles)
     EXPECT_NEAR(m.getM42(), 0.0, DoubleEpsilon);
     EXPECT_NEAR(m.getM43(), 0.0, DoubleEpsilon);
     EXPECT_NEAR(m.getM44(), 1.0, DoubleEpsilon);
+}
+
+TEST(TestMatrix4x4d, trsQuaternionMatchesEuler)
+{
+    const Vector3d translation(1.0f, 2.0f, 3.0f);
+    const Vector3d rotation(0.0f, std::numbers::pi_v<float> * 0.5f, -std::numbers::pi_v<float> * 0.5f);
+    const Vector3d scale(3.0f, 2.0f, 1.0f);
+
+    const Quaterniond quaternion = Quaterniond::fromEulerAngles(rotation.getX(), rotation.getY(), rotation.getZ());
+
+    const Matrix4x4d eulerMatrix = MathLib::trs(translation, rotation, scale);
+
+    const Matrix4x4d quaternionMatrix = MathLib::trs(translation, quaternion, scale);
+
+    EXPECT_NEAR(quaternionMatrix.getM11(), eulerMatrix.getM11(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM12(), eulerMatrix.getM12(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM13(), eulerMatrix.getM13(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM14(), eulerMatrix.getM14(), DoubleEpsilon);
+
+    EXPECT_NEAR(quaternionMatrix.getM21(), eulerMatrix.getM21(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM22(), eulerMatrix.getM22(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM23(), eulerMatrix.getM23(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM24(), eulerMatrix.getM24(), DoubleEpsilon);
+
+    EXPECT_NEAR(quaternionMatrix.getM31(), eulerMatrix.getM31(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM32(), eulerMatrix.getM32(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM33(), eulerMatrix.getM33(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM34(), eulerMatrix.getM34(), DoubleEpsilon);
+
+    EXPECT_NEAR(quaternionMatrix.getM41(), eulerMatrix.getM41(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM42(), eulerMatrix.getM42(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM43(), eulerMatrix.getM43(), DoubleEpsilon);
+    EXPECT_NEAR(quaternionMatrix.getM44(), eulerMatrix.getM44(), DoubleEpsilon);
 }
 
 TEST(TestMatrix4x4d, extractEulerXYZ)
