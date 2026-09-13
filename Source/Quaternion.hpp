@@ -10,12 +10,7 @@
 #include <Vector3.hpp>
 #include <Matrix3x3.hpp>
 #include <Matrix4x4.hpp>
-
-#define QUAT4F_ALIGNEMENT 16
-#define QUAT4D_ALIGNEMENT 32
-#include <AVX.hpp>
-#include <NEON.hpp>
-#include <SSE.hpp>
+#include <SimdHeader.hpp>
 
 namespace MathLib
 {
@@ -24,7 +19,7 @@ namespace MathLib
     // W real Part
     template<typename T>
     requires(std::is_floating_point_v<T>)
-    class alignas(std::is_same_v<T, float> ? QUAT4F_ALIGNEMENT : QUAT4D_ALIGNEMENT) Quaternion
+    class alignas(SimdAlignementRegister4<T>::Value) Quaternion
     {
     public:
 #if defined(MATH_LIB_INTRINSIC)
@@ -70,7 +65,7 @@ namespace MathLib
 #if defined(MATH_LIB_INTRINSIC)
         MATH_LIB_FORCE_INLINE Quaternion(const _VectorInstrinsic& reg) noexcept
         {
-            Simd::storeUnaligned(reg, m_data.data());
+            Simd::storeAligned(reg, m_data.data());
         }
 #endif // defined(MATH_LIB_INTRINSIC)
 
@@ -777,7 +772,7 @@ namespace MathLib
 #if defined(MATH_LIB_INTRINSIC)
         operator _VectorInstrinsic() const noexcept
         {
-            return Simd::makeVector4Unaligned(m_data.data());
+            return Simd::makeVector4Aligned(m_data.data());
         }
 #endif // defined(MATH_LIB_INTRINSIC)
 

@@ -205,6 +205,31 @@ namespace MathLib
 
     static constexpr size_t SSE_ALIGNEMENT = 16;
     static constexpr size_t AVX_ALIGNEMENT = 32;
+
+
+    template<typename T>
+    struct SimdTraits;
+
+    template<>
+    struct SimdTraits<float>
+    {
+#if defined(MATH_LIB_AVX)
+        using Register = __m128;
+#elif defined(MATH_LIB_NEON)
+        using Register = float32x4_t;
+#endif
+    };
+
+    template<>
+    struct SimdTraits<double>
+    {
+#if defined(MATH_LIB_AVX)
+        using Register = __m256d;
+#elif defined(MATH_LIB_NEON)
+        using Register = float64x2x2_t; // or whatever abstraction you use
+#endif
+    };
+
 }
 
 // NOLINTEND(cppcoreguidelines-macro-usage)

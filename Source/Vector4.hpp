@@ -9,13 +9,7 @@
 #include <ostream>
 #include <span>
 #include <MathLibHeader.hpp>
-
-// TODO use meta programming for alignement
-#define VECTOR4F_ALIGNEMENT 16
-#define VECTOR4D_ALIGNEMENT 32
-#include <AVX.hpp>
-#include <NEON.hpp>
-#include <SSE.hpp>
+#include <SimdHeader.hpp>
 
 namespace MathLib
 {
@@ -29,7 +23,7 @@ namespace MathLib
 
     template<typename T>
     requires(std::is_floating_point_v<T>)
-    class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Vector4 // TODO is align or not
+    class alignas(SimdAlignementRegister4<T>::Value) Vector4
     {
     public:
         using _ValueType = T;
@@ -58,7 +52,7 @@ namespace MathLib
 #if defined(MATH_LIB_INTRINSIC)
         MATH_LIB_FORCE_INLINE Vector4(const _VectorInstrinsic& reg) noexcept
         {
-            Simd::storeUnaligned(reg, m_data.data());
+            Simd::storeAligned(reg, m_data.data());
         }
 #endif // defined(MATH_LIB_INTRINSIC)
 
@@ -709,7 +703,7 @@ namespace MathLib
 #if defined(MATH_LIB_INTRINSIC)
         operator _VectorInstrinsic() const noexcept
         {
-            return Simd::makeVector4Unaligned(m_data.data());
+            return Simd::makeVector4Aligned(m_data.data());
         }
 #endif // defined(MATH_LIB_INTRINSIC)
 
