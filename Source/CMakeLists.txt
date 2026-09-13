@@ -16,6 +16,7 @@ set(MATHLIB_SOURCES
     Matrix4x4.hpp
     MatrixTransformation.hpp
     SSE.hpp
+    SimdHeader.hpp
     Quaternion.hpp
     Vector2.hpp
     Vector3.hpp

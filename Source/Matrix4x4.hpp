@@ -14,7 +14,7 @@ namespace MathLib
     // Mathematical operations use a column-vector convention
     template<typename T>
     requires(std::is_floating_point_v<T>)
-    class alignas(std::is_same_v<T, float> ? VECTOR4F_ALIGNEMENT : VECTOR4D_ALIGNEMENT) Matrix4x4
+    class alignas(SimdAlignementRegister4<T>::Value) Matrix4x4
     {
     public:
         using _VectorType = Vector4<T>;
