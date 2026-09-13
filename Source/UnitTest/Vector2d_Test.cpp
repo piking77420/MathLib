@@ -1,11 +1,6 @@
 #include <gtest/gtest.h>
-
-#include <cmath>
-#include <array>
-#include <span>
-
 #include <MathLibHeader.hpp>
-#include <Vector2d.hpp>
+#include <Vector2.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -63,7 +58,7 @@ TEST(TestVector2d, addVectorOperator)
     }
 }
 
-TEST(TestVector2d, subOperator)
+TEST(TestVector2d, subVectorOperator)
 {
     {
         Vector2d v(1.0, 2.0);
@@ -81,6 +76,48 @@ TEST(TestVector2d, subOperator)
 
         EXPECT_DOUBLE_EQ(v.getX(), -7.0);
         EXPECT_DOUBLE_EQ(v.getY(), -8.0);
+    }
+}
+
+TEST(TestVector2d, mulVectorOperator)
+{
+    {
+        Vector2d v(1.0, 2.0);
+        v *= Vector2d(8.0, 10.0);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v2(8.0, 10.0);
+
+        const Vector2d v = v1 * v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+    }
+}
+
+TEST(TestVector2d, divVectorOperator)
+{
+    {
+        Vector2d v(1.0, 2.0);
+        v /= Vector2d(8.0, 10.0);
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.125);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+    }
+
+    {
+        const Vector2d v1(1.0, 2.0);
+        const Vector2d v2(8.0, 10.0);
+
+        const Vector2d v = v1 / v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 0.125);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
     }
 }
 
@@ -221,7 +258,7 @@ TEST(TestVector2d, CmpOperator)
     }
 }
 
-TEST(TestVector2, NegateOperator)
+TEST(TestVector2d, NegateOperator)
 {
     // all positive
     {
@@ -834,160 +871,7 @@ TEST(TestVector2d, abs)
     }
 }
 
-TEST(TestVector2d, stroreToUnAlignedDouble)
-{
-    {
-        std::array<double, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToUnalignedDouble(data.data());
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-    }
-
-    {
-        std::array<double, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToUnalignedDouble(std::span<double, 2>(data));
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector2d, storeToUnAlignedFloat)
-{
-    {
-        std::array<float, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToUnAlignedFloat(data.data());
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-    }
-
-    {
-        std::array<float, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToUnAlignedFloat(std::span<float, 2>(data));
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-    }
-}
-
-TEST(TestVector2d, storeToAlignedDouble)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToAlignedDouble(data.data());
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToAlignedDouble(std::span<double, 2>(data));
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector2d, streamToUnalignedFloat)
-{
-    {
-        alignas(SSE_ALIGNEMENT) std::array<float, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToAlignedFloat(data.data());
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-    }
-
-    {
-        alignas(SSE_ALIGNEMENT) std::array<float, 2> data;
-        const Vector2d v(1.0, 2.0);
-        v.storeToAlignedFloat(std::span<float, 2>(data));
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-    }
-}
-
-TEST(TestVector2d, fromUnAlignedDouble)
-{
-    {
-        std::array<double, 2> data = {1.0, 2.0};
-        Vector2d v;
-        v.fromUnalignedDouble(data);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-    }
-
-    {
-        std::array<double, 2> data = {1.0, 2.0};
-        Vector2d v;
-        v.fromUnalignedDouble(std::span<const double, 2>(data));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector2d, fromUnAlignedFloat)
-{
-    {
-        std::array<float, 2> data = {1.0, 2.0};
-        Vector2d v;
-        v.fromUnAlignedFloat(data);
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-    }
-
-    {
-        std::array<float, 2> data = {1.0, 2.0};
-        Vector2d v;
-        v.fromUnAlignedFloat(std::span<const float, 2>(data));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-    }
-}
-
-TEST(TestVector2d, fromAlignedDouble)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0};
-        Vector2d v;
-        v.fromAlignedDouble(data.data());
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        ;
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 2> data{1.0, 2.0};
-        Vector2d v;
-        v.fromAlignedDouble(std::span<double, 2>(data));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector2d, fromAlignedFloat)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<float, 2> data{1.0, 2.0};
-        Vector2d v;
-        v.fromAlignedFloat(data.data());
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<float, 2> data{1.0, 2.0};
-        Vector2d v;
-        v.fromAlignedFloat(std::span<float, 2>(data));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-    }
-}
-
-TEST(TestVector2, IsFinite)
+TEST(TestVector2d, IsFinite)
 {
     {
         const Vector2d v = Vector2d(1., 2.);

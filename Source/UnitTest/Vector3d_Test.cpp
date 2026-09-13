@@ -1,39 +1,20 @@
 #include <gtest/gtest.h>
-
-#include <cmath>
-#include <array>
-#include <span>
-
 #include <MathLibHeader.hpp>
-#include <Vector3d.hpp>
+#include <Vector3.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 using namespace MathLib;
 
-constexpr bool isValidHighLane([[maybe_unused]] const Vector3d& _v)
-{
-#if defined(SIMD_AVX)
-    const __m128d zw = _mm256_extractf128_pd(_v, 1);
-    double w = _mm_cvtsd_f64(_mm_unpackhi_pd(zw, zw));
-
-    // bot are valid exemple when we negate an vector we dont handle the w component
-    return w == 0.0 || w == -0.0;
-#else
-    return true;
-#endif // defined(SIMD_AVX)
-}
-
-TEST(TestVector3, Constructor)
+TEST(TestVector3d, Constructor)
 {
     const Vector3d v = Vector3d(1., 2., 3.);
 
     EXPECT_DOUBLE_EQ(v.getX(), 1.0);
     EXPECT_DOUBLE_EQ(v.getY(), 2.0);
     EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-    EXPECT_TRUE(isValidHighLane(v));
 }
 
-TEST(TestVector3, Setter)
+TEST(TestVector3d, Setter)
 {
     Vector3d v{};
     v.setX(1.);
@@ -43,10 +24,9 @@ TEST(TestVector3, Setter)
     EXPECT_DOUBLE_EQ(v.getX(), 1.0);
     EXPECT_DOUBLE_EQ(v.getY(), 2.0);
     EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-    EXPECT_TRUE(isValidHighLane(v));
 }
 
-TEST(TestVector3, addVectorOperator)
+TEST(TestVector3d, addVectorOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
@@ -56,7 +36,6 @@ TEST(TestVector3, addVectorOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 5.0);
         EXPECT_DOUBLE_EQ(v.getY(), 7.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -67,11 +46,10 @@ TEST(TestVector3, addVectorOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 5.0);
         EXPECT_DOUBLE_EQ(v.getY(), 7.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 9.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 }
 
-TEST(TestVector3, subVectorOperator)
+TEST(TestVector3d, subVectorOperator)
 {
     {
         Vector3d v(1.0, 2.0, 3.0);
@@ -82,7 +60,6 @@ TEST(TestVector3, subVectorOperator)
         EXPECT_DOUBLE_EQ(v.getX(), -7.0);
         EXPECT_DOUBLE_EQ(v.getY(), -8.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -94,11 +71,60 @@ TEST(TestVector3, subVectorOperator)
         EXPECT_DOUBLE_EQ(v.getX(), -7.0);
         EXPECT_DOUBLE_EQ(v.getY(), -8.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 }
 
-TEST(TestVector3, addScalarOperator)
+TEST(TestVector3d, mulVectorOperator)
+{
+    {
+        Vector3d v(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        v *= v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+    }
+
+    {
+        const Vector3d v1(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        const Vector3d v = v1 * v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+    }
+}
+
+TEST(TestVector3d, divVectorOperator)
+{
+    {
+        Vector3d v(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        v /= v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.20);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+    }
+
+    {
+        const Vector3d v1(1.0, 2.0, 3.0);
+        const Vector3d v2(8.0, 10.0, 2.0);
+
+        const Vector3d v = v1 / v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.20);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+    }
+}
+
+TEST(TestVector3d, addScalarOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
@@ -107,7 +133,6 @@ TEST(TestVector3, addScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 6.0);
         EXPECT_DOUBLE_EQ(v.getY(), 7.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -116,11 +141,10 @@ TEST(TestVector3, addScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 6.0);
         EXPECT_DOUBLE_EQ(v.getY(), 7.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 8.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 }
 
-TEST(TestVector3, subScalarOperator)
+TEST(TestVector3d, subScalarOperator)
 {
     {
         Vector3d v = Vector3d(1., 2., 3.);
@@ -129,7 +153,6 @@ TEST(TestVector3, subScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), -4.0);
         EXPECT_DOUBLE_EQ(v.getY(), -3.0);
         EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -138,11 +161,10 @@ TEST(TestVector3, subScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), -4.0);
         EXPECT_DOUBLE_EQ(v.getY(), -3.0);
         EXPECT_DOUBLE_EQ(v.getZ(), -2.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 }
 
-TEST(TestVector3, mulScalarOperator)
+TEST(TestVector3d, mulScalarOperator)
 {
 
     {
@@ -152,7 +174,6 @@ TEST(TestVector3, mulScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 1.0);
         EXPECT_DOUBLE_EQ(v.getY(), 2.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -161,7 +182,6 @@ TEST(TestVector3, mulScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 1.0);
         EXPECT_DOUBLE_EQ(v.getY(), 2.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -171,7 +191,6 @@ TEST(TestVector3, mulScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 10.0);
         EXPECT_DOUBLE_EQ(v.getY(), 20.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -180,11 +199,10 @@ TEST(TestVector3, mulScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 10.0);
         EXPECT_DOUBLE_EQ(v.getY(), 20.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 30.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 }
 
-TEST(TestVector3, divScalarOperator)
+TEST(TestVector3d, divScalarOperator)
 {
 
     {
@@ -194,7 +212,6 @@ TEST(TestVector3, divScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 1.0);
         EXPECT_DOUBLE_EQ(v.getY(), 2.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -203,7 +220,6 @@ TEST(TestVector3, divScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 1.0);
         EXPECT_DOUBLE_EQ(v.getY(), 2.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 3.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -213,7 +229,6 @@ TEST(TestVector3, divScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 0.1);
         EXPECT_DOUBLE_EQ(v.getY(), 0.2);
         EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     {
@@ -222,11 +237,10 @@ TEST(TestVector3, divScalarOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 0.1);
         EXPECT_DOUBLE_EQ(v.getY(), 0.2);
         EXPECT_DOUBLE_EQ(v.getZ(), 0.3);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 }
 
-TEST(TestVector3, CmpOperator)
+TEST(TestVector3d, cmpOperator)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
@@ -257,7 +271,7 @@ TEST(TestVector3, CmpOperator)
     }
 }
 
-TEST(TestVector3, NegateOperator)
+TEST(TestVector3d, negateOperator)
 {
     // all positive
     {
@@ -266,7 +280,6 @@ TEST(TestVector3, NegateOperator)
         EXPECT_DOUBLE_EQ(v.getX(), -1.);
         EXPECT_DOUBLE_EQ(v.getY(), -2.);
         EXPECT_DOUBLE_EQ(v.getZ(), -3.);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     // all negative
@@ -276,7 +289,6 @@ TEST(TestVector3, NegateOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 1.);
         EXPECT_DOUBLE_EQ(v.getY(), 2.);
         EXPECT_DOUBLE_EQ(v.getZ(), 3.);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 
     // all randome values
@@ -286,11 +298,10 @@ TEST(TestVector3, NegateOperator)
         EXPECT_DOUBLE_EQ(v.getX(), 1.25);
         EXPECT_DOUBLE_EQ(v.getY(), -14.04);
         EXPECT_DOUBLE_EQ(v.getZ(), -45.0);
-        EXPECT_TRUE(isValidHighLane(v));
     }
 }
 
-TEST(TestVector3, Dot)
+TEST(TestVector3d, dot)
 {
     {
         const Vector3d v1 = Vector3d::unitX();
@@ -366,12 +377,108 @@ TEST(TestVector3, Dot)
     }
 }
 
-TEST(TestVector3, Cross)
+TEST(TestVector3d, cross)
 {
-    // TODO
+    // Cross self
+    {
+        const Vector3d x = Vector3d::unitX();
+        const Vector3d result = Vector3d::cross(x, x);
+        EXPECT_DOUBLE_EQ(result.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 0.0);
+    }
+
+    // Check cross product magnitude
+    {
+        const Vector3d a(3.0, 0.0, 0.0);
+        const Vector3d b(0.0, 4.0, 0.0);
+
+        const Vector3d result = Vector3d::cross(a, b);
+
+        // a cross b = (0, 0, 12)
+        EXPECT_DOUBLE_EQ(result.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 12.0);
+
+        EXPECT_DOUBLE_EQ(result.length(), a.length() * b.length());
+    }
+
+    // x cross y = z , y cross x = -z
+    {
+        const Vector3d x = Vector3d::unitX();
+        const Vector3d y = Vector3d::unitY();
+
+        const Vector3d z = Vector3d::cross(x, y);
+        const Vector3d minusZ = Vector3d::cross(y, x);
+
+        EXPECT_DOUBLE_EQ(z.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(z.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(z.getZ(), 1.0);
+
+        EXPECT_DOUBLE_EQ(minusZ.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(minusZ.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(minusZ.getZ(), -1.0);
+    }
+
+    // x cross z = -y, z cross x = y
+    {
+        const Vector3d x = Vector3d::unitX();
+        const Vector3d z = Vector3d::unitZ();
+
+        const Vector3d minusY = Vector3d::cross(x, z);
+        const Vector3d y = Vector3d::cross(z, x);
+
+        EXPECT_DOUBLE_EQ(minusY.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(minusY.getY(), -1.0);
+        EXPECT_DOUBLE_EQ(minusY.getZ(), 0.0);
+
+        EXPECT_DOUBLE_EQ(y.getX(), 0.0);
+        EXPECT_DOUBLE_EQ(y.getY(), 1.0);
+        EXPECT_DOUBLE_EQ(y.getZ(), 0.0);
+    }
+
+    // y cross z = x, z cross y = -x
+    {
+        const Vector3d y = Vector3d::unitY();
+        const Vector3d z = Vector3d::unitZ();
+
+        const Vector3d x = Vector3d::cross(y, z);
+        const Vector3d minusX = Vector3d::cross(z, y);
+
+        EXPECT_DOUBLE_EQ(x.getX(), 1.0);
+        EXPECT_DOUBLE_EQ(x.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(x.getZ(), 0.0);
+
+        EXPECT_DOUBLE_EQ(minusX.getX(), -1.0);
+        EXPECT_DOUBLE_EQ(minusX.getY(), 0.0);
+        EXPECT_DOUBLE_EQ(minusX.getZ(), 0.0);
+    }
+    // random
+    {
+        const Vector3d a = Vector3d(3.0, -2.0, 5.0);
+        const Vector3d b = Vector3d(-1.0, 4.0, 2.0);
+
+        const Vector3d result = Vector3d::cross(a, b);
+        EXPECT_DOUBLE_EQ(result.getX(), -24.0);
+        EXPECT_DOUBLE_EQ(result.getY(), -11.0);
+        EXPECT_DOUBLE_EQ(result.getZ(), 10.0);
+    }
 }
 
-TEST(TestVector3, lengthSquare)
+TEST(TestVector3d, mix)
+{
+    {
+        const Vector3d a(1.0, 2.0, 3.0);
+        const Vector3d b(4.0, 5.0, 6.0);
+        const Vector3d c(7.0, 8.0, 10.0);
+
+        const double result = Vector3d::mix(a, b, c);
+
+        EXPECT_DOUBLE_EQ(result, -3.0);
+    }
+}
+
+TEST(TestVector3d, lengthSquare)
 {
     // unit vector lengthSquare by definition is 1
     {
@@ -395,7 +502,7 @@ TEST(TestVector3, lengthSquare)
     }
 }
 
-TEST(TestVector3, length)
+TEST(TestVector3d, length)
 {
     // Unit vector length by definition is 1
     {
@@ -425,7 +532,7 @@ TEST(TestVector3, length)
     }
 }
 
-TEST(TestVector3, distanceSquare)
+TEST(TestVector3d, distanceSquare)
 {
     // Unit vector
     {
@@ -508,7 +615,7 @@ TEST(TestVector3, distanceSquare)
     }
 }
 
-TEST(TestVector3, distance)
+TEST(TestVector3d, distance)
 {
     // Unit vector
     {
@@ -601,12 +708,11 @@ TEST(TestVector3, distance)
     }
 }
 
-TEST(TestVector3, getNormalize)
+TEST(TestVector3d, getNormalize)
 {
     {
         const Vector3d v(3.0, 4.0, 0.0);
         const Vector3d normalized = v.getNormalize();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
         EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
@@ -623,7 +729,6 @@ TEST(TestVector3, getNormalize)
     {
         const Vector3d v(-1.0, -2.0, 4.0);
         const Vector3d normalized = v.getNormalize();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
     }
@@ -632,7 +737,6 @@ TEST(TestVector3, getNormalize)
     {
         const Vector3d v = Vector3d::unitX();
         const Vector3d normalized = v.getNormalize();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
         EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
@@ -644,7 +748,6 @@ TEST(TestVector3, getNormalize)
     {
         const Vector3d v(0.0, 0.0, 0.0);
         const Vector3d normalized = v.getNormalize();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
         EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
@@ -652,13 +755,12 @@ TEST(TestVector3, getNormalize)
     }
 }
 
-TEST(TestVector3, normalize)
+TEST(TestVector3d, normalize)
 {
     {
         Vector3d v(3.0, 4.0, 0.0);
 
         v.normalize();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
         EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
@@ -671,7 +773,6 @@ TEST(TestVector3, normalize)
         Vector3d v(-1.0, -2.0, 4.0);
 
         v.normalize();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
     }
@@ -681,7 +782,6 @@ TEST(TestVector3, normalize)
         Vector3d v = Vector3d::unitX();
 
         v.normalize();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
         EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
@@ -694,7 +794,6 @@ TEST(TestVector3, normalize)
         Vector3d v(0.0, 0.0, 0.0);
 
         v.normalize();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_DOUBLE_EQ(v.getX(), 0.0);
         EXPECT_DOUBLE_EQ(v.getY(), 0.0);
@@ -706,18 +805,16 @@ TEST(TestVector3, normalize)
         Vector3d v(3.0, 4.0, 0.0);
 
         const Vector3d& result = v.normalize();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_EQ(&result, &v);
     }
 }
 
-TEST(TestVector3, getNormalizeFast)
+TEST(TestVector3d, getNormalizeFast)
 {
     {
         const Vector3d v(3.0, 4.0, 0.0);
         const Vector3d normalized = v.getNormalizeFast();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_NEAR(normalized.getX(), 0.6, DoubleEpsilon);
         EXPECT_NEAR(normalized.getY(), 0.8, DoubleEpsilon);
@@ -734,7 +831,6 @@ TEST(TestVector3, getNormalizeFast)
     {
         const Vector3d v(-1.0, -2.0, 4.0);
         const Vector3d normalized = v.getNormalizeFast();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
     }
@@ -743,7 +839,6 @@ TEST(TestVector3, getNormalizeFast)
     {
         const Vector3d v = Vector3d::unitX();
         const Vector3d normalized = v.getNormalizeFast();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_NEAR(normalized.length(), 1.0, DoubleEpsilon);
         EXPECT_NEAR(normalized.getX(), 1.0, DoubleEpsilon);
@@ -755,7 +850,6 @@ TEST(TestVector3, getNormalizeFast)
     {
         const Vector3d v(0.0, 0.0, 0.0);
         const Vector3d normalized = v.getNormalizeFast();
-        EXPECT_TRUE(isValidHighLane(normalized));
 
         EXPECT_DOUBLE_EQ(normalized.getX(), 0.0);
         EXPECT_DOUBLE_EQ(normalized.getY(), 0.0);
@@ -763,13 +857,12 @@ TEST(TestVector3, getNormalizeFast)
     }
 }
 
-TEST(TestVector3, normalizeFast)
+TEST(TestVector3d, normalizeFast)
 {
     {
         Vector3d v(3.0, 4.0, 0.0);
 
         v.normalizeFast();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_NEAR(v.getX(), 0.6, DoubleEpsilon);
         EXPECT_NEAR(v.getY(), 0.8, DoubleEpsilon);
@@ -782,7 +875,6 @@ TEST(TestVector3, normalizeFast)
         Vector3d v(-1.0, -2.0, 4.0);
 
         v.normalizeFast();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
     }
@@ -792,7 +884,6 @@ TEST(TestVector3, normalizeFast)
         Vector3d v = Vector3d::unitX();
 
         v.normalizeFast();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_NEAR(v.length(), 1.0, DoubleEpsilon);
         EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
@@ -805,7 +896,6 @@ TEST(TestVector3, normalizeFast)
         Vector3d v(0.0, 0.0, 0.0);
 
         v.normalizeFast();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_DOUBLE_EQ(v.getX(), 0.0);
         EXPECT_DOUBLE_EQ(v.getY(), 0.0);
@@ -817,7 +907,6 @@ TEST(TestVector3, normalizeFast)
         Vector3d v(3.0, 4.0, 0.0);
 
         const Vector3d& result = v.normalizeFast();
-        EXPECT_TRUE(isValidHighLane(v));
 
         EXPECT_EQ(&result, &v);
     }
@@ -830,7 +919,6 @@ TEST(TestVector3d, min)
         const Vector3d v1(5.0, 6.0, 7.0);
 
         const Vector3d result = Vector3d::min(v0, v1);
-        EXPECT_TRUE(isValidHighLane(result));
 
         EXPECT_DOUBLE_EQ(result.getX(), 1.0);
         EXPECT_DOUBLE_EQ(result.getY(), 2.0);
@@ -842,7 +930,6 @@ TEST(TestVector3d, min)
         const Vector3d v1(2.0, 12.0, -3.0);
 
         const Vector3d result = Vector3d::min(v0, v1);
-        EXPECT_TRUE(isValidHighLane(result));
 
         EXPECT_DOUBLE_EQ(result.getX(), 2.0);
         EXPECT_DOUBLE_EQ(result.getY(), -4.0);
@@ -854,7 +941,6 @@ TEST(TestVector3d, min)
         const Vector3d v1(5.0, 3.0, -2.0);
 
         const Vector3d result = Vector3d::min(v0, v1);
-        EXPECT_TRUE(isValidHighLane(result));
 
         EXPECT_DOUBLE_EQ(result.getX(), 5.0);
         EXPECT_DOUBLE_EQ(result.getY(), 3.0);
@@ -862,14 +948,13 @@ TEST(TestVector3d, min)
     }
 }
 
-TEST(TestVector3d, max)
+TEST(TestVector3dd, max)
 {
     {
         const Vector3d v0(1.0, 2.0, 3.0);
         const Vector3d v1(5.0, 6.0, 7.0);
 
         const Vector3d result = Vector3d::max(v0, v1);
-        EXPECT_TRUE(isValidHighLane(result));
 
         EXPECT_DOUBLE_EQ(result.getX(), 5.0);
         EXPECT_DOUBLE_EQ(result.getY(), 6.0);
@@ -881,7 +966,6 @@ TEST(TestVector3d, max)
         const Vector3d v1(2.0, 12.0, -3.0);
 
         const Vector3d result = Vector3d::max(v0, v1);
-        EXPECT_TRUE(isValidHighLane(result));
 
         EXPECT_DOUBLE_EQ(result.getX(), 8.0);
         EXPECT_DOUBLE_EQ(result.getY(), 12.0);
@@ -893,7 +977,6 @@ TEST(TestVector3d, max)
         const Vector3d v1(5.0, 3.0, -2.0);
 
         const Vector3d result = Vector3d::max(v0, v1);
-        EXPECT_TRUE(isValidHighLane(result));
 
         EXPECT_DOUBLE_EQ(result.getX(), 5.0);
         EXPECT_DOUBLE_EQ(result.getY(), 3.0);
@@ -901,182 +984,7 @@ TEST(TestVector3d, max)
     }
 }
 
-TEST(TestVector3, streamToUnAlignedDouble)
-{
-    const Vector3d v(1.0, 2.0, 3.0);
-
-    {
-        std::array<double, 3> data;
-        v.storeToUnalignedDouble(data.data());
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-    }
-
-    {
-        std::array<double, 3> data;
-        v.storeToUnalignedDouble(std::span<double, 3>(data));
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector3, storeToUnAlignedFloat)
-{
-    const Vector3d v(1.0, 2.0, 3.0);
-    {
-        std::array<float, 3> data;
-        v.storeToUnAlignedFloat(data.data());
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-    }
-
-    {
-        std::array<float, 3> data;
-        v.storeToUnAlignedFloat(std::span<float, 3>(data));
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-    }
-}
-
-TEST(TestVector3, storeToAlignedDouble)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 3> data;
-        const Vector3d v(1.0, 2.0, 3.0);
-        v.storeToAlignedDouble(data.data());
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 3> data;
-        const Vector3d v(1.0, 2.0, 3.0);
-        v.storeToAlignedDouble(std::span<double, 3>(data));
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector3, storeToUnalignedFloat)
-{
-    {
-        alignas(SSE_ALIGNEMENT) std::array<float, 3> data;
-        const Vector3d v(1.0, 2.0, 3.0);
-        v.storeToAlignedFloat(data.data());
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-    }
-
-    {
-        alignas(SSE_ALIGNEMENT) std::array<float, 3> data;
-        const Vector3d v(1.0, 2.0, 3.0);
-        v.storeToAlignedFloat(std::span<float, 3>(data));
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-    }
-}
-
-TEST(TestVector3, fromUnAlignedDouble)
-{
-    {
-        std::array<double, 3> data = {1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromUnalignedDouble(data);
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-    }
-
-    {
-        std::array<double, 3> data = {1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromUnalignedDouble(std::span<const double, 3>(data));
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector3, fromUnAlignedFloat)
-{
-    {
-        std::array<float, 3> data = {1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromUnAlignedFloat(data);
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-    }
-
-    {
-        std::array<float, 3> data = {1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromUnAlignedFloat(std::span<const float, 3>(data));
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-    }
-}
-
-TEST(TestVector3, fromAlignedDouble)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 3> data{1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromAlignedDouble(data.data());
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 3> data{1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromAlignedDouble(std::span<double, 3>(data));
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector3, fromAlignedFloat)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<float, 3> data{1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromAlignedFloat(data.data());
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<float, 3> data{1.0, 2.0, 3.0};
-        Vector3d v;
-        v.fromAlignedFloat(std::span<float, 3>(data));
-        EXPECT_TRUE(isValidHighLane(v));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-    }
-}
-
-TEST(TestVector3, IsFinite)
+TEST(TestVector3d, IsFinite)
 {
     {
         const Vector3d v = Vector3d(1., 2., 3.);

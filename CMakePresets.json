@@ -120,6 +120,8 @@
       "name": "simd-avx2",
       "hidden": true,
       "cacheVariables": {
+        "MATHLIB_USE_INTRINSIC": true,
+        "MATHLIB_USE_FMA": true,
         "MATHLIB_SIMD_EXT": "AVX2"
       }
     },
@@ -127,6 +129,8 @@
       "name": "simd-neon",
       "hidden": true,
       "cacheVariables": {
+        "MATHLIB_USE_INTRINSIC": true,
+        "MATHLIB_USE_FMA": true,
         "MATHLIB_SIMD_EXT": "NEON"
       }
     },

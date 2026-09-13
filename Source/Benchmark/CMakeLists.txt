@@ -21,11 +21,12 @@ set(BENCHMARK_ENABLE_EXCEPTIONS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(benchmark)
 
 set(BENCHMARK_SOURCES
-    Alloc.cpp
-    Alloc.hpp
     BenchmarkHeader.hpp
-    Vector2d_Benchmark.cpp
-    Vector4d_Benchmark.cpp
+    BenchmarkMaker.hpp
+    HardwareAlignedVector.hpp
+    main.cpp
+    Matrix_Benchmark.cpp
+    Vector_Benchmark.cpp
 )
 
 add_executable(
@@ -43,5 +44,5 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
         MathLib
-        benchmark::benchmark_main
+        benchmark::benchmark
 )

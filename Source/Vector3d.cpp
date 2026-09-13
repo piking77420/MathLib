@@ -1,5 +1,0 @@
-
-namespace MathLib
-{
-
-} // namespace MathLib

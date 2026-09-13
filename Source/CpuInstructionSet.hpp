@@ -22,12 +22,14 @@ namespace MathLib
             bool sse = false;
             bool avx = false;
             bool avx2 = false;
+            bool fma = false;
         };
 
         struct ARMInstructionSet
         {
             bool sve = false;
             bool neon = false;
+            bool fma = false;
         };
 
     } // Cpu

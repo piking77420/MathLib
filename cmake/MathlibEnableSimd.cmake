@@ -68,7 +68,7 @@ function(mathlib_enable_simd target level)
     if(simd_option)
         target_compile_options(
             ${target}
-            PRIVATE
+            PUBLIC
             ${simd_option}
         )
     endif()

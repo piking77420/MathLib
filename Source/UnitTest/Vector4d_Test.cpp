@@ -1,11 +1,8 @@
 #include <gtest/gtest.h>
-
-#include <cmath>
-#include <array>
-#include <span>
-
 #include <MathLibHeader.hpp>
-#include <Vector4d.hpp>
+#include <Vector4.hpp>
+#include <Vector3.hpp>
+#include <Vector2.hpp>
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
@@ -84,6 +81,60 @@ TEST(TestVector4d, subVectorOperator)
         EXPECT_DOUBLE_EQ(v.getY(), -8.0);
         EXPECT_DOUBLE_EQ(v.getZ(), 1.0);
         EXPECT_DOUBLE_EQ(v.getW(), 0.0);
+    }
+}
+
+TEST(TestVector4d, mulVectorOperator)
+{
+    {
+        Vector4d v(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v2(8.0, 10.0, 2.0, 4.0);
+
+        v *= v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 16.0);
+    }
+
+    {
+        const Vector4d v1(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v2(8.0, 10.0, 2.0, 4.0);
+
+        const Vector4d v = v1 * v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 20.0);
+        EXPECT_DOUBLE_EQ(v.getZ(), 6.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 16);
+    }
+}
+
+TEST(TestVector4d, divVectorOperator)
+{
+    {
+        Vector4d v(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v2(8.0, 10.0, 2.0, 4.0);
+
+        v /= v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 1.0);
+    }
+
+    {
+        const Vector4d v1(1.0, 2.0, 3.0, 4.0);
+        const Vector4d v2(8.0, 10.0, 2.0, 4.0);
+
+        const Vector4d v = v1 / v2;
+
+        EXPECT_DOUBLE_EQ(v.getX(), 1.0 / 8.0);
+        EXPECT_DOUBLE_EQ(v.getY(), 0.2);
+        EXPECT_DOUBLE_EQ(v.getZ(), 3.0 / 2.0);
+        EXPECT_DOUBLE_EQ(v.getW(), 1.0);
     }
 }
 
@@ -280,7 +331,7 @@ TEST(TestVector4d, NegateOperator)
     }
 }
 
-TEST(TestVector4d, Dot)
+TEST(TestVector4d, dot)
 {
     {
         const Vector4d v1 = Vector4d::unitX();
@@ -843,7 +894,7 @@ TEST(TestVector4d, isHomogeneous)
     }
 }
 
-TEST(TestVector4dd, min)
+TEST(TestVector4d, min)
 {
     {
         const Vector4d v0(1.0, 2.0, 3.0, 4.0);
@@ -978,191 +1029,7 @@ TEST(TestVector4d, abs)
     }
 }
 
-TEST(TestVector4d, streamToUnAlignedDouble)
-{
-    {
-        std::array<double, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToUnalignedDouble(data.data());
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-        EXPECT_NEAR(data[3], 4.0, DoubleEpsilon);
-    }
-
-    {
-        std::array<double, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToUnalignedDouble(std::span<double, 4>(data));
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-        EXPECT_NEAR(data[3], 4.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector4d, storeToUnAlignedFloat)
-{
-    {
-        std::array<float, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToUnAlignedFloat(data.data());
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-        EXPECT_NEAR(data[3], 4.0f, FloatEpsilon);
-    }
-
-    {
-        std::array<float, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToUnAlignedFloat(std::span<float, 4>(data));
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-        EXPECT_NEAR(data[3], 4.0f, FloatEpsilon);
-    }
-}
-
-TEST(TestVector4d, storeToAlignedDouble)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToAlignedDouble(data.data());
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-        EXPECT_NEAR(data[3], 4.0, DoubleEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToAlignedDouble(std::span<double, 4>(data));
-        EXPECT_NEAR(data[0], 1.0, DoubleEpsilon);
-        EXPECT_NEAR(data[1], 2.0, DoubleEpsilon);
-        EXPECT_NEAR(data[2], 3.0, DoubleEpsilon);
-        EXPECT_NEAR(data[3], 4.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector4d, streamToUnalignedFloat)
-{
-    {
-        alignas(SSE_ALIGNEMENT) std::array<float, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToAlignedFloat(data.data());
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-        EXPECT_NEAR(data[3], 4.0f, FloatEpsilon);
-    }
-
-    {
-        alignas(SSE_ALIGNEMENT) std::array<float, 4> data;
-        const Vector4d v(1.0, 2.0, 3.0, 4.0);
-        v.storeToAlignedFloat(std::span<float, 4>(data));
-        EXPECT_NEAR(data[0], 1.0f, FloatEpsilon);
-        EXPECT_NEAR(data[1], 2.0f, FloatEpsilon);
-        EXPECT_NEAR(data[2], 3.0f, FloatEpsilon);
-        EXPECT_NEAR(data[3], 4.0f, FloatEpsilon);
-    }
-}
-
-TEST(TestVector4d, fromUnAlignedDouble)
-{
-    {
-        std::array<double, 4> data = {1.0, 2.0, 3.0, 4.0};
-        Vector4d v;
-        v.fromUnalignedDouble(data);
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
-    }
-
-    {
-        std::array<double, 4> data = {1.0, 2.0, 3.0, 4.0};
-        Vector4d v;
-        v.fromUnalignedDouble(std::span<const double, 4>(data));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector4d, fromUnAlignedFloat)
-{
-    {
-        std::array<float, 4> data = {1.0, 2.0, 3.0, 4.0};
-        Vector4d v;
-        v.fromUnAlignedFloat(data);
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
-    }
-
-    {
-        std::array<float, 4> data = {1.0, 2.0, 3.0, 4.0};
-        Vector4d v;
-        v.fromUnAlignedFloat(std::span<const float, 4>(data));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
-    }
-}
-
-TEST(TestVector4d, fromAlignedDouble)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
-        Vector4d v;
-        v.fromAlignedDouble(data.data());
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<double, 4> data{1.0, 2.0, 3.0, 4.};
-        Vector4d v;
-        v.fromAlignedDouble(std::span<double, 4>(data));
-        EXPECT_NEAR(v.getX(), 1.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, DoubleEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, DoubleEpsilon);
-    }
-}
-
-TEST(TestVector4d, fromAlignedFloat)
-{
-    {
-        alignas(AVX_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
-        Vector4d v;
-        v.fromAlignedFloat(data.data());
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
-    }
-
-    {
-        alignas(AVX_ALIGNEMENT) std::array<float, 4> data{1.0, 2.0, 3.0, 4.};
-        Vector4d v;
-        v.fromAlignedFloat(std::span<float, 4>(data));
-        EXPECT_NEAR(v.getX(), 1.0, FloatEpsilon);
-        EXPECT_NEAR(v.getY(), 2.0, FloatEpsilon);
-        EXPECT_NEAR(v.getZ(), 3.0, FloatEpsilon);
-        EXPECT_NEAR(v.getW(), 4.0, FloatEpsilon);
-    }
-}
-
-TEST(TestVector4, IsFinite)
+TEST(TestVector4d, IsFinite)
 {
     {
         const Vector4d v = Vector4d(1.0, 2.0, 3.0, 4.0);
@@ -1195,4 +1062,90 @@ TEST(TestVector4, IsFinite)
 #endif
 }
 
+TEST(TestVector4d, permutationVector4)
+{
+    const Vector4d v(1.0, 2.0, 3.0, 4.0);
+
+    auto test = [&](const Vector4d& vec, double expectedX, double expectedY, double expectedZ, double expectedW)
+    {
+        EXPECT_NEAR(vec.getX(), expectedX, FloatEpsilon);
+        EXPECT_NEAR(vec.getY(), expectedY, FloatEpsilon);
+        EXPECT_NEAR(vec.getZ(), expectedZ, FloatEpsilon);
+        EXPECT_NEAR(vec.getW(), expectedW, FloatEpsilon);
+    };
+
+    test(v.xywz(), v.getX(), v.getY(), v.getW(), v.getZ());
+    test(v.xzyw(), v.getX(), v.getZ(), v.getY(), v.getW());
+    test(v.xzwy(), v.getX(), v.getZ(), v.getW(), v.getY());
+    test(v.xwyz(), v.getX(), v.getW(), v.getY(), v.getZ());
+    test(v.xwzy(), v.getX(), v.getW(), v.getZ(), v.getY());
+
+    test(v.yxzw(), v.getY(), v.getX(), v.getZ(), v.getW());
+    test(v.yxwz(), v.getY(), v.getX(), v.getW(), v.getZ());
+    test(v.yzxw(), v.getY(), v.getZ(), v.getX(), v.getW());
+    test(v.yzwx(), v.getY(), v.getZ(), v.getW(), v.getX());
+    test(v.ywxz(), v.getY(), v.getW(), v.getX(), v.getZ());
+    test(v.ywzx(), v.getY(), v.getW(), v.getZ(), v.getX());
+
+    test(v.zxyw(), v.getZ(), v.getX(), v.getY(), v.getW());
+    test(v.zxwy(), v.getZ(), v.getX(), v.getW(), v.getY());
+    test(v.zyxw(), v.getZ(), v.getY(), v.getX(), v.getW());
+    test(v.zywx(), v.getZ(), v.getY(), v.getW(), v.getX());
+    test(v.zwxy(), v.getZ(), v.getW(), v.getX(), v.getY());
+    test(v.zwyx(), v.getZ(), v.getW(), v.getY(), v.getX());
+
+    test(v.wxyz(), v.getW(), v.getX(), v.getY(), v.getZ());
+    test(v.wxzy(), v.getW(), v.getX(), v.getZ(), v.getY());
+    test(v.wyxz(), v.getW(), v.getY(), v.getX(), v.getZ());
+    test(v.wyzx(), v.getW(), v.getY(), v.getZ(), v.getX());
+    test(v.wzxy(), v.getW(), v.getZ(), v.getX(), v.getY());
+    test(v.wzyx(), v.getW(), v.getZ(), v.getY(), v.getX());
+}
+
+TEST(TestVector4d, permutationVector3)
+{
+    const Vector4d v(1.0, 2.0, 3.0, 4.0);
+
+    auto test = [&](const Vector3d& vec, double expectedX, double expectedY, double expectedZ)
+    {
+        EXPECT_NEAR(vec.getX(), expectedX, FloatEpsilon);
+        EXPECT_NEAR(vec.getY(), expectedY, FloatEpsilon);
+        EXPECT_NEAR(vec.getZ(), expectedZ, FloatEpsilon);
+    };
+
+    test(v.xyz(), v.getX(), v.getY(), v.getZ());
+    test(v.xzy(), v.getX(), v.getZ(), v.getY());
+
+    test(v.yxz(), v.getY(), v.getX(), v.getZ());
+    test(v.yzx(), v.getY(), v.getZ(), v.getX());
+
+    test(v.zxy(), v.getZ(), v.getX(), v.getY());
+    test(v.zyx(), v.getZ(), v.getY(), v.getX());
+}
+
+TEST(TestVector4d, permutationVector2d)
+{
+    const Vector4d v(1.0, 2.0, 3.0, 4.0);
+
+    auto test = [&](const Vector2d& vec, double expectedX, double expectedY)
+    {
+        EXPECT_NEAR(vec.getX(), expectedX, FloatEpsilon);
+        EXPECT_NEAR(vec.getY(), expectedY, FloatEpsilon);
+    };
+
+    test(v.xz(), v.getX(), v.getZ());
+    test(v.xw(), v.getX(), v.getW());
+
+    test(v.yx(), v.getY(), v.getX());
+    test(v.yz(), v.getY(), v.getZ());
+    test(v.yw(), v.getY(), v.getW());
+
+    test(v.zx(), v.getZ(), v.getX());
+    test(v.zy(), v.getZ(), v.getY());
+    test(v.zw(), v.getZ(), v.getW());
+
+    test(v.wx(), v.getW(), v.getX());
+    test(v.wy(), v.getW(), v.getY());
+    test(v.wz(), v.getW(), v.getZ());
+}
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

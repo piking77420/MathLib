@@ -19,6 +19,14 @@
 #define CPU_ARM_32 1
 #endif
 
+#if (defined(__arm__) && !defined(__aarch64__))
+#error "32-bit ARM is not supported"
+#endif
+
+#if defined(__i386__) || defined(_M_IX86)
+#error "32-bit x86 is not supported"
+#endif
+
 #if CPU_X86_64
 
 #if defined(MATHLIB_SIMD_LEVEL_AVX2)
@@ -48,16 +56,15 @@
 
 // ARM SIMD
 #if defined(MATHLIB_SIMD_LEVEL_SVE)
-#define SIMD_ARM_SVE 1
+#define SIMD_SVE 1
 #endif
 
 #if defined(MATHLIB_SIMD_LEVEL_SVE2)
-#define SIMD_ARM_SVE2 1
+#define SIMD_SVE2 1
 #endif
 
-#if defined(MATHLIB_SIMD_LEVEL)
-#define SIMD_ARM_NEON 1
-#endif
+// NEON is always available on ARM64 / AArch64.
+#define SIMD_NEON 1
 
 #endif // CPU_ARM_64
 
@@ -65,15 +72,15 @@
 #include <immintrin.h>
 #endif // CPU_X86_64
 
-#if SIMD_ARM_SVE
+#if SIMD_SVE
 #include <arm_sve.h>
 #endif
 
-#if SIMD_ARM_SVE2
+#if SIMD_SVE2
 #include <arm_sve.h>
 #endif
 
-#if SIMD_ARM_NEON
+#if SIMD_NEON
 #include <arm_neon.h>
 #endif
 
@@ -101,6 +108,21 @@
 
 #define ASSERT_IS_FINITE(x) MATHLIB_ASSERT((x).isFinite());
 
+#if defined(__clang__)
+#define MATH_ASSUME(x) __builtin_assume(x)
+#elif defined(_MSC_VER)
+#define MATH_ASSUME(x) __assume(x)
+#elif defined(__GNUC__)
+#define MATH_ASSUME(x)                                                                                                 \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (!(x))                                                                                                      \
+            __builtin_unreachable();                                                                                   \
+    } while (false)
+#else
+#define MATH_ASSUME(x) ((void)0)
+#endif
+
 namespace MathLib
 {
     constexpr double DoubleEpsilon = 0.0001;
@@ -108,6 +130,25 @@ namespace MathLib
 
     constexpr double SquareDoubleEpsilon = DoubleEpsilon * DoubleEpsilon;
     constexpr float SquareFloatEpsilon = FloatEpsilon * FloatEpsilon;
+
+    template<typename T>
+    struct Epsilon;
+
+    template<>
+    struct Epsilon<float>
+    {
+        static constexpr float Value = FloatEpsilon;
+        static constexpr float Square = SquareFloatEpsilon;
+        static constexpr float Double = FloatEpsilon * FloatEpsilon;
+    };
+
+    template<>
+    struct Epsilon<double>
+    {
+        static constexpr double Value = DoubleEpsilon;
+        static constexpr double Square = SquareDoubleEpsilon;
+        static constexpr double Double = DoubleEpsilon * DoubleEpsilon;
+    };
 
     [[nodiscard]] constexpr bool fuzzyZero(double value, double tolerance = DoubleEpsilon)
     {
@@ -129,6 +170,26 @@ namespace MathLib
         return std::abs(a - b) <= tolerance * std::max({1.0f, std::abs(a), std::abs(b)});
     }
 
+    enum class RotationOrder
+    {
+        // Rotation application order.
+        // Column-vector convention:
+        //
+        // XYZ -> Rz * Ry * Rx
+        // XZY -> Ry * Rz * Rx
+        // YXZ -> Rz * Rx * Ry
+        // YZX -> Rx * Rz * Ry
+        // ZXY -> Ry * Rx * Rz
+        // ZYX -> Rx * Ry * Rz
+
+        XYZ,
+        XZY,
+        YXZ,
+        YZX,
+        ZXY,
+        ZYX,
+    };
+
     template<std::size_t Alignment>
     [[nodiscard]] constexpr bool isAligned(const void* const ptr) noexcept
     {
@@ -144,6 +205,31 @@ namespace MathLib
 
     static constexpr size_t SSE_ALIGNEMENT = 16;
     static constexpr size_t AVX_ALIGNEMENT = 32;
+
+
+    template<typename T>
+    struct SimdTraits;
+
+    template<>
+    struct SimdTraits<float>
+    {
+#if defined(MATH_LIB_AVX)
+        using Register = __m128;
+#elif defined(MATH_LIB_NEON)
+        using Register = float32x4_t;
+#endif
+    };
+
+    template<>
+    struct SimdTraits<double>
+    {
+#if defined(MATH_LIB_AVX)
+        using Register = __m256d;
+#elif defined(MATH_LIB_NEON)
+        using Register = float64x2x2_t; // or whatever abstraction you use
+#endif
+    };
+
 }
 
 // NOLINTEND(cppcoreguidelines-macro-usage)

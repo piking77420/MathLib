@@ -99,6 +99,42 @@ namespace MathLib
     }
 #endif // CPU_X86_64
 
+    [[nodiscard]] inline bool hasFma() noexcept
+    {
+#if defined(_MSC_VER) && (defined(_M_X64) || defined(_M_IX86))
+
+        int cpuInfo[4]{};
+        __cpuid(cpuInfo, 1);
+
+        constexpr int FMA_BIT = 1 << 12;
+        return (cpuInfo[2] & FMA_BIT) != 0;
+
+#elif defined(__aarch64__) || defined(__arm__)
+
+#if defined(__ARM_FEATURE_FMA)
+        return true;
+#else
+        return false;
+#endif
+
+#elif defined(__GNUC__) || defined(__clang__)
+
+        unsigned eax{};
+        unsigned ebx{};
+        unsigned ecx{};
+        unsigned edx{};
+
+        if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) == 0)
+            return false;
+
+        return (ecx & bit_FMA) != 0;
+
+#else
+
+        return false;
+#endif
+    }
+
     CpuInstructionSet::CpuInstructionSet()
     {
 #if CPU_X86_64
@@ -140,10 +176,12 @@ namespace MathLib
         const bool cpuAvx2 = hasBit(leaf7.ebx, 5);
 
         avx2 = cpuAvx2 && avx;
+        fma = hasFma();
 #elif CPU_ARM_64
         const unsigned long hwcap = getauxval(AT_HWCAP);
         neon = (hwcap & HWCAP_ASIMD) != 0;
         sve = (hwcap & HWCAP_SVE) != 0;
+        fma = hasFma();
 #endif // CPU_X86_64
     }
 
