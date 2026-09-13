@@ -115,6 +115,13 @@ namespace MathLib::Simd
         // (ax*bx + az*bz) + (ay*by + aw*bw)
         return _mm_cvtsd_f64(_mm_add_sd(sum, highSum));
     }
+
+    [[nodiscard]] MATH_LIB_FORCE_INLINE VectorRegister4Double negate(const VectorRegister4Double& a) noexcept
+    {
+        const VectorRegister4Double signMask = makeVector4(-0.0);
+        return _mm256_xor_pd(a, signMask);
+    }
+
 } // namespace MathLib::Simd
 
 #endif // defined(SIMD_AVX)

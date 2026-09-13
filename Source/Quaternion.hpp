@@ -11,6 +11,12 @@
 #include <Matrix3x3.hpp>
 #include <Matrix4x4.hpp>
 
+#define QUAT4F_ALIGNEMENT 16
+#define QUAT4D_ALIGNEMENT 32
+#include <AVX.hpp>
+#include <NEON.hpp>
+#include <SSE.hpp>
+
 namespace MathLib
 {
     // X Y Z W
@@ -18,7 +24,7 @@ namespace MathLib
     // W real Part
     template<typename T>
     requires(std::is_floating_point_v<T>)
-    class Quaternion
+    class alignas(std::is_same_v<T, float> ? QUAT4F_ALIGNEMENT : QUAT4D_ALIGNEMENT) Quaternion
     {
     public:
 #if defined(MATH_LIB_INTRINSIC)
@@ -61,6 +67,13 @@ namespace MathLib
             ASSERT_IS_FINITE(*this);
         }
 
+#if defined(MATH_LIB_INTRINSIC)
+        MATH_LIB_FORCE_INLINE Quaternion(const _VectorInstrinsic& reg) noexcept
+        {
+            Simd::storeUnaligned(reg, m_data.data());
+        }
+#endif // defined(MATH_LIB_INTRINSIC)
+
         [[nodiscard]] MATH_LIB_FORCE_INLINE const _ValueType* data() const noexcept
         {
             return m_data.data();
@@ -93,8 +106,13 @@ namespace MathLib
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static _ValueType dot(const Quaternion& a, const Quaternion& b) noexcept
         {
+
+#if defined(MATH_LIB_INTRINSIC)
+            return Simd::dot(a, b);
+#else
             return a.m_data[0] * b.m_data[0] + a.m_data[1] * b.m_data[1] + a.m_data[2] * b.m_data[2] +
                    a.m_data[3] * b.m_data[3];
+#endif // defined(MATH_LIB_INTRINSIC)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion fromNormalizeAxisAngle(const _Vector3& axis,
@@ -104,9 +122,13 @@ namespace MathLib
 
             const _ValueType sinHalfAngle = std::sin(halfAngle);
             const _ValueType cosHalfAngle = std::cos(halfAngle);
-
+#if defined(MATH_LIB_INTRINSIC)
+            return Quaternion(Simd::mul(Simd::makeVector4(axis.getX(), axis.getY(), axis.getZ(), T(1.0)),
+                                        Simd::makeVector4(sinHalfAngle, sinHalfAngle, sinHalfAngle, cosHalfAngle)));
+#else
             return Quaternion(axis.getX() * sinHalfAngle, axis.getY() * sinHalfAngle, axis.getZ() * sinHalfAngle,
                               cosHalfAngle);
+#endif // defined(MATH_LIB_INTRINSIC)
         }
 
         [[nodiscard]] MATH_LIB_FORCE_INLINE static Quaternion fromAxisAngle(const _Vector3& axis,
@@ -413,19 +435,27 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Quaternion& operator+=(const Quaternion& rhs) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Quaternion(Simd::add(*this, rhs));
+#else
             m_data[0] += rhs.m_data[0];
             m_data[1] += rhs.m_data[1];
             m_data[2] += rhs.m_data[2];
             m_data[3] += rhs.m_data[3];
+#endif // defined(MATH_LIB_INTRINSIC)
             return *this;
         }
 
         MATH_LIB_FORCE_INLINE Quaternion& operator-=(const Quaternion& rhs) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Quaternion(Simd::sub(*this, rhs));
+#else
             m_data[0] -= rhs.m_data[0];
             m_data[1] -= rhs.m_data[1];
             m_data[2] -= rhs.m_data[2];
             m_data[3] -= rhs.m_data[3];
+#endif // defined(MATH_LIB_INTRINSIC)
             return *this;
         }
 
@@ -443,10 +473,14 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Quaternion& operator*=(_ValueType scalar) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Quaternion(Simd::mul(*this, Simd::makeVector4(scalar)));
+#else
             m_data[0] *= scalar;
             m_data[1] *= scalar;
             m_data[2] *= scalar;
             m_data[3] *= scalar;
+#endif // defined(MATH_LIB_INTRINSIC)
             return *this;
         }
 
@@ -458,10 +492,14 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Quaternion& operator/=(_ValueType scalar) noexcept
         {
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Quaternion(Simd::div(*this, Simd::makeVector4(scalar)));
+#else
             m_data[0] /= scalar;
             m_data[1] /= scalar;
             m_data[2] /= scalar;
             m_data[3] /= scalar;
+#endif // defined(MATH_LIB_INTRINSIC)
             return *this;
         }
 
@@ -541,10 +579,15 @@ namespace MathLib
                 return *this;
 
             const _ValueType invLength = One / std::sqrt(lenghtSquare);
+
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Quaternion(Simd::mul(*this, Simd::makeVector4(invLength)));
+#else
             m_data[0] *= invLength;
             m_data[1] *= invLength;
             m_data[2] *= invLength;
             m_data[3] *= invLength;
+#endif // defined(MATH_LIB_INTRINSIC)
             return *this;
         }
 
@@ -556,9 +599,13 @@ namespace MathLib
 
         MATH_LIB_FORCE_INLINE Quaternion& conjugate()
         {
+#if defined(MATH_LIB_INTRINSIC)
+            *this = Quaternion(Simd::negate(Simd::makeVector4(m_data[0], m_data[1], m_data[2], -m_data[3])));
+#else
             m_data[0] = -m_data[0];
             m_data[1] = -m_data[1];
             m_data[2] = -m_data[2];
+#endif // defined(MATH_LIB_INTRINSIC)
             return *this;
         }
 
@@ -577,11 +624,16 @@ namespace MathLib
 
             const _ValueType invLengthSq = _ValueType(1) / lengthSq;
 
+#if defined(MATH_LIB_INTRINSIC)
+            _VectorInstrinsic vec =
+                Simd::negate(Simd::makeVector4(invLengthSq, invLengthSq, invLengthSq, -invLengthSq));
+            *this = Quaternion(Simd::mul(*this, vec));
+#else
             m_data[0] *= -invLengthSq;
             m_data[1] *= -invLengthSq;
             m_data[2] *= -invLengthSq;
             m_data[3] *= invLengthSq;
-
+#endif // defined(MATH_LIB_INTRINSIC)
             return *this;
         }
 
@@ -721,6 +773,13 @@ namespace MathLib
 
             return Quaternion(x, y, z, w);
         }
+
+#if defined(MATH_LIB_INTRINSIC)
+        operator _VectorInstrinsic() const noexcept
+        {
+            return Simd::makeVector4Unaligned(m_data.data());
+        }
+#endif // defined(MATH_LIB_INTRINSIC)
 
     private:
         std::array<T, 4> m_data;
